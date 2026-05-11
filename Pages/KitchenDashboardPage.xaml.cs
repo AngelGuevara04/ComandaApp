@@ -2,9 +2,9 @@
 
 namespace ComandaApp.Pages;
 
-public partial class TableManagementPage : ContentPage
+public partial class KitchenDashboardPage : ContentPage
 {
-    public TableManagementPage(TableManagementPageModel viewModel)
+    public KitchenDashboardPage(KitchenDashboardPageModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

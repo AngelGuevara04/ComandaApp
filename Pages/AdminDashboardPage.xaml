@@ -8,56 +8,65 @@
 
     <ScrollView>
         <VerticalStackLayout Padding="25" Spacing="25">
+
             <Label Text="Panel de Administración" 
                    FontSize="28" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center" 
                    TextColor="#512BD4"/>
+
             <Grid ColumnDefinitions="*,*" 
                   RowDefinitions="Auto,Auto,Auto" 
                   ColumnSpacing="15" 
                   RowSpacing="15">
 
-                <Border Grid.Row="0" Grid.Column="0" StrokeShape="RoundRectangle 12" Padding="15">
+                <Border Grid.Row="0" Grid.Column="0" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Mesas y QR" FontAttributes="Bold" HorizontalOptions="Center" />
-                        <Button Text="Entrar" Command="{Binding GoToMesasCommand}" />
+                        <Label Text="Mesas y QR" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
+                        <Label Text="Gestión de accesos" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                        <Button Text="Entrar" Command="{Binding GoToMesasCommand}" BackgroundColor="#512BD4"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Row="0" Grid.Column="1" StrokeShape="RoundRectangle 12" Padding="15">
+                <Border Grid.Row="0" Grid.Column="1" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Menú" FontAttributes="Bold" HorizontalOptions="Center" />
-                        <Button Text="Gestionar" Command="{Binding GoToMenuCommand}" />
+                        <Label Text="Menú" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
+                        <Label Text="Platillos y precios" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                        <Button Text="Gestionar" Command="{Binding GoToMenuCommand}" BackgroundColor="#512BD4"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 12" Padding="15">
+                <Border Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Dispositivos" FontAttributes="Bold" HorizontalOptions="Center" />
-                        <Button Text="Vincular" Command="{Binding GoToDevicesCommand}" />
+                        <Label Text="Dispositivos" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
+                        <Label Text="Caja, Cocina, etc." FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                        <Button Text="Vincular" Command="{Binding GoToDevicesCommand}" BackgroundColor="#512BD4"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Row="1" Grid.Column="1" StrokeShape="RoundRectangle 12" Padding="15">
+                <Border Grid.Row="1" Grid.Column="1" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Corte de Caja" FontAttributes="Bold" HorizontalOptions="Center" />
-                        <Button Text="Ver" Command="{Binding GoToCorteCommand}" />
+                        <Label Text="Corte de Caja" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
+                        <Label Text="Finanzas del día" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                        <Button Text="Ver" Command="{Binding GoToCorteCommand}" BackgroundColor="#512BD4"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" StrokeShape="RoundRectangle 12" Padding="15">
-                    <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
-                        <Label Text="Reportes e Historial" VerticalOptions="Center" FontAttributes="Bold" />
-                        <Button Text="Consultar Pedidos" Command="{Binding GoToHistoryCommand}" WidthRequest="200" />
-                    </HorizontalStackLayout>
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="Reportes e Historial" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
+                        <Label Text="Consulta de pedidos por día" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                        <Button Text="Consultar Pedidos" Command="{Binding GoToHistoryCommand}" WidthRequest="220" BackgroundColor="#512BD4"/>
+                    </VerticalStackLayout>
                 </Border>
 
             </Grid>
 
             <Button Text="Configuración del Restaurante" 
                     Command="{Binding GoToConfigCommand}"
-                    BackgroundColor="#808080"
+                    BackgroundColor="#6C757D"
+                    FontAttributes="Bold"
+                    HeightRequest="55"
                     Margin="0,10,0,0" />
 
         </VerticalStackLayout>

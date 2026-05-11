@@ -25,18 +25,24 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        // 1. Registro de Dashboard Principal (Solo una vez)
+        // ========================================================
+        // INYECCIÓN DE DEPENDENCIAS (DI)
+        // ========================================================
+
+        // 1. Registro de Dashboard Principal (Singleton: solo se crea una vez en memoria)
         builder.Services.AddSingleton<AdminDashboardPage>();
         builder.Services.AddSingleton<AdminDashboardPageModel>();
 
-        // 2. Registro de Páginas Secundarias de Administración
-        // Asegúrate de crear los archivos correspondientes en Pages/ y PageModels/
-        builder.Services.AddTransientWithShellRoute<TableManagementPage, TableManagementPageModel>("table_management");
-        builder.Services.AddTransientWithShellRoute<BusinessConfigPage, BusinessConfigPageModel>("business_config");
+        // 2. Registro de Páginas Secundarias del Administrador (Transient: se recrean al abrir)
+        builder.Services.AddTransient<TableManagementPage>();
+        builder.Services.AddTransient<TableManagementPageModel>();
 
-        // Rutas adicionales para que los botones del Dashboard no den error al navegar
-        // builder.Services.AddTransientWithShellRoute<MenuPage, MenuPageModel>("menu_management");
-        // builder.Services.AddTransientWithShellRoute<DevicesPage, DevicesPageModel>("device_management");
+        builder.Services.AddTransient<BusinessConfigPage>();
+        builder.Services.AddTransient<BusinessConfigPageModel>();
+
+        // 3. Registro del módulo de Cocina (que construimos hace un momento)
+        builder.Services.AddTransient<KitchenDashboardPage>();
+        builder.Services.AddTransient<KitchenDashboardPageModel>();
 
         return builder.Build();
     }

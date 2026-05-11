@@ -5,13 +5,48 @@
              x:DataType="vm:BusinessConfigPageModel"
              Title="Configurar Restaurante">
 
-    <VerticalStackLayout Padding="20" Spacing="15">
-        <Entry Placeholder="Nombre del Restaurante" Text="{Binding Config.NombreRestaurante}" />
-        <Entry Placeholder="RFC" Text="{Binding Config.RFC}" />
-        <Entry Placeholder="Dirección" Text="{Binding Config.Direccion}" />
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
 
-        <Button Text="Guardar Cambios" 
-                Command="{Binding GuardarConfiguracionCommand}" 
-                Margin="0,20"/>
-    </VerticalStackLayout>
+            <Label Text="Información del Negocio" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   TextColor="#512BD4"/>
+
+            <Border StrokeShape="RoundRectangle 12" Padding="20" BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#1E1E1E}">
+                <VerticalStackLayout Spacing="15">
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Nombre del Restaurante" FontAttributes="Bold" TextColor="Gray"/>
+                        <Entry Placeholder="Ej. Taquería El Fogón" Text="{Binding Config.NombreRestaurante}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="RFC" FontAttributes="Bold" TextColor="Gray"/>
+                        <Entry Placeholder="Ej. XAXX010101000" Text="{Binding Config.Rfc}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="Dirección" FontAttributes="Bold" TextColor="Gray"/>
+                        <Entry Placeholder="Calle, Colonia, Ciudad" Text="{Binding Config.Direccion}" />
+                    </VerticalStackLayout>
+
+                    <VerticalStackLayout Spacing="5">
+                        <Label Text="URL del Logo (Opcional)" FontAttributes="Bold" TextColor="Gray"/>
+                        <Entry Placeholder="https://..." Text="{Binding Config.LogoUrl}" />
+                    </VerticalStackLayout>
+
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Guardar Cambios" 
+                    Command="{Binding GuardarConfiguracionCommand}" 
+                    HeightRequest="55"
+                    FontAttributes="Bold"
+                    Margin="0,15,0,0"
+                    BackgroundColor="#28A745"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>

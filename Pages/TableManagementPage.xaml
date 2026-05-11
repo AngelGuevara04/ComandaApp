@@ -2,29 +2,72 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
              xmlns:models="clr-namespace:ComandaApp.Models"
+             xmlns:converters="clr-namespace:ComandaApp.Converters"
              x:Class="ComandaApp.Pages.TableManagementPage"
              x:DataType="vm:TableManagementPageModel"
              Title="Gestión de Mesas">
 
+    <ContentPage.Resources>
+        <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+    </ContentPage.Resources>
+
     <Grid RowDefinitions="*, Auto" Padding="20">
 
         <CollectionView Grid.Row="0" ItemsSource="{Binding Mesas}">
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout HorizontalOptions="Center" VerticalOptions="Center">
+                    <Label Text="No hay mesas registradas." 
+                           TextColor="Gray"
+                           FontSize="18"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Presiona 'Agregar Nueva Mesa' para comenzar." 
+                           TextColor="LightGray"
+                           FontSize="14"
+                           HorizontalOptions="Center"/>
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Mesa">
-                    <Border StrokeShape="RoundRectangle 12" Margin="0,5" Padding="15">
-                        <Grid ColumnDefinitions="*, Auto">
-                            <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
-                                <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}" FontAttributes="Bold" FontSize="18"/>
-                                <Label Text="{Binding Area}" TextColor="Gray"/>
-                            </VerticalStackLayout>
+                    <SwipeView Margin="0,5">
 
-                            <Button Grid.Column="1" 
-                                    Text="Ver QR" 
-                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TableManagementPageModel}}, Path=VerQrMesaCommand}"
-                                    CommandParameter="{Binding .}"
-                                    BackgroundColor="#512BD4"/>
-                        </Grid>
-                    </Border>
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Eliminar" 
+                                           BackgroundColor="Red"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TableManagementPageModel}}, Path=EliminarMesaCommand}"
+                                           CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+
+                        <Border StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                            <Grid ColumnDefinitions="*, Auto, Auto">
+
+                                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                    <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}" FontAttributes="Bold" FontSize="18"/>
+                                    <Label Text="{Binding Area}" TextColor="Gray"/>
+                                    <Label Text="{Binding EstaOcupada, StringFormat='Ocupada: {0}'}" 
+                                           TextColor="{Binding EstaOcupada, Converter={StaticResource BoolToColorConverter}}" 
+                                           FontSize="12"
+                                           FontAttributes="Bold"/>
+                                </VerticalStackLayout>
+
+                                <Button Grid.Column="1" 
+                                        Text="Estado" 
+                                        Margin="0,0,10,0"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TableManagementPageModel}}, Path=CambiarEstadoMesaCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#28A745"/>
+
+                                <Button Grid.Column="2" 
+                                        Text="Ver QR" 
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TableManagementPageModel}}, Path=VerQrMesaCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#512BD4"/>
+                            </Grid>
+                        </Border>
+                    </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
@@ -33,6 +76,7 @@
                 Text="Agregar Nueva Mesa" 
                 Command="{Binding AgregarMesaCommand}"
                 Margin="0,10"
-                HeightRequest="60"/>
+                HeightRequest="60"
+                FontAttributes="Bold"/>
     </Grid>
 </ContentPage>

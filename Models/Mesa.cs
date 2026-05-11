@@ -1,11 +1,24 @@
-﻿namespace ComandaApp.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class Mesa
+namespace ComandaApp.Models;
+
+public partial class Mesa : ObservableObject
 {
-    public int Id { get; set; }
-    public string NumeroMesa { get; set; } = string.Empty;
-    public int Capacidad { get; set; }
-    public string Area { get; set; } = "General";
-    public string QrCodeData { get; set; } = string.Empty; // Aquí guardaremos el ID único del QR
-    public bool EstaOcupada { get; set; }
+    [ObservableProperty]
+    private int id;
+
+    [ObservableProperty]
+    private string numeroMesa = string.Empty;
+
+    [ObservableProperty]
+    private int capacidad;
+
+    [ObservableProperty]
+    private string area = "General";
+
+    [ObservableProperty]
+    private string qrCodeData = string.Empty;
+
+    [ObservableProperty]
+    private bool estaOcupada;
 }

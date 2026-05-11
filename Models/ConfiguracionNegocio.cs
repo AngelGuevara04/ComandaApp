@@ -1,9 +1,18 @@
-﻿namespace ComandaApp.Models;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-public class ConfiguracionNegocio
+namespace ComandaApp.Models;
+
+public partial class ConfiguracionNegocio : ObservableObject
 {
-    public string NombreRestaurante { get; set; } = string.Empty;
-    public string RFC { get; set; } = string.Empty;
-    public string Direccion { get; set; } = string.Empty;
-    public string LogoUrl { get; set; } = string.Empty;
+    [ObservableProperty]
+    private string nombreRestaurante = string.Empty;
+
+    [ObservableProperty]
+    private string rfc = string.Empty;
+
+    [ObservableProperty]
+    private string direccion = string.Empty;
+
+    [ObservableProperty]
+    private string logoUrl = string.Empty;
 }

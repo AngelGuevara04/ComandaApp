@@ -1,0 +1,90 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ComandaApp.PageModels"
+             xmlns:models="clr-namespace:ComandaApp.Models"
+             xmlns:converters="clr-namespace:ComandaApp.Converters"
+             x:Class="ComandaApp.Pages.KitchenDashboardPage"
+             x:DataType="vm:KitchenDashboardPageModel"
+             Title="Panel de Cocina">
+
+    <ContentPage.Resources>
+        <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
+        <converters:StringNotNullConverter x:Key="StringNotNullConverter" />
+    </ContentPage.Resources>
+
+    <Grid ColumnDefinitions="6*, 4*" Padding="10" ColumnSpacing="15">
+
+        <Border Grid.Column="0" StrokeShape="RoundRectangle 10" Padding="15" BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#121212}">
+            <Grid RowDefinitions="Auto, *">
+                <Label Grid.Row="0" Text="Órdenes Activas" FontSize="24" FontAttributes="Bold" Margin="0,0,0,15"/>
+
+                <CollectionView Grid.Row="1" ItemsSource="{Binding PedidosActivos}">
+                    <CollectionView.EmptyView>
+                        <Label Text="No hay pedidos pendientes." HorizontalOptions="Center" VerticalOptions="Center" TextColor="Gray"/>
+                    </CollectionView.EmptyView>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:DetallePedido">
+                            <Border StrokeShape="RoundRectangle 8" Padding="15" Margin="0,0,0,10" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                                <Grid ColumnDefinitions="*, Auto" RowDefinitions="Auto, Auto">
+
+                                    <VerticalStackLayout Grid.Column="0" Grid.Row="0">
+                                        <Label Text="{Binding NombrePlatillo, StringFormat='{0}x {1}'}" FontAttributes="Bold" FontSize="18"/>
+
+                                        <Label Text="{Binding Notas, StringFormat='Notas: {0}'}" 
+                                               TextColor="DarkRed" 
+                                               FontAttributes="Italic" 
+                                               IsVisible="{Binding Notas, Converter={StaticResource StringNotNullConverter}}"/>
+
+                                        <Label Text="{Binding Estado, StringFormat='Estado: {0}'}" TextColor="Gray" FontSize="12" Margin="0,5,0,0"/>
+                                    </VerticalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Column="1" Grid.Row="0" Spacing="10" VerticalOptions="Center">
+                                        <Button Text="Rechazar" 
+                                                BackgroundColor="Red" 
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:KitchenDashboardPageModel}}, Path=RechazarPedidoCommand}"
+                                                CommandParameter="{Binding .}"
+                                                HeightRequest="40"/>
+
+                                        <Button Text="Preparar" 
+                                                BackgroundColor="#FFC107" TextColor="Black"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:KitchenDashboardPageModel}}, Path=MarcarEnPreparacionCommand}"
+                                                CommandParameter="{Binding .}"
+                                                HeightRequest="40"/>
+
+                                        <Button Text="¡Listo!" 
+                                                BackgroundColor="#28A745"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:KitchenDashboardPageModel}}, Path=MarcarListoCommand}"
+                                                CommandParameter="{Binding .}"
+                                                HeightRequest="40"/>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Border>
+
+        <Border Grid.Column="1" StrokeShape="RoundRectangle 10" Padding="15" BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#121212}">
+            <Grid RowDefinitions="Auto, *">
+                <Label Grid.Row="0" Text="Disponibilidad Menú" FontSize="20" FontAttributes="Bold" Margin="0,0,0,15"/>
+
+                <CollectionView Grid.Row="1" ItemsSource="{Binding MenuRestaurante}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Platillo">
+                            <Grid ColumnDefinitions="*, Auto" Padding="0,10">
+                                <Label Grid.Column="0" Text="{Binding Nombre}" VerticalOptions="Center" FontSize="16"/>
+                                <Button Grid.Column="1" 
+                                        Text="{Binding EstaDisponible, StringFormat='{0}'}"
+                                        BackgroundColor="{Binding EstaDisponible, Converter={StaticResource BoolToColorConverter}}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:KitchenDashboardPageModel}}, Path=AlternarDisponibilidadCommand}"
+                                        CommandParameter="{Binding .}"
+                                        WidthRequest="100" HeightRequest="35"/>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+            </Grid>
+        </Border>
+    </Grid>
+</ContentPage>

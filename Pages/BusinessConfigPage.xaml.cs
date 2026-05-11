@@ -2,9 +2,9 @@
 
 namespace ComandaApp.Pages;
 
-public partial class TableManagementPage : ContentPage
+public partial class BusinessConfigPage : ContentPage
 {
-    public TableManagementPage(TableManagementPageModel viewModel)
+    public BusinessConfigPage(BusinessConfigPageModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

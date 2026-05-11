@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 using Font = Microsoft.Maui.Font;
+using ComandaApp.Pages; // Agregamos este using para que reconozca nuestras vistas
 
 namespace ComandaApp;
 
@@ -9,6 +10,25 @@ public partial class AppShell : Shell
     public AppShell()
     {
         InitializeComponent();
+
+        // ==========================================
+        // REGISTRO DE RUTAS DE NAVEGACIÓN
+        // ==========================================
+
+        // Rutas de las páginas que ya están construidas
+        Routing.RegisterRoute("table_management", typeof(TableManagementPage));
+        Routing.RegisterRoute("business_config", typeof(BusinessConfigPage));
+
+        // Si tienes la de cocina en este proyecto de MAUI:
+        // Routing.RegisterRoute("kitchen_dashboard", typeof(KitchenDashboardPage)); 
+
+        // Rutas de los próximos módulos (comentadas para evitar errores de compilación
+        // hasta que creemos los archivos .xaml correspondientes)
+        // Routing.RegisterRoute("menu_management", typeof(MenuManagementPage));
+        // Routing.RegisterRoute("device_management", typeof(DeviceManagementPage));
+        // Routing.RegisterRoute("corte_caja", typeof(CorteCajaPage));
+        // Routing.RegisterRoute("order_history", typeof(OrderHistoryPage));
+
 
         // Verificación de seguridad reforzada
         if (Application.Current != null && ThemeSegmentedControl != null)
