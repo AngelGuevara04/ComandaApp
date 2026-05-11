@@ -25,9 +25,14 @@ public static class MauiProgram
         builder.Logging.AddDebug();
 #endif
 
-        // Solo registramos lo que estamos usando actualmente
+        // 1. Registro de Dashboard Principal
         builder.Services.AddSingleton<AdminDashboardPage>();
         builder.Services.AddSingleton<AdminDashboardPageModel>();
+
+        // 2. Registro de Páginas Secundarias de Administración
+        // Usamos Transient porque estas pantallas se crean y destruyen al navegar
+        builder.Services.AddTransientWithShellRoute<TableManagementPage, TableManagementPageModel>("table_management");
+        builder.Services.AddTransientWithShellRoute<BusinessConfigPage, BusinessConfigPageModel>("business_config");
 
         return builder.Build();
     }

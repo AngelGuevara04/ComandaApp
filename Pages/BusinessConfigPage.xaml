@@ -1,0 +1,17 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ComandaApp.PageModels"
+             x:Class="ComandaApp.Pages.BusinessConfigPage"
+             x:DataType="vm:BusinessConfigPageModel"
+             Title="Configurar Restaurante">
+
+    <VerticalStackLayout Padding="20" Spacing="15">
+        <Entry Placeholder="Nombre del Restaurante" Text="{Binding Config.NombreRestaurante}" />
+        <Entry Placeholder="RFC" Text="{Binding Config.RFC}" />
+        <Entry Placeholder="Dirección" Text="{Binding Config.Direccion}" />
+
+        <Button Text="Guardar Cambios" 
+                Command="{Binding GuardarConfiguracionCommand}" 
+                Margin="0,20"/>
+    </VerticalStackLayout>
+</ContentPage>

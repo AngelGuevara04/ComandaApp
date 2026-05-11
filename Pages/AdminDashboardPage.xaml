@@ -6,27 +6,61 @@
              x:DataType="vm:AdminDashboardPageModel"
              Title="Centro de Mando">
 
-	<ScrollView>
-		<VerticalStackLayout Padding="30" Spacing="30">
-			<Label Text="Administración" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center" />
+    <ScrollView>
+        <VerticalStackLayout Padding="25" Spacing="25">
+            <Label Text="Panel de Administración" 
+                   FontSize="28" 
+                   FontAttributes="Bold" 
+                   HorizontalOptions="Center" 
+                   TextColor="{StaticResource Primary}"/>
 
-			<Grid ColumnDefinitions="*,*" RowDefinitions="Auto" ColumnSpacing="20">
+            <Grid ColumnDefinitions="*,*" 
+                  RowDefinitions="Auto,Auto,Auto" 
+                  ColumnSpacing="15" 
+                  RowSpacing="15">
 
-				<Border Grid.Column="0" StrokeShape="RoundRectangle 15" StrokeThickness="1" Stroke="#E0E0E0" Padding="20">
-					<VerticalStackLayout Spacing="15" HorizontalOptions="Center">
-						<Label Text="Mesas" FontAttributes="Bold" HorizontalOptions="Center" />
-						<Button Text="Configurar" Command="{Binding GoToMesasCommand}" />
-					</VerticalStackLayout>
-				</Border>
+                <Border Grid.Row="0" Grid.Column="0" StrokeShape="RoundRectangle 12" Padding="15">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="Mesas y QR" FontAttributes="Bold" HorizontalOptions="Center" />
+                        <Button Text="Entrar" Command="{Binding GoToMesasCommand}" Style="{StaticResource ButtonOutline}" />
+                    </VerticalStackLayout>
+                </Border>
 
-				<Border Grid.Column="1" StrokeShape="RoundRectangle 15" StrokeThickness="1" Stroke="#E0E0E0" Padding="20">
-					<VerticalStackLayout Spacing="15" HorizontalOptions="Center">
-						<Label Text="Menú" FontAttributes="Bold" HorizontalOptions="Center" />
-						<Button Text="Gestionar" Command="{Binding GoToMenuCommand}" />
-					</VerticalStackLayout>
-				</Border>
+                <Border Grid.Row="0" Grid.Column="1" StrokeShape="RoundRectangle 12" Padding="15">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="Menú" FontAttributes="Bold" HorizontalOptions="Center" />
+                        <Button Text="Gestionar" Command="{Binding GoToMenuCommand}" />
+                    </VerticalStackLayout>
+                </Border>
 
-			</Grid>
-		</VerticalStackLayout>
-	</ScrollView>
+                <Border Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 12" Padding="15">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="Dispositivos" FontAttributes="Bold" HorizontalOptions="Center" />
+                        <Button Text="Vincular" Command="{Binding GoToDevicesCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="1" Grid.Column="1" StrokeShape="RoundRectangle 12" Padding="15">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="Corte de Caja" FontAttributes="Bold" HorizontalOptions="Center" />
+                        <Button Text="Ver" Command="{Binding GoToCorteCommand}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" StrokeShape="RoundRectangle 12" Padding="15">
+                    <HorizontalStackLayout Spacing="20" HorizontalOptions="Center">
+                        <Label Text="Reportes e Historial" VerticalOptions="Center" FontAttributes="Bold" />
+                        <Button Text="Consultar Pedidos" Command="{Binding GoToHistoryCommand}" WidthRequest="200" />
+                    </HorizontalStackLayout>
+                </Border>
+
+            </Grid>
+
+            <Button Text="Configuración del Restaurante" 
+                    Command="{Binding GoToConfigCommand}"
+                    BackgroundColor="Gray"
+                    Margin="0,10,0,0" />
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
