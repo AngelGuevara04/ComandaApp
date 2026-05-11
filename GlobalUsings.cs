@@ -1,6 +1,9 @@
-global using ComandaApp.Data;
-global using ComandaApp.PageModels;
+global using CommunityToolkit.Maui;
+global using CommunityToolkit.Maui.Views;
+global using CommunityToolkit.Mvvm.ComponentModel;
+global using CommunityToolkit.Mvvm.Input;
+global using Microsoft.Extensions.Logging;
+global using System.Collections.ObjectModel;
 global using ComandaApp.Pages;
-global using ComandaApp.Services;
-global using ComandaApp.Utilities;
-global using Fonts;
+global using ComandaApp.PageModels;
+global using ComandaApp.Models;

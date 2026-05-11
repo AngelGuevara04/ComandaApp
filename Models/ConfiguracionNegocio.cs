@@ -2,8 +2,8 @@
 
 public class ConfiguracionNegocio
 {
-    public string NombreRestaurante { get; set; }
-    public string RFC { get; set; }
-    public string Direccion { get; set; }
-    public string LogoUrl { get; set; }
+    public string NombreRestaurante { get; set; } = string.Empty;
+    public string RFC { get; set; } = string.Empty;
+    public string Direccion { get; set; } = string.Empty;
+    public string LogoUrl { get; set; } = string.Empty;
 }

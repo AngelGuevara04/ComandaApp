@@ -4,34 +4,31 @@ using Syncfusion.Maui.Toolkit.Hosting;
 using ComandaApp.Pages;
 using ComandaApp.PageModels;
 
-namespace ComandaApp
+namespace ComandaApp;
+
+public static class MauiProgram
 {
-    public static class MauiProgram
+    public static MauiApp CreateMauiApp()
     {
-        public static MauiApp CreateMauiApp()
-        {
-            var builder = MauiApp.CreateBuilder();
-            builder
-                .UseMauiApp<App>()
-                .UseMauiCommunityToolkit()
-                .ConfigureSyncfusionToolkit()
-                .ConfigureFonts(fonts =>
-                {
-                    fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                    fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                    fonts.AddFont("SegoeUI-Semibold.ttf", "SegoeSemibold");
-                    fonts.AddFont("FluentSystemIcons-Regular.ttf", FluentUI.FontFamily);
-                });
+        var builder = MauiApp.CreateBuilder();
+        builder
+            .UseMauiApp<App>()
+            .UseMauiCommunityToolkit()
+            .ConfigureSyncfusionToolkit()
+            .ConfigureFonts(fonts =>
+            {
+                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+            });
 
 #if DEBUG
-            builder.Logging.AddDebug();
+        builder.Logging.AddDebug();
 #endif
 
-            // REGISTRO ÚNICO PARA TU APP DE COMANDAS
-            builder.Services.AddSingleton<AdminDashboardPage>();
-            builder.Services.AddSingleton<AdminDashboardPageModel>();
+        // Solo registramos lo que estamos usando actualmente
+        builder.Services.AddSingleton<AdminDashboardPage>();
+        builder.Services.AddSingleton<AdminDashboardPageModel>();
 
-            return builder.Build();
-        }
+        return builder.Build();
     }
 }
