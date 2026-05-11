@@ -10,11 +10,19 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
-        // Verificación de seguridad para evitar cierres al iniciar
+        // Verificación de seguridad reforzada
         if (Application.Current != null && ThemeSegmentedControl != null)
         {
-            var currentTheme = Application.Current.RequestedTheme;
-            ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
+            try
+            {
+                var currentTheme = Application.Current.RequestedTheme;
+                ThemeSegmentedControl.SelectedIndex = currentTheme == AppTheme.Light ? 0 : 1;
+            }
+            catch
+            {
+                // Si falla la detección del tema, por defecto iniciamos en el primero
+                ThemeSegmentedControl.SelectedIndex = 0;
+            }
         }
     }
 

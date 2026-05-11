@@ -12,8 +12,7 @@
                    FontSize="28" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center" 
-                   TextColor="{StaticResource Primary}"/>
-
+                   TextColor="#512BD4"/>
             <Grid ColumnDefinitions="*,*" 
                   RowDefinitions="Auto,Auto,Auto" 
                   ColumnSpacing="15" 
@@ -22,7 +21,7 @@
                 <Border Grid.Row="0" Grid.Column="0" StrokeShape="RoundRectangle 12" Padding="15">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
                         <Label Text="Mesas y QR" FontAttributes="Bold" HorizontalOptions="Center" />
-                        <Button Text="Entrar" Command="{Binding GoToMesasCommand}" Style="{StaticResource ButtonOutline}" />
+                        <Button Text="Entrar" Command="{Binding GoToMesasCommand}" />
                     </VerticalStackLayout>
                 </Border>
 
@@ -58,7 +57,7 @@
 
             <Button Text="Configuración del Restaurante" 
                     Command="{Binding GoToConfigCommand}"
-                    BackgroundColor="Gray"
+                    BackgroundColor="#808080"
                     Margin="0,10,0,0" />
 
         </VerticalStackLayout>
