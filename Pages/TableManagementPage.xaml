@@ -7,19 +7,32 @@
              Title="Gestión de Mesas">
 
     <Grid RowDefinitions="*, Auto" Padding="20">
+
         <CollectionView Grid.Row="0" ItemsSource="{Binding Mesas}">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Mesa">
-                    <Border StrokeShape="RoundRectangle 10" Margin="0,5" Padding="15">
-                        <HorizontalStackLayout Spacing="20">
-                            <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}" FontAttributes="Bold" VerticalOptions="Center"/>
-                            <Label Text="{Binding Area}" VerticalOptions="Center" TextColor="Gray"/>
-                        </HorizontalStackLayout>
+                    <Border StrokeShape="RoundRectangle 12" Margin="0,5" Padding="15">
+                        <Grid ColumnDefinitions="*, Auto">
+                            <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}" FontAttributes="Bold" FontSize="18"/>
+                                <Label Text="{Binding Area}" TextColor="Gray"/>
+                            </VerticalStackLayout>
+
+                            <Button Grid.Column="1" 
+                                    Text="Ver QR" 
+                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TableManagementPageModel}}, Path=VerQrMesaCommand}"
+                                    CommandParameter="{Binding .}"
+                                    BackgroundColor="#512BD4"/>
+                        </Grid>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button Grid.Row="1" Text="Agregar Nueva Mesa" Command="{Binding AgregarMesaCommand}" />
+        <Button Grid.Row="1" 
+                Text="Agregar Nueva Mesa" 
+                Command="{Binding AgregarMesaCommand}"
+                Margin="0,10"
+                HeightRequest="60"/>
     </Grid>
 </ContentPage>
