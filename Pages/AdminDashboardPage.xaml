@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ComandaApp.PageModels"
+             x:Class="ComandaApp.Pages.AdminDashboardPage"
+             x:DataType="vm:AdminDashboardPageModel"
+             Title="Administración">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="25">
+            <Label Text="Centro de Control" FontSize="32" FontAttributes="Bold" HorizontalOptions="Center" Margin="0,20" />
+
+            <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="20" RowSpacing="20">
+                <Frame Grid.Row="0" Grid.Column="0" HasShadow="True" BorderColor="#E0E0E0" Padding="15">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="Mesas" FontAttributes="Bold" HorizontalOptions="Center" />
+                        <Button Text="Gestionar" 
+                                Command="{Binding GoToMesasCommand}"
+                                BackgroundColor="{StaticResource Primary}" />
+                    </VerticalStackLayout>
+                </Frame>
+
+                <Frame Grid.Row="0" Grid.Column="1" HasShadow="True" BorderColor="#E0E0E0" Padding="15">
+                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
+                        <Label Text="Menú" FontAttributes="Bold" HorizontalOptions="Center" />
+                        <Button Text="Configurar" 
+                                Command="{Binding GoToMenuCommand}"
+                                BackgroundColor="{StaticResource Primary}" />
+                    </VerticalStackLayout>
+                </Frame>
+            </Grid>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
