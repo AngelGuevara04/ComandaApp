@@ -1,0 +1,47 @@
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ComandaApp.PageModels"
+             xmlns:models="clr-namespace:ComandaApp.Models"
+             x:Class="ComandaApp.Pages.DeviceManagementPage"
+             x:DataType="vm:DeviceManagementPageModel"
+             Title="Gestión de Dispositivos">
+
+    <Grid RowDefinitions="*, Auto" Padding="15">
+        <CollectionView Grid.Row="0" ItemsSource="{Binding DispositivosAgrupados}" IsGrouped="True">
+
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate x:DataType="vm:GrupoDispositivos">
+                    <Label Text="{Binding Titulo}" FontAttributes="Bold" FontSize="20" Padding="10" BackgroundColor="#F0F0F0" TextColor="Black"/>
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Dispositivo">
+                    <SwipeView Margin="0,2">
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem Text="Eliminar" BackgroundColor="Red" 
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceManagementPageModel}}, Path=EliminarDispositivoCommand}"
+                                           CommandParameter="{Binding .}"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Border Padding="15" StrokeThickness="0.5">
+                            <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
+                                <Label Text="📱" FontSize="24"/>
+                                <VerticalStackLayout>
+                                    <Label Text="{Binding Nombre}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding QrCodeData}" FontSize="10" TextColor="Gray"/>
+                                </VerticalStackLayout>
+                            </HorizontalStackLayout>
+                        </Border>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+
+        <HorizontalStackLayout Grid.Row="1" Spacing="10" HorizontalOptions="Center" Padding="10">
+            <Button Text="Vincular Nuevo" Command="{Binding AgregarDispositivoCommand}" BackgroundColor="#512BD4"/>
+            <Button Text="Limpiar Rol" Command="{Binding EliminarPorRolCommand}" BackgroundColor="Orange" TextColor="Black"/>
+        </HorizontalStackLayout>
+    </Grid>
+</ContentPage>

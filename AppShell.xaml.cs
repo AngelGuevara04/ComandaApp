@@ -11,14 +11,13 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
-        // ==========================================
-        // REGISTRO DE RUTAS 
-        // ==========================================
         Routing.RegisterRoute(nameof(TableManagementPage), typeof(TableManagementPage));
         Routing.RegisterRoute(nameof(BusinessConfigPage), typeof(BusinessConfigPage));
         Routing.RegisterRoute(nameof(KitchenDashboardPage), typeof(KitchenDashboardPage));
 
-        // Verificación de seguridad reforzada
+        // ¡Nueva ruta registrada!
+        Routing.RegisterRoute(nameof(MenuManagementPage), typeof(MenuManagementPage));
+
         if (Application.Current != null && ThemeSegmentedControl != null)
         {
             try
@@ -42,23 +41,18 @@ public partial class AppShell : Shell
             CornerRadius = new CornerRadius(10),
             Font = Font.SystemFontOfSize(16)
         };
-
-        var snackbar = Snackbar.Make(message, visualOptions: snackbarOptions);
-        await snackbar.Show();
+        await Snackbar.Make(message, visualOptions: snackbarOptions).Show();
     }
 
     public static async Task DisplayToastAsync(string message)
     {
         if (OperatingSystem.IsWindows()) return;
-        var toast = Toast.Make(message, textSize: 16);
-        await toast.Show();
+        await Toast.Make(message, textSize: 16).Show();
     }
 
     private void SfSegmentedControl_SelectionChanged(object? sender, Syncfusion.Maui.Toolkit.SegmentedControl.SelectionChangedEventArgs e)
     {
         if (Application.Current != null)
-        {
             Application.Current.UserAppTheme = e.NewIndex == 0 ? AppTheme.Light : AppTheme.Dark;
-        }
     }
 }

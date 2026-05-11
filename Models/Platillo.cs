@@ -17,9 +17,11 @@ public partial class Platillo : ObservableObject
     private double precio;
 
     [ObservableProperty]
-    private string categoria = "Comida"; // Puede ser Comida, Bebida, Postre
+    private string categoria = "Comida"; // "Comida" o "Bebida"
 
-    // Esta es la propiedad clave que la cocina modificará
+    [ObservableProperty]
+    private string imagenSource = "dotnet_bot.svg"; // Imagen por defecto
+
     [ObservableProperty]
     private bool estaDisponible = true;
 }
