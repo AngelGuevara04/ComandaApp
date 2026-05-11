@@ -9,7 +9,7 @@
     Title="ComandaApp">
 
     <ShellContent
-        Title="Panel Admin"
+        Title="Admin Dashboard"
         ContentTemplate="{DataTemplate pages:AdminDashboardPage}"
         Route="admin_dashboard" />
 
@@ -21,8 +21,8 @@
                 SegmentWidth="40" SegmentHeight="40">
                 <sf:SfSegmentedControl.ItemsSource>
                     <x:Array Type="{x:Type sf:SfSegmentItem}">
-                        <sf:SfSegmentItem ImageSource="{StaticResource IconLight}" />
-                        <sf:SfSegmentItem ImageSource="{StaticResource IconDark}" />
+                        <sf:SfSegmentItem Text="☀" />
+                        <sf:SfSegmentItem Text="🌙" />
                     </x:Array>
                 </sf:SfSegmentedControl.ItemsSource>
             </sf:SfSegmentedControl>
