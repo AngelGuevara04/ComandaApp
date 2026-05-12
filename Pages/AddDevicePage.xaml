@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ComandaApp.PageModels"
+             x:Class="ComandaApp.Pages.AddDevicePage"
+             x:DataType="vm:AddDevicePageModel"
+             Title="{Binding TituloFormulario}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20" Spacing="20">
+
+            <VerticalStackLayout Spacing="15" IsVisible="{Binding FormularioVisible}">
+                <Label Text="Completar Datos" FontSize="20" FontAttributes="Bold" HorizontalOptions="Center"/>
+
+                <Border StrokeShape="RoundRectangle 12" Padding="20" BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#1E1E1E}">
+                    <VerticalStackLayout Spacing="15">
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="{Binding PromptNombre}" FontAttributes="Bold" TextColor="Gray"/>
+                            <Entry Text="{Binding NombreInput}" Placeholder="Escribe aquí..."/>
+                        </VerticalStackLayout>
+
+                        <VerticalStackLayout Spacing="5">
+                            <Label Text="{Binding PromptDetalle}" FontAttributes="Bold" TextColor="Gray"/>
+                            <Entry Text="{Binding DetalleInput}" Placeholder="Escribe aquí..."/>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button Text="Generar QR de Acceso" 
+                        Command="{Binding GenerarQRCommand}" 
+                        BackgroundColor="#512BD4" 
+                        HeightRequest="55" 
+                        FontAttributes="Bold" 
+                        Margin="0,20,0,0"/>
+            </VerticalStackLayout>
+
+            <VerticalStackLayout Spacing="20" IsVisible="{Binding QrGenerado}" HorizontalOptions="Center">
+                <Label Text="¡Dispositivo Registrado!" FontSize="22" FontAttributes="Bold" TextColor="#28A745" HorizontalOptions="Center"/>
+
+                <Border StrokeShape="RoundRectangle 12" Padding="30" BackgroundColor="White" HorizontalOptions="Center">
+                    <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
+                        <Label Text="🔲" FontSize="120" HorizontalOptions="Center"/>
+                        <Label Text="Escanea este código con el dispositivo" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                        <Label Text="{Binding QrCodeData}" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" FontSize="12"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Button Text="Regresar al Gestor" 
+                        Command="{Binding VolverCommand}" 
+                        BackgroundColor="#6C757D" 
+                        HeightRequest="55" 
+                        FontAttributes="Bold"/>
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

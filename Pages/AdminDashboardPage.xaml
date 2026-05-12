@@ -16,31 +16,23 @@
                    TextColor="#512BD4"/>
 
             <Grid ColumnDefinitions="*,*" 
-                  RowDefinitions="Auto,Auto,Auto" 
-                  ColumnSpacing="15" 
-                  RowSpacing="15">
+      RowDefinitions="Auto,Auto,Auto" 
+      ColumnSpacing="15" 
+      RowSpacing="15">
 
-                <Border Grid.Row="0" Grid.Column="0" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Mesas y QR" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
-                        <Label Text="Gestión de accesos" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
-                        <Button Text="Entrar" Command="{Binding AbrirMesasCommand}" BackgroundColor="#512BD4"/>
-                    </VerticalStackLayout>
-                </Border>
-
-                <Border Grid.Row="0" Grid.Column="1" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
-                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Menú" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
-                        <Label Text="Platillos y precios" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
-                        <Button Text="Gestionar" Command="{Binding AbrirMenuCommand}" BackgroundColor="#512BD4"/>
+                        <Label Text="Gestión de Dispositivos (QR)" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
+                        <Label Text="Mesas, Cajas y Cocinas" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                        <Button Text="Administrar Accesos" Command="{Binding AbrirDispositivosCommand}" WidthRequest="250" BackgroundColor="#512BD4"/>
                     </VerticalStackLayout>
                 </Border>
 
                 <Border Grid.Row="1" Grid.Column="0" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Dispositivos" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
-                        <Label Text="Caja, Cocina, etc." FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
-                        <Button Text="Vincular" Command="{Binding AbrirDispositivosCommand}" BackgroundColor="#512BD4"/>
+                        <Label Text="Menú" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
+                        <Label Text="Platillos y precios" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
+                        <Button Text="Gestionar" Command="{Binding AbrirMenuCommand}" BackgroundColor="#512BD4"/>
                     </VerticalStackLayout>
                 </Border>
 
@@ -57,14 +49,6 @@
                         <Label Text="Reportes e Historial" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
                         <Label Text="Consulta de pedidos por día" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
                         <Button Text="Consultar Pedidos" Command="{Binding AbrirHistorialCommand}" WidthRequest="220" BackgroundColor="#512BD4"/>
-                    </VerticalStackLayout>
-                </Border>
-
-                <Border Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
-                    <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Gestión de Dispositivos (QR)" FontAttributes="Bold" HorizontalOptions="Center" FontSize="16"/>
-                        <Label Text="Mesas, Cajas y Cocinas" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
-                        <Button Text="Administrar Accesos" Command="{Binding AbrirDispositivosCommand}" WidthRequest="250" BackgroundColor="#512BD4"/>
                     </VerticalStackLayout>
                 </Border>
 

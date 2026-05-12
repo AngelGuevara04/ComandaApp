@@ -15,8 +15,11 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(nameof(BusinessConfigPage), typeof(BusinessConfigPage));
         Routing.RegisterRoute(nameof(KitchenDashboardPage), typeof(KitchenDashboardPage));
 
-        // ¡Nueva ruta registrada!
         Routing.RegisterRoute(nameof(MenuManagementPage), typeof(MenuManagementPage));
+
+        Routing.RegisterRoute(nameof(DeviceManagementPage), typeof(DeviceManagementPage));
+
+        Routing.RegisterRoute(nameof(AddDevicePage), typeof(AddDevicePage));
 
         if (Application.Current != null && ThemeSegmentedControl != null)
         {

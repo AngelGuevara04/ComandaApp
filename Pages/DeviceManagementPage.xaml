@@ -6,9 +6,45 @@
              x:DataType="vm:DeviceManagementPageModel"
              Title="Gestión de Dispositivos">
 
-    <Grid RowDefinitions="*, Auto" Padding="15">
-        <CollectionView Grid.Row="0" ItemsSource="{Binding DispositivosAgrupados}" IsGrouped="True">
+    <Grid RowDefinitions="Auto, *, Auto" Padding="15">
 
+        <VerticalStackLayout Grid.Row="0" Spacing="15" Margin="0,0,0,20">
+            <Label Text="Agregar Nuevo Dispositivo" FontAttributes="Bold" FontSize="18" HorizontalOptions="Center"/>
+            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+
+                <Border Grid.Column="0" StrokeShape="RoundRectangle 10" BackgroundColor="#28A745" Padding="10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}" CommandParameter="Mesa"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <Label Text="🪑" FontSize="30" HorizontalOptions="Center"/>
+                        <Label Text="Mesa" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="1" StrokeShape="RoundRectangle 10" BackgroundColor="#FFC107" Padding="10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}" CommandParameter="Cocina"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <Label Text="🍳" FontSize="30" HorizontalOptions="Center"/>
+                        <Label Text="Cocina" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border Grid.Column="2" StrokeShape="RoundRectangle 10" BackgroundColor="#512BD4" Padding="10">
+                    <Border.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}" CommandParameter="Caja"/>
+                    </Border.GestureRecognizers>
+                    <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
+                        <Label Text="💵" FontSize="30" HorizontalOptions="Center"/>
+                        <Label Text="Caja" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                    </VerticalStackLayout>
+                </Border>
+            </Grid>
+        </VerticalStackLayout>
+
+        <CollectionView Grid.Row="1" ItemsSource="{Binding DispositivosAgrupados}" IsGrouped="True">
             <CollectionView.GroupHeaderTemplate>
                 <DataTemplate x:DataType="vm:GrupoDispositivos">
                     <Label Text="{Binding Titulo}" FontAttributes="Bold" FontSize="20" Padding="10" BackgroundColor="#F0F0F0" TextColor="Black"/>
@@ -25,11 +61,12 @@
                                            CommandParameter="{Binding .}"/>
                             </SwipeItems>
                         </SwipeView.RightItems>
-                        <Border Padding="15" StrokeThickness="0.5">
+                        <Border Padding="15" StrokeThickness="0.5" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                             <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
                                 <Label Text="📱" FontSize="24"/>
                                 <VerticalStackLayout>
                                     <Label Text="{Binding Nombre}" FontAttributes="Bold"/>
+                                    <Label Text="{Binding DetalleExtra}" FontSize="12" TextColor="#28A745"/>
                                     <Label Text="{Binding QrCodeData}" FontSize="10" TextColor="Gray"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
@@ -39,9 +76,6 @@
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <HorizontalStackLayout Grid.Row="1" Spacing="10" HorizontalOptions="Center" Padding="10">
-            <Button Text="Vincular Nuevo" Command="{Binding AgregarDispositivoCommand}" BackgroundColor="#512BD4"/>
-            <Button Text="Limpiar Rol" Command="{Binding EliminarPorRolCommand}" BackgroundColor="Orange" TextColor="Black"/>
-        </HorizontalStackLayout>
+        <Button Grid.Row="2" Text="Eliminar Rol Completo" Command="{Binding EliminarPorRolCommand}" BackgroundColor="Orange" TextColor="Black" Margin="10,10,10,0"/>
     </Grid>
 </ContentPage>

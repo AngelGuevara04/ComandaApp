@@ -15,6 +15,10 @@ public partial class Dispositivo : ObservableObject
     [ObservableProperty]
     private RolDispositivo rol;
 
+    // Nuevo campo para guardar respuestas del cuestionario
+    [ObservableProperty]
+    private string detalleExtra = string.Empty;
+
     [ObservableProperty]
     private string qrCodeData = string.Empty;
 
@@ -22,7 +26,6 @@ public partial class Dispositivo : ObservableObject
     private DateTime fechaVinculacion = DateTime.Now;
 }
 
-// Clase para agrupar dispositivos por Rol en la UI
 public class GrupoDispositivos : List<Dispositivo>
 {
     public string Titulo { get; set; }

@@ -41,6 +41,12 @@ public static class MauiProgram
         builder.Services.AddTransient<MenuManagementPage>();
         builder.Services.AddTransient<MenuManagementPageModel>();
 
+        builder.Services.AddTransient<DeviceManagementPage>();
+        builder.Services.AddTransient<DeviceManagementPageModel>();
+
+        builder.Services.AddTransient<AddDevicePage>();
+        builder.Services.AddTransient<AddDevicePageModel>();
+
         return builder.Build();
     }
 }

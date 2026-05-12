@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ComandaApp.Models;
+using ComandaApp.Pages;
 
 namespace ComandaApp.PageModels;
 
@@ -14,24 +15,17 @@ public partial class DeviceManagementPageModel : ObservableObject
 
     public DeviceManagementPageModel() => actualizarGrupos();
 
+    // Este comando abre la nueva página enviándole qué apartado presionó el usuario
     [RelayCommand]
-    private async Task agregarDispositivo()
+    private async Task abrirCuestionario(string rolSeleccionado)
     {
-        string rolStr = await Shell.Current.DisplayActionSheet("Tipo de Dispositivo", "Cancelar", null, "Mesa", "Caja", "Cocina");
-        if (rolStr == "Cancelar") return;
+        await Shell.Current.GoToAsync($"{nameof(AddDevicePage)}?rol={rolSeleccionado}");
+    }
 
-        string nombre = await Shell.Current.DisplayPromptAsync("Identificador", $"Nombre para {rolStr}:");
-        if (string.IsNullOrWhiteSpace(nombre)) return;
-
-        var rol = Enum.Parse<RolDispositivo>(rolStr);
-        var nuevo = new Dispositivo
-        {
-            Nombre = nombre,
-            Rol = rol,
-            QrCodeData = $"comanda_{rol.ToString().ToLower()}_{nombre}_{Guid.NewGuid().ToString().Substring(0, 5)}"
-        };
-
-        listaMaestra.Add(nuevo);
+    // Este método público permite que el formulario guarde el dispositivo aquí al terminar
+    public void AgregarDispositivoDesdeForm(Dispositivo nuevoDispositivo)
+    {
+        listaMaestra.Add(nuevoDispositivo);
         actualizarGrupos();
     }
 

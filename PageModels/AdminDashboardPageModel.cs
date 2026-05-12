@@ -7,13 +7,6 @@ namespace ComandaApp.PageModels;
 public partial class AdminDashboardPageModel : ObservableObject
 {
     [RelayCommand]
-    private async Task AbrirMesas()
-    {
-        try { await Shell.Current.GoToAsync(nameof(TableManagementPage)); }
-        catch (Exception ex) { await Shell.Current.DisplayAlert("Error", $"Fallo: {ex.Message}", "OK"); }
-    }
-
-    [RelayCommand]
     private async Task AbrirConfig()
     {
         try { await Shell.Current.GoToAsync(nameof(BusinessConfigPage)); }
@@ -23,7 +16,6 @@ public partial class AdminDashboardPageModel : ObservableObject
     [RelayCommand]
     private async Task AbrirMenu()
     {
-        // ¡NUEVO! Conectamos el botón al módulo recién creado
         try { await Shell.Current.GoToAsync(nameof(MenuManagementPage)); }
         catch (Exception ex) { await Shell.Current.DisplayAlert("Error", $"Fallo: {ex.Message}", "OK"); }
     }
@@ -31,7 +23,9 @@ public partial class AdminDashboardPageModel : ObservableObject
     [RelayCommand]
     private async Task AbrirDispositivos()
     {
-        await Shell.Current.DisplayAlert("Próximamente", "El módulo Dispositivos será el siguiente.", "OK");
+        // ¡Corregido! Ahora navega a la página de dispositivos reales
+        try { await Shell.Current.GoToAsync(nameof(DeviceManagementPage)); }
+        catch (Exception ex) { await Shell.Current.DisplayAlert("Error", $"Fallo: {ex.Message}", "OK"); }
     }
 
     [RelayCommand]
