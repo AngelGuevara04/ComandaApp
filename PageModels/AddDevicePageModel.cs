@@ -1,14 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ComandaApp.Models;
+using QRCoder; // NUEVO: Librería de Códigos QR
 
 namespace ComandaApp.PageModels;
 
-// Atrapamos el parámetro ?rol=Mesa que enviamos en la pantalla anterior
 [QueryProperty(nameof(RolStr), "rol")]
 public partial class AddDevicePageModel : ObservableObject
 {
-    // Instancia del gestor principal para poder guardar el dispositivo ahí
     private readonly DeviceManagementPageModel _adminViewModel;
 
     [ObservableProperty]
@@ -32,19 +31,21 @@ public partial class AddDevicePageModel : ObservableObject
     [ObservableProperty]
     private string qrCodeData = string.Empty;
 
+    // NUEVO: Aquí guardaremos la imagen generada del QR para mostrarla en pantalla
+    [ObservableProperty]
+    private ImageSource qrImageSource;
+
     [ObservableProperty]
     private bool qrGenerado = false;
 
     [ObservableProperty]
     private bool formularioVisible = true;
 
-    // Inyectamos el ViewModel principal
     public AddDevicePageModel(DeviceManagementPageModel adminViewModel)
     {
         _adminViewModel = adminViewModel;
     }
 
-    // Este método se ejecuta automáticamente cuando MAUI recibe el Rol
     partial void OnRolStrChanged(string value)
     {
         if (value == "Mesa")
@@ -68,7 +69,7 @@ public partial class AddDevicePageModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task generarQR()
+    private async Task GenerarQR()
     {
         if (string.IsNullOrWhiteSpace(NombreInput))
         {
@@ -76,9 +77,24 @@ public partial class AddDevicePageModel : ObservableObject
             return;
         }
 
-        // Generamos el Hash/Texto único del QR
+        // 1. Creamos el texto hash/único de tu dispositivo
         QrCodeData = $"comanda_{RolStr.ToLower()}_{NombreInput.Replace(" ", "_")}_{Guid.NewGuid().ToString().Substring(0, 5)}";
 
+        // 2. MAGIA OFFLINE: Generamos el código QR real en imagen
+        using (QRCodeGenerator qrGenerator = new QRCodeGenerator())
+        {
+            // Nivel de corrección de error 'Q' (25% de resistencia a daños/manchas)
+            QRCodeData qrCodeInfo = qrGenerator.CreateQrCode(QrCodeData, QRCodeGenerator.ECCLevel.Q);
+            PngByteQRCode qrCode = new PngByteQRCode(qrCodeInfo);
+
+            // Obtenemos los bytes de la imagen. El número 10 es la escala/tamaño de los píxeles.
+            byte[] qrBytes = qrCode.GetGraphic(10);
+
+            // Lo inyectamos directamente en la Vista sin necesidad de guardarlo en el disco duro del teléfono
+            QrImageSource = ImageSource.FromStream(() => new MemoryStream(qrBytes));
+        }
+
+        // 3. Guardamos el dispositivo en el Gestor Central
         var nuevoDispositivo = new Dispositivo
         {
             Rol = Enum.Parse<RolDispositivo>(RolStr),
@@ -87,16 +103,15 @@ public partial class AddDevicePageModel : ObservableObject
             QrCodeData = QrCodeData
         };
 
-        // Lo mandamos al panel de administración
         _adminViewModel.AgregarDispositivoDesdeForm(nuevoDispositivo);
 
-        // Ocultamos el formulario y revelamos el QR
+        // 4. Cambiamos de pantalla
         FormularioVisible = false;
         QrGenerado = true;
     }
 
     [RelayCommand]
-    private async Task volver()
+    private async Task Volver()
     {
         await Shell.Current.GoToAsync("..");
     }

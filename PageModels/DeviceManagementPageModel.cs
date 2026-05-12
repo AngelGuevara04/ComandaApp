@@ -15,11 +15,18 @@ public partial class DeviceManagementPageModel : ObservableObject
 
     public DeviceManagementPageModel() => actualizarGrupos();
 
-    // Este comando abre la nueva página enviándole qué apartado presionó el usuario
+    // 1. CORRECCIÓN: PascalCase y Try/Catch para navegación segura
     [RelayCommand]
-    private async Task abrirCuestionario(string rolSeleccionado)
+    private async Task AbrirCuestionario(string rolSeleccionado)
     {
-        await Shell.Current.GoToAsync($"{nameof(AddDevicePage)}?rol={rolSeleccionado}");
+        try
+        {
+            await Shell.Current.GoToAsync($"{nameof(AddDevicePage)}?rol={rolSeleccionado}");
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error de Navegación", $"Fallo al abrir formulario: {ex.Message}", "OK");
+        }
     }
 
     // Este método público permite que el formulario guarde el dispositivo aquí al terminar
@@ -29,15 +36,17 @@ public partial class DeviceManagementPageModel : ObservableObject
         actualizarGrupos();
     }
 
+    // 2. CORRECCIÓN: PascalCase para evitar fallos en el botón de eliminar
     [RelayCommand]
-    private void eliminarDispositivo(Dispositivo d)
+    private void EliminarDispositivo(Dispositivo d)
     {
         listaMaestra.Remove(d);
         actualizarGrupos();
     }
 
+    // 3. CORRECCIÓN: PascalCase para evitar fallos en el botón limpiar
     [RelayCommand]
-    private async Task eliminarPorRol()
+    private async Task EliminarPorRol()
     {
         string rolStr = await Shell.Current.DisplayActionSheet("Limpiar Rol Completo", "Cancelar", null, "Mesa", "Caja", "Cocina");
         if (rolStr == "Cancelar") return;

@@ -41,8 +41,9 @@ public static class MauiProgram
         builder.Services.AddTransient<MenuManagementPage>();
         builder.Services.AddTransient<MenuManagementPageModel>();
 
-        builder.Services.AddTransient<DeviceManagementPage>();
-        builder.Services.AddTransient<DeviceManagementPageModel>();
+        // CORRECCIÓN: Singleton para que la lista de dispositivos no se borre al cambiar de pantalla
+        builder.Services.AddSingleton<DeviceManagementPage>();
+        builder.Services.AddSingleton<DeviceManagementPageModel>();
 
         builder.Services.AddTransient<AddDevicePage>();
         builder.Services.AddTransient<AddDevicePageModel>();

@@ -39,7 +39,9 @@
 
                 <Border StrokeShape="RoundRectangle 12" Padding="30" BackgroundColor="White" HorizontalOptions="Center">
                     <VerticalStackLayout Spacing="15" HorizontalOptions="Center">
-                        <Label Text="🔲" FontSize="120" HorizontalOptions="Center"/>
+
+                        <Image Source="{Binding QrImageSource}" WidthRequest="220" HeightRequest="220" Aspect="AspectFit" HorizontalOptions="Center"/>
+
                         <Label Text="Escanea este código con el dispositivo" FontSize="12" TextColor="Gray" HorizontalOptions="Center"/>
                         <Label Text="{Binding QrCodeData}" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center" FontSize="12"/>
                     </VerticalStackLayout>
