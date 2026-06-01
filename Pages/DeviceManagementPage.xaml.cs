@@ -9,4 +9,14 @@ public partial class DeviceManagementPage : ContentPage
         InitializeComponent();
         BindingContext = viewModel;
     }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is DeviceManagementPageModel viewModel)
+        {
+            await viewModel.CargarDispositivosAsync();
+        }
+    }
 }

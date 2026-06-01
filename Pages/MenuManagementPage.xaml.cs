@@ -7,8 +7,16 @@ public partial class MenuManagementPage : ContentPage
     public MenuManagementPage(MenuManagementPageModel viewModel)
     {
         InitializeComponent();
-
-        // Asignamos el ViewModel inyectado como contexto de datos para la interfaz
         BindingContext = viewModel;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+
+        if (BindingContext is MenuManagementPageModel viewModel)
+        {
+            await viewModel.CargarMenuAsync();
+        }
     }
 }

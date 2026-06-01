@@ -2,14 +2,21 @@
 <Application xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:local="clr-namespace:ComandaApp"
+             xmlns:converters="clr-namespace:ComandaApp.Converters"
              x:Class="ComandaApp.App">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="Resources/Styles/Colors.xaml" />
                 <ResourceDictionary Source="Resources/Styles/Styles.xaml" />
-                <ResourceDictionary Source="Resources/Styles/AppStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
+
+            <converters:InvertedBoolConverter        x:Key="InvertedBoolConverter"/>
+            <converters:BoolToEyeTextConverter       x:Key="BoolToEyeTextConverter"/>
+            <converters:BoolToSelectedColorConverter  x:Key="BoolToSelectedColorConverter"/>
+            <converters:BoolToFontAttributesConverter x:Key="BoolToFontAttributesConverter"/>
+            <converters:StringToBoolConverter         x:Key="StringToBoolConverter"/>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>

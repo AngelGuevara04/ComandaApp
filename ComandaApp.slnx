@@ -1,3 +1,5 @@
 <Solution>
-  <Project Path="ComandaApp.csproj" />
+  <Project Path="ComandaApp.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
 </Solution>

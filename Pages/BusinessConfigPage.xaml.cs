@@ -4,9 +4,18 @@ namespace ComandaApp.Pages;
 
 public partial class BusinessConfigPage : ContentPage
 {
-    public BusinessConfigPage(BusinessConfigPageModel viewModel)
+    private readonly BusinessConfigPageModel _pageModel;
+
+    public BusinessConfigPage(BusinessConfigPageModel pageModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        _pageModel = pageModel;
+        BindingContext = pageModel;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _pageModel.CargarAsync();
     }
 }

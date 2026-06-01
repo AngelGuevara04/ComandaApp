@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ComandaApp.PageModels"
+             xmlns:models="clr-namespace:ComandaApp.Models"
+             x:Class="ComandaApp.Pages.CorteCajaPage"
+             x:DataType="vm:CorteCajaPageModel"
+             Title="Corte de caja">
+
+    <RefreshView IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding CargarCorteCommand}">
+
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="16">
+
+                <Label Text="Corte de caja"
+                       FontSize="28"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"
+                       TextColor="#1F4E8E"/>
+
+                <Border StrokeShape="RoundRectangle 14"
+                        Padding="16"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+
+                    <VerticalStackLayout Spacing="12">
+
+                        <Label Text="Fecha del corte"
+                               FontSize="16"
+                               FontAttributes="Bold"/>
+
+                        <DatePicker Date="{Binding FechaCorte}"/>
+
+                        <Button Text="Actualizar corte"
+                                Command="{Binding CargarCorteCommand}"
+                                BackgroundColor="#1F4E8E"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="48"/>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <Grid ColumnDefinitions="*,*"
+                      RowDefinitions="Auto,Auto"
+                      ColumnSpacing="12"
+                      RowSpacing="12">
+
+                    <Border Grid.Row="0"
+                            Grid.Column="0"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="14"
+                            BackgroundColor="{AppThemeBinding Light=#EEF4FF, Dark=#172336}">
+
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Total vendido"
+                                   FontSize="13"
+                                   TextColor="Gray"/>
+
+                            <Label Text="{Binding TotalVendido, StringFormat='${0:F2}'}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#1F4E8E"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="0"
+                            Grid.Column="1"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="14"
+                            BackgroundColor="{AppThemeBinding Light=#EEF4FF, Dark=#172336}">
+
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Órdenes pagadas"
+                                   FontSize="13"
+                                   TextColor="Gray"/>
+
+                            <Label Text="{Binding CantidadOrdenes}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#1F4E8E"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1"
+                            Grid.Column="0"
+                            Grid.ColumnSpan="2"
+                            StrokeShape="RoundRectangle 14"
+                            Padding="14"
+                            BackgroundColor="{AppThemeBinding Light=#EEF4FF, Dark=#172336}">
+
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="Ticket promedio"
+                                   FontSize="13"
+                                   TextColor="Gray"/>
+
+                            <Label Text="{Binding TicketPromedio, StringFormat='${0:F2}'}"
+                                   FontSize="24"
+                                   FontAttributes="Bold"
+                                   TextColor="#1F4E8E"/>
+                        </VerticalStackLayout>
+                    </Border>
+
+                </Grid>
+
+                <Label Text="No hay ventas pagadas para esta fecha."
+                       IsVisible="{Binding NoHayOrdenes}"
+                       HorizontalOptions="Center"
+                       TextColor="Gray"
+                       Margin="0,20,0,0"/>
+
+                <CollectionView ItemsSource="{Binding OrdenesDelCorte}"
+                                IsVisible="{Binding HayOrdenes}">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:OrdenMesa">
+
+                            <Border StrokeShape="RoundRectangle 14"
+                                    Padding="16"
+                                    Margin="0,0,0,14"
+                                    BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+
+                                <Grid ColumnDefinitions="*,Auto">
+
+                                    <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                        <Label Text="{Binding MesaAsignada.NumeroMesa, StringFormat='Mesa {0}'}"
+                                               FontSize="18"
+                                               FontAttributes="Bold"/>
+
+                                        <Label Text="{Binding NombreCliente, StringFormat='Cliente: {0}'}"
+                                               FontSize="13"
+                                               TextColor="Gray"/>
+
+                                        <Label Text="{Binding FechaCreacion, StringFormat='{0:dd/MM/yyyy HH:mm}'}"
+                                               FontSize="12"
+                                               TextColor="Gray"/>
+                                    </VerticalStackLayout>
+
+                                    <Label Grid.Column="1"
+                                           Text="{Binding TotalCuenta, StringFormat='${0:F2}'}"
+                                           FontSize="20"
+                                           FontAttributes="Bold"
+                                           TextColor="#1F4E8E"
+                                           VerticalOptions="Center"/>
+
+                                </Grid>
+
+                            </Border>
+
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

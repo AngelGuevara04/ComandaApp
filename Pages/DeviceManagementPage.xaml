@@ -1,81 +1,210 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
              xmlns:models="clr-namespace:ComandaApp.Models"
              x:Class="ComandaApp.Pages.DeviceManagementPage"
              x:DataType="vm:DeviceManagementPageModel"
+             x:Name="PageRoot"
              Title="Gestión de Dispositivos">
 
-    <Grid RowDefinitions="Auto, *, Auto" Padding="15">
+    <Grid RowDefinitions="Auto,Auto,*,Auto"
+          Padding="15"
+          RowSpacing="14">
 
-        <VerticalStackLayout Grid.Row="0" Spacing="15" Margin="0,0,0,20">
-            <Label Text="Agregar Nuevo Dispositivo" FontAttributes="Bold" FontSize="18" HorizontalOptions="Center"/>
-            <Grid ColumnDefinitions="*,*,*" ColumnSpacing="10">
+        <VerticalStackLayout Grid.Row="0" Spacing="12">
+            <Label Text="Agregar nuevo dispositivo"
+                   FontAttributes="Bold"
+                   FontSize="18"
+                   HorizontalOptions="Center"/>
 
-                <Border Grid.Column="0" StrokeShape="RoundRectangle 10" BackgroundColor="#28A745" Padding="10">
+            <Grid ColumnDefinitions="*,*,*"
+                  ColumnSpacing="10">
+
+                <Border Grid.Column="0"
+                        StrokeShape="RoundRectangle 10"
+                        BackgroundColor="#28A745"
+                        Padding="12">
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}" CommandParameter="Mesa"/>
+                        <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}"
+                                              CommandParameter="Mesa"/>
                     </Border.GestureRecognizers>
+
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
-                        <Label Text="🪑" FontSize="30" HorizontalOptions="Center"/>
-                        <Label Text="Mesa" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                        <Label Text="Mesa"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Cliente"
+                               FontSize="12"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Column="1" StrokeShape="RoundRectangle 10" BackgroundColor="#FFC107" Padding="10">
+                <Border Grid.Column="1"
+                        StrokeShape="RoundRectangle 10"
+                        BackgroundColor="#FFC107"
+                        Padding="12">
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}" CommandParameter="Cocina"/>
+                        <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}"
+                                              CommandParameter="Cocina"/>
                     </Border.GestureRecognizers>
+
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
-                        <Label Text="🍳" FontSize="30" HorizontalOptions="Center"/>
-                        <Label Text="Cocina" FontAttributes="Bold" TextColor="Black" HorizontalOptions="Center"/>
+                        <Label Text="Cocina"
+                               FontAttributes="Bold"
+                               TextColor="Black"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Pedidos"
+                               FontSize="12"
+                               TextColor="Black"
+                               HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Column="2" StrokeShape="RoundRectangle 10" BackgroundColor="#512BD4" Padding="10">
+                <Border Grid.Column="2"
+                        StrokeShape="RoundRectangle 10"
+                        BackgroundColor="#512BD4"
+                        Padding="12">
                     <Border.GestureRecognizers>
-                        <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}" CommandParameter="Caja"/>
+                        <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}"
+                                              CommandParameter="Caja"/>
                     </Border.GestureRecognizers>
+
                     <VerticalStackLayout HorizontalOptions="Center" Spacing="5">
-                        <Label Text="💵" FontSize="30" HorizontalOptions="Center"/>
-                        <Label Text="Caja" FontAttributes="Bold" TextColor="White" HorizontalOptions="Center"/>
+                        <Label Text="Caja"
+                               FontAttributes="Bold"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
+                        <Label Text="Pagos"
+                               FontSize="12"
+                               TextColor="White"
+                               HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
             </Grid>
         </VerticalStackLayout>
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding DispositivosAgrupados}" IsGrouped="True">
+        <Border Grid.Row="1"
+                IsVisible="{Binding QrVisible}"
+                StrokeShape="RoundRectangle 14"
+                Padding="16"
+                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+
+            <VerticalStackLayout Spacing="12"
+                                 HorizontalOptions="Center">
+
+                <Label Text="Código QR del dispositivo"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       HorizontalOptions="Center"/>
+
+                <Label Text="{Binding DispositivoSeleccionado.Nombre}"
+                       FontSize="16"
+                       FontAttributes="Bold"
+                       TextColor="#1F4E8E"
+                       HorizontalOptions="Center"/>
+
+                <Border StrokeShape="RoundRectangle 12"
+                        Padding="18"
+                        BackgroundColor="White"
+                        HorizontalOptions="Center">
+
+                    <Image Source="{Binding QrImageSource}"
+                           WidthRequest="230"
+                           HeightRequest="230"
+                           Aspect="AspectFit"/>
+                </Border>
+
+                <Label Text="{Binding DispositivoSeleccionado.QrCodeData}"
+                       FontSize="12"
+                       TextColor="Gray"
+                       HorizontalTextAlignment="Center"
+                       LineBreakMode="WordWrap"
+                       WidthRequest="280"/>
+
+                <Button Text="Ocultar QR"
+                        Command="{Binding CerrarQrCommand}"
+                        BackgroundColor="#6C757D"
+                        TextColor="White"
+                        CornerRadius="10"
+                        HeightRequest="44"
+                        WidthRequest="180"/>
+            </VerticalStackLayout>
+        </Border>
+
+        <CollectionView Grid.Row="2"
+                        ItemsSource="{Binding DispositivosAgrupados}"
+                        IsGrouped="True">
+
             <CollectionView.GroupHeaderTemplate>
-                <DataTemplate x:DataType="vm:GrupoDispositivos">
-                    <Label Text="{Binding Titulo}" FontAttributes="Bold" FontSize="20" Padding="10" BackgroundColor="#F0F0F0" TextColor="Black"/>
+                <DataTemplate x:DataType="models:GrupoDispositivos">
+                    <Label Text="{Binding Titulo}"
+                           FontAttributes="Bold"
+                           FontSize="20"
+                           Padding="10"
+                           BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"
+                           TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
 
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Dispositivo">
+
                     <SwipeView Margin="0,2">
                         <SwipeView.RightItems>
                             <SwipeItems>
-                                <SwipeItem Text="Eliminar" BackgroundColor="Red" 
-                                           Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceManagementPageModel}}, Path=EliminarDispositivoCommand}"
+                                <SwipeItem Text="Eliminar"
+                                           BackgroundColor="Red"
+                                           Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.EliminarDispositivoCommand}"
                                            CommandParameter="{Binding .}"/>
                             </SwipeItems>
                         </SwipeView.RightItems>
-                        <Border Padding="15" StrokeThickness="0.5" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
-                            <HorizontalStackLayout Spacing="15" VerticalOptions="Center">
-                                <Label Text="📱" FontSize="24"/>
-                                <VerticalStackLayout>
-                                    <Label Text="{Binding Nombre}" FontAttributes="Bold"/>
-                                    <Label Text="{Binding DetalleExtra}" FontSize="12" TextColor="#28A745"/>
-                                    <Label Text="{Binding QrCodeData}" FontSize="10" TextColor="Gray"/>
+
+                        <Border Padding="14"
+                                StrokeThickness="0.5"
+                                BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+
+                            <Grid ColumnDefinitions="*,Auto"
+                                  ColumnSpacing="10">
+
+                                <VerticalStackLayout Grid.Column="0" Spacing="3">
+                                    <Label Text="{Binding Nombre}"
+                                           FontAttributes="Bold"
+                                           FontSize="16"/>
+
+                                    <Label Text="{Binding DetalleExtra}"
+                                           FontSize="12"
+                                           TextColor="#28A745"/>
+
+                                    <Label Text="{Binding QrCodeData}"
+                                           FontSize="10"
+                                           TextColor="Gray"
+                                           LineBreakMode="TailTruncation"/>
                                 </VerticalStackLayout>
-                            </HorizontalStackLayout>
+
+                                <Button Grid.Column="1"
+                                        Text="Ver QR"
+                                        Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.MostrarQrCommand}"
+                                        CommandParameter="{Binding .}"
+                                        BackgroundColor="#1F4E8E"
+                                        TextColor="White"
+                                        CornerRadius="10"
+                                        WidthRequest="90"
+                                        VerticalOptions="Center"/>
+                            </Grid>
                         </Border>
                     </SwipeView>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
 
-        <Button Grid.Row="2" Text="Eliminar Rol Completo" Command="{Binding EliminarPorRolCommand}" BackgroundColor="Orange" TextColor="Black" Margin="10,10,10,0"/>
+        <Button Grid.Row="3"
+                Text="Eliminar rol completo"
+                Command="{Binding EliminarPorRolCommand}"
+                BackgroundColor="Orange"
+                TextColor="Black"
+                Margin="10,10,10,0"/>
     </Grid>
 </ContentPage>

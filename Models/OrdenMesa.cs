@@ -3,7 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ComandaApp.Models;
 
-// Representa la cuenta completa de una mesa en su sesión activa
+// Representa la cuenta completa de una mesa.
 public partial class OrdenMesa : ObservableObject
 {
     [ObservableProperty]
@@ -13,7 +13,7 @@ public partial class OrdenMesa : ObservableObject
     private Mesa mesaAsignada = new();
 
     [ObservableProperty]
-    private string nombreCliente = string.Empty; // Útil si es un QR temporal
+    private string nombreCliente = string.Empty;
 
     [ObservableProperty]
     private DateTime fechaCreacion = DateTime.Now;
@@ -21,12 +21,11 @@ public partial class OrdenMesa : ObservableObject
     [ObservableProperty]
     private bool estaPagada;
 
-    // Lista observable de los platillos pedidos
     [ObservableProperty]
     private ObservableCollection<DetallePedido> platillos = new();
 
-    // Calcula el total a pagar sumando los subtotales de platillos que NO fueron rechazados
-    public double TotalCuenta => platillos
+    // Calcula el total de la cuenta.
+    public double TotalCuenta => Platillos
         .Where(p => p.Estado != EstadoPedido.Rechazado)
         .Sum(p => p.Subtotal);
 }

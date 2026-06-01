@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="ComandaApp.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:sf="clr-namespace:Syncfusion.Maui.Toolkit.SegmentedControl;assembly=Syncfusion.Maui.Toolkit"
-    xmlns:pages="clr-namespace:ComandaApp.Pages"
-    Shell.FlyoutBehavior="Disabled"
-    Title="ComandaApp">
+<Shell x:Class="ComandaApp.AppShell"
+       xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:pages="clr-namespace:ComandaApp.Pages"
+       Shell.FlyoutBehavior="Disabled"
+       Shell.TabBarIsVisible="False"
+       Title="ComandaApp">
 
-    <ShellContent
-        Title="Admin Dashboard"
-        ContentTemplate="{DataTemplate pages:AdminDashboardPage}"
-        Route="admin_dashboard" />
+    <ShellContent Title="Login"
+                  ContentTemplate="{DataTemplate pages:LoginPage}"
+                  Route="login" />
 
-    <Shell.FlyoutFooter>
-        <Grid Padding="15">
-            <sf:SfSegmentedControl x:Name="ThemeSegmentedControl" 
-                VerticalOptions="Center" HorizontalOptions="Center" 
-                SelectionChanged="SfSegmentedControl_SelectionChanged"
-                SegmentWidth="40" SegmentHeight="40">
-                <sf:SfSegmentedControl.ItemsSource>
-                    <x:Array Type="{x:Type sf:SfSegmentItem}">
-                        <sf:SfSegmentItem Text="☀" />
-                        <sf:SfSegmentItem Text="🌙" />
-                    </x:Array>
-                </sf:SfSegmentedControl.ItemsSource>
-            </sf:SfSegmentedControl>
-        </Grid>
-    </Shell.FlyoutFooter>
+    <ShellContent Title="Admin"
+                  ContentTemplate="{DataTemplate pages:AdminDashboardPage}"
+                  Route="admin_dashboard" />
+
+    <ShellContent Title="Cliente"
+                  ContentTemplate="{DataTemplate pages:ClienteMenuPage}"
+                  Route="cliente_menu" />
+
+    <ShellContent Title="Cocina"
+                  ContentTemplate="{DataTemplate pages:KitchenDashboardPage}"
+                  Route="kitchen_dashboard" />
+
+    <ShellContent Title="Caja"
+                  ContentTemplate="{DataTemplate pages:CajaDashboardPage}"
+                  Route="caja_dashboard" />
+
 </Shell>

@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:pm="clr-namespace:ComandaApp.PageModels"
+             x:Class="ComandaApp.Pages.LoginPage"
+             x:DataType="pm:LoginPageModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#17171a}">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="28,56,28,32" Spacing="0">
+
+            <Label Text="ComandaApp"
+                   FontSize="34"
+                   FontAttributes="Bold"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light=#1F4E8E, Dark=#4A90D9}"/>
+
+            <Label Text="Sistema de gestión de pedidos"
+                   FontSize="14"
+                   HorizontalTextAlignment="Center"
+                   TextColor="{AppThemeBinding Light=#666, Dark=#888}"
+                   Margin="0,4,0,36"/>
+
+            <VerticalStackLayout IsVisible="{Binding ShowRegisterForm}" Spacing="14">
+
+                <Label Text="Crear cuenta de administrador"
+                       FontSize="18"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center"
+                       TextColor="{AppThemeBinding Light=#222, Dark=#EEE}"
+                       Margin="0,0,0,4"/>
+
+                <Label Text="Registra las credenciales del administrador."
+                       FontSize="13"
+                       HorizontalTextAlignment="Center"
+                       TextColor="{AppThemeBinding Light=#777, Dark=#999}"
+                       Margin="0,0,0,8"/>
+
+                <Border StrokeShape="RoundRectangle 14"
+                        Stroke="{AppThemeBinding Light=#DDE3EA, Dark=#2A2A2A}"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1C}"
+                        Padding="20,16">
+
+                    <VerticalStackLayout Spacing="12">
+
+                        <Entry Placeholder="Nombre completo"
+                               Text="{Binding DisplayName}"
+                               Keyboard="Text"
+                               ReturnType="Next"
+                               ClearButtonVisibility="WhileEditing"/>
+
+                        <Entry Placeholder="Correo electrónico"
+                               Text="{Binding Email}"
+                               Keyboard="Email"
+                               ReturnType="Next"
+                               ClearButtonVisibility="WhileEditing"/>
+
+                        <Grid ColumnDefinitions="*,48" ColumnSpacing="4">
+                            <Entry Grid.Column="0"
+                                   Placeholder="Contraseña"
+                                   Text="{Binding Password}"
+                                   IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InvertedBoolConverter}}"
+                                   ReturnType="Next"/>
+
+                            <Button Grid.Column="1"
+                                    Text="{Binding IsPasswordVisible, Converter={StaticResource BoolToEyeTextConverter}}"
+                                    Command="{Binding TogglePasswordVisibilityCommand}"
+                                    BackgroundColor="Transparent"
+                                    FontSize="18"
+                                    Padding="0"/>
+                        </Grid>
+
+                        <Entry Placeholder="Confirmar contraseña"
+                               Text="{Binding ConfirmPassword}"
+                               IsPassword="True"
+                               ReturnType="Done"
+                               ReturnCommand="{Binding RegisterCommand}"/>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <Label Text="{Binding ErrorMessage}"
+                       TextColor="#E74C3C"
+                       FontSize="13"
+                       HorizontalTextAlignment="Center"
+                       IsVisible="{Binding HasError}"/>
+
+                <Button Text="Crear cuenta"
+                        Command="{Binding RegisterCommand}"
+                        IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                        BackgroundColor="#1F4E8E"
+                        TextColor="White"
+                        CornerRadius="12"
+                        HeightRequest="52"
+                        FontSize="16"
+                        FontAttributes="Bold"/>
+
+                <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+                    <Label Text="¿Ya tienes cuenta?"
+                           VerticalOptions="Center"
+                           FontSize="13"
+                           TextColor="{AppThemeBinding Light=#666, Dark=#AAA}"/>
+
+                    <Button Text="Iniciar sesión"
+                            Command="{Binding ShowLoginCommand}"
+                            BackgroundColor="Transparent"
+                            TextColor="#1F4E8E"
+                            FontAttributes="Bold"
+                            Padding="0"/>
+                </HorizontalStackLayout>
+
+                <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                   IsVisible="{Binding IsLoading}"
+                                   Color="#1F4E8E"
+                                   HorizontalOptions="Center"/>
+
+            </VerticalStackLayout>
+
+            <VerticalStackLayout IsVisible="{Binding ShowRegisterForm, Converter={StaticResource InvertedBoolConverter}}"
+                                 Spacing="14">
+
+                <Grid ColumnDefinitions="*,*"
+                      HorizontalOptions="Center"
+                      WidthRequest="280"
+                      ColumnSpacing="6"
+                      Margin="0,0,0,8">
+
+                    <Button Grid.Column="0"
+                            Text="Credenciales"
+                            Command="{Binding SelectCredentialsCommand}"
+                            BackgroundColor="{Binding IsCredentialsMode, Converter={StaticResource BoolToSelectedColorConverter}}"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="42"
+                            FontSize="13"
+                            FontAttributes="{Binding IsCredentialsMode, Converter={StaticResource BoolToFontAttributesConverter}}"/>
+
+                    <Button Grid.Column="1"
+                            Text="Código QR"
+                            Command="{Binding SelectQrCommand}"
+                            BackgroundColor="{Binding IsQrMode, Converter={StaticResource BoolToSelectedColorConverter}}"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="42"
+                            FontSize="13"
+                            FontAttributes="{Binding IsQrMode, Converter={StaticResource BoolToFontAttributesConverter}}"/>
+                </Grid>
+
+                <VerticalStackLayout IsVisible="{Binding IsCredentialsMode}" Spacing="12">
+
+                    <Border StrokeShape="RoundRectangle 14"
+                            Stroke="{AppThemeBinding Light=#DDE3EA, Dark=#2A2A2A}"
+                            BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1C}"
+                            Padding="20,16">
+
+                        <VerticalStackLayout Spacing="12">
+
+                            <Entry Placeholder="Correo electrónico"
+                                   Text="{Binding Email}"
+                                   Keyboard="Email"
+                                   ReturnType="Next"
+                                   ClearButtonVisibility="WhileEditing"/>
+
+                            <Grid ColumnDefinitions="*,48" ColumnSpacing="4">
+                                <Entry Grid.Column="0"
+                                       Placeholder="Contraseña"
+                                       Text="{Binding Password}"
+                                       IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InvertedBoolConverter}}"
+                                       ReturnType="Done"
+                                       ReturnCommand="{Binding LoginCommand}"/>
+
+                                <Button Grid.Column="1"
+                                        Text="{Binding IsPasswordVisible, Converter={StaticResource BoolToEyeTextConverter}}"
+                                        Command="{Binding TogglePasswordVisibilityCommand}"
+                                        BackgroundColor="Transparent"
+                                        FontSize="18"
+                                        Padding="0"/>
+                            </Grid>
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Label Text="{Binding ErrorMessage}"
+                           TextColor="#E74C3C"
+                           FontSize="13"
+                           HorizontalTextAlignment="Center"
+                           IsVisible="{Binding HasError}"/>
+
+                    <Button Text="Iniciar sesión"
+                            Command="{Binding LoginCommand}"
+                            IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                            BackgroundColor="#1F4E8E"
+                            TextColor="White"
+                            CornerRadius="12"
+                            HeightRequest="52"
+                            FontSize="16"
+                            FontAttributes="Bold"/>
+
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
+                        <Label Text="¿Aún no tienes cuenta?"
+                               VerticalOptions="Center"
+                               FontSize="13"
+                               TextColor="{AppThemeBinding Light=#666, Dark=#AAA}"/>
+
+                        <Button Text="Registrarte"
+                                Command="{Binding ShowRegisterCommand}"
+                                BackgroundColor="Transparent"
+                                TextColor="#1F4E8E"
+                                FontAttributes="Bold"
+                                Padding="0"/>
+                    </HorizontalStackLayout>
+
+                    <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                       IsVisible="{Binding IsLoading}"
+                                       Color="#1F4E8E"
+                                       HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+
+                <VerticalStackLayout IsVisible="{Binding IsQrMode}" Spacing="12">
+
+                    <Border StrokeShape="RoundRectangle 14"
+                            Stroke="{AppThemeBinding Light=#DDE3EA, Dark=#2A2A2A}"
+                            BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1C}"
+                            Padding="20,16">
+
+                        <VerticalStackLayout Spacing="12">
+
+                            <Label Text="Ingresa el código generado desde el panel de admin"
+                                   FontSize="13"
+                                   HorizontalTextAlignment="Center"
+                                   TextColor="{AppThemeBinding Light=#555, Dark=#AAA}"/>
+
+                            <Entry Placeholder="Código QR del dispositivo"
+                                   Text="{Binding QrToken}"
+                                   ClearButtonVisibility="WhileEditing"
+                                   ReturnType="Done"
+                                   ReturnCommand="{Binding LoginWithQrCommand}"/>
+
+                            <Button Text="Escanear con cámara"
+                                    Command="{Binding AbrirScannerCommand}"
+                                    BackgroundColor="{AppThemeBinding Light=#E8F0FB, Dark=#1A2A40}"
+                                    TextColor="#1F4E8E"
+                                    CornerRadius="10"
+                                    HeightRequest="44"/>
+
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Label Text="{Binding ErrorMessage}"
+                           TextColor="#E74C3C"
+                           FontSize="13"
+                           HorizontalTextAlignment="Center"
+                           IsVisible="{Binding HasError}"/>
+
+                    <Button Text="Acceder con código"
+                            Command="{Binding LoginWithQrCommand}"
+                            IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
+                            BackgroundColor="#1F4E8E"
+                            TextColor="White"
+                            CornerRadius="12"
+                            HeightRequest="52"
+                            FontSize="16"
+                            FontAttributes="Bold"/>
+
+                    <ActivityIndicator IsRunning="{Binding IsLoading}"
+                                       IsVisible="{Binding IsLoading}"
+                                       Color="#1F4E8E"
+                                       HorizontalOptions="Center"/>
+
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+
+        </VerticalStackLayout>
+    </ScrollView>
+
+</ContentPage>

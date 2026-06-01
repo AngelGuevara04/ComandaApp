@@ -1,66 +1,161 @@
-﻿using System.Collections.ObjectModel;
+﻿using ComandaApp.Models;
+using ComandaApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using ComandaApp.Models;
+using QRCoder;
+using System.Collections.ObjectModel;
 
 namespace ComandaApp.PageModels;
 
 public partial class TableManagementPageModel : ObservableObject
 {
+    private readonly MesaService _mesaService;
+
     [ObservableProperty]
     private ObservableCollection<Mesa> mesas = new();
 
-    [RelayCommand]
-    private async Task agregarMesa()
+    [ObservableProperty]
+    private bool isBusy;
+
+    public TableManagementPageModel(MesaService mesaService)
     {
-        // 1. Pedimos el número de mesa utilizando variables en camelCase
-        string numeroIngresado = await Shell.Current.DisplayPromptAsync("Nueva Mesa", "Ingrese el número o nombre de la mesa:");
+        _mesaService = mesaService;
+    }
 
-        if (!string.IsNullOrWhiteSpace(numeroIngresado))
+    // Carga las mesas desde Supabase. Se llama desde OnAppearing.
+    public async Task CargarAsync()
+    {
+        IsBusy = true;
+        try
         {
-            // 2. Creamos la mesa con un identificador único para el QR
-            var nuevaMesa = new Mesa
-            {
-                NumeroMesa = numeroIngresado,
-                Capacidad = 4,
-                QrCodeData = $"comanda_mesa_{numeroIngresado}_{Guid.NewGuid().ToString().Substring(0, 8)}",
-                EstaOcupada = false
-            };
+            var lista = await _mesaService.GetAllAsync();
+            Mesas = new ObservableCollection<Mesa>(lista);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", $"No se pudo cargar las mesas: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
 
+    // Agrega una nueva mesa generando su codigo QR y guardando en Supabase.
+    [RelayCommand]
+    private async Task AgregarMesa()
+    {
+        string numeroIngresado = await Shell.Current.DisplayPromptAsync(
+            "Nueva Mesa", "Numero o nombre de la mesa:");
+
+        if (string.IsNullOrWhiteSpace(numeroIngresado)) return;
+
+        // Verificar que no exista ya una mesa con ese numero.
+        if (Mesas.Any(m => m.NumeroMesa == numeroIngresado.Trim()))
+        {
+            await Shell.Current.DisplayAlert("Aviso", "Ya existe una mesa con ese numero.", "OK");
+            return;
+        }
+
+        string capacidadStr = await Shell.Current.DisplayPromptAsync(
+            "Capacidad", "Numero de personas:", keyboard: Keyboard.Numeric, initialValue: "4");
+        int.TryParse(capacidadStr, out int capacidad);
+        if (capacidad <= 0) capacidad = 4;
+
+        string area = await Shell.Current.DisplayActionSheet(
+            "Area", "Cancelar", null, "General", "Terraza", "VIP", "Bar");
+        if (area == "Cancelar" || string.IsNullOrEmpty(area)) area = "General";
+
+        // Generar el token unico del QR permanente.
+        string qrData = $"comanda_mesa_{numeroIngresado.Trim().Replace(" ", "_")}_{Guid.NewGuid().ToString()[..8]}";
+
+        var nuevaMesa = new Mesa
+        {
+            NumeroMesa = numeroIngresado.Trim(),
+            Capacidad = capacidad,
+            Area = area,
+            QrCodeData = qrData,
+            EstaOcupada = false
+        };
+
+        IsBusy = true;
+        try
+        {
+            await _mesaService.AddAsync(nuevaMesa);
             Mesas.Add(nuevaMesa);
-
-            // Reemplazado por DisplayAlert por seguridad estándar de MAUI, 
-            // a menos que AppShell.DisplayToastAsync sea una extensión personalizada tuya.
-            await Shell.Current.DisplayAlert("Éxito", $"Mesa {numeroIngresado} agregada con éxito.", "OK");
+            await Shell.Current.DisplayAlert(
+                "Mesa agregada",
+                $"Mesa {numeroIngresado} creada.\nCodigo QR: {qrData}",
+                "OK");
         }
-    }
-
-    [RelayCommand]
-    private async Task verQrMesa(Mesa mesaSeleccionada)
-    {
-        // Lógica para mostrar el QR en una ventana emergente o navegar a detalle
-        await Shell.Current.DisplayAlert("Código QR", $"Datos del QR: {mesaSeleccionada.QrCodeData}", "OK");
-    }
-
-    [RelayCommand]
-    private async Task eliminarMesa(Mesa mesaSeleccionada)
-    {
-        bool confirmacionBorrado = await Shell.Current.DisplayAlert(
-            "Eliminar Mesa",
-            $"¿Está seguro de que desea eliminar la mesa {mesaSeleccionada.NumeroMesa}?",
-            "Sí, Eliminar",
-            "Cancelar");
-
-        if (confirmacionBorrado)
+        catch (Exception ex)
         {
-            Mesas.Remove(mesaSeleccionada);
+            await Shell.Current.DisplayAlert("Error", $"No se pudo guardar la mesa: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
         }
     }
 
+    // Genera y muestra la imagen QR de la mesa seleccionada.
     [RelayCommand]
-    private void cambiarEstadoMesa(Mesa mesaSeleccionada)
+    private async Task VerQrMesa(Mesa mesa)
     {
-        // Al haber convertido Mesa en un ObservableObject, la UI detectará este cambio instantáneamente.
-        mesaSeleccionada.EstaOcupada = !mesaSeleccionada.EstaOcupada;
+        // Generamos la imagen QR con QRCoder para mostrarla al admin.
+        using var qrGenerator = new QRCodeGenerator();
+        var qrCodeInfo = qrGenerator.CreateQrCode(mesa.QrCodeData, QRCodeGenerator.ECCLevel.Q);
+        var qrCode = new PngByteQRCode(qrCodeInfo);
+        byte[] qrBytes = qrCode.GetGraphic(10);
+
+        // Por ahora mostramos el codigo como texto.
+        // La imagen se puede mostrar en una pagina de detalle mas adelante.
+        await Shell.Current.DisplayAlert(
+            $"QR Mesa {mesa.NumeroMesa}",
+            $"Codigo: {mesa.QrCodeData}\n\nArea: {mesa.Area} | Capacidad: {mesa.Capacidad}",
+            "Cerrar");
+    }
+
+    // Elimina una mesa de Supabase y de la lista local.
+    [RelayCommand]
+    private async Task EliminarMesa(Mesa mesa)
+    {
+        bool confirmar = await Shell.Current.DisplayAlert(
+            "Eliminar Mesa",
+            $"Eliminar la mesa {mesa.NumeroMesa}?",
+            "Si, Eliminar", "Cancelar");
+
+        if (!confirmar) return;
+
+        IsBusy = true;
+        try
+        {
+            await _mesaService.DeleteAsync(mesa.NumeroMesa);
+            Mesas.Remove(mesa);
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", $"No se pudo eliminar: {ex.Message}", "OK");
+        }
+        finally
+        {
+            IsBusy = false;
+        }
+    }
+
+    // Cambia el estado de ocupacion de la mesa y lo persiste en Supabase.
+    [RelayCommand]
+    private async Task CambiarEstadoMesa(Mesa mesa)
+    {
+        bool nuevoEstado = !mesa.EstaOcupada;
+        try
+        {
+            await _mesaService.ActualizarEstadoAsync(mesa.NumeroMesa, nuevoEstado);
+            mesa.EstaOcupada = nuevoEstado;
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlert("Error", $"No se pudo actualizar el estado: {ex.Message}", "OK");
+        }
     }
 }

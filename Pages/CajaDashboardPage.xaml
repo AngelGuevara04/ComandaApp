@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:ComandaApp.Models"
+             x:Class="ComandaApp.Pages.CajaDashboardPage"
+             x:Name="PageRoot"
+             Title="Caja">
+
+    <RefreshView IsRefreshing="{Binding IsBusy}"
+                 Command="{Binding CargarOrdenesCommand}">
+
+        <ScrollView>
+            <VerticalStackLayout Padding="20" Spacing="18">
+
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Grid.Column="0"
+                           Text="Panel de Caja"
+                           FontSize="28"
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"
+                           TextColor="#1F4E8E"/>
+
+                    <Button Grid.Column="1"
+                            Text="Salir"
+                            Command="{Binding SalirRolCommand}"
+                            BackgroundColor="#C0392B"
+                            TextColor="White"
+                            CornerRadius="10"/>
+                </Grid>
+
+                <Border StrokeShape="RoundRectangle 14"
+                        Padding="16"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+
+                    <VerticalStackLayout Spacing="12">
+
+                        <Label Text="Generar acceso temporal"
+                               FontSize="18"
+                               FontAttributes="Bold"/>
+
+                        <Entry Placeholder="Nombre del cliente"
+                               Text="{Binding NombreClienteTemporal}"
+                               ClearButtonVisibility="WhileEditing"/>
+
+                        <Entry Placeholder="Número de mesa"
+                               Text="{Binding NumeroMesaTemporal}"
+                               Keyboard="Text"
+                               ClearButtonVisibility="WhileEditing"/>
+
+                        <Button Text="Generar QR temporal"
+                                Command="{Binding GenerarQrTemporalCommand}"
+                                BackgroundColor="#1F4E8E"
+                                TextColor="White"
+                                CornerRadius="10"
+                                HeightRequest="48"/>
+
+                        <Border IsVisible="{Binding TieneQrTemporal}"
+                                StrokeShape="RoundRectangle 10"
+                                Padding="12"
+                                BackgroundColor="{AppThemeBinding Light=#EEF4FF, Dark=#172336}">
+
+                            <VerticalStackLayout Spacing="10"
+                                                 HorizontalOptions="Center">
+
+                                <Label Text="QR temporal del cliente"
+                                       FontAttributes="Bold"
+                                       FontSize="16"
+                                       TextColor="#1F4E8E"
+                                       HorizontalOptions="Center"/>
+
+                                <Border StrokeShape="RoundRectangle 12"
+                                        Padding="18"
+                                        BackgroundColor="White"
+                                        HorizontalOptions="Center">
+
+                                    <Image Source="{Binding QrTemporalImageSource}"
+                                           WidthRequest="230"
+                                           HeightRequest="230"
+                                           Aspect="AspectFit"/>
+                                </Border>
+
+                                <Label Text="{Binding QrTemporal}"
+                                       FontSize="11"
+                                       TextColor="Gray"
+                                       HorizontalTextAlignment="Center"
+                                       LineBreakMode="WordWrap"
+                                       WidthRequest="280"/>
+
+                            </VerticalStackLayout>
+                        </Border>
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
+                    <Label Grid.Column="0"
+                           Text="Órdenes activas"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           VerticalOptions="Center"/>
+
+                    <Button Grid.Column="1"
+                            Text="Actualizar"
+                            Command="{Binding CargarOrdenesCommand}"
+                            BackgroundColor="#6C757D"
+                            TextColor="White"
+                            CornerRadius="10"/>
+                </Grid>
+
+                <Label Text="No hay órdenes activas."
+                       IsVisible="{Binding NoHayOrdenes}"
+                       HorizontalOptions="Center"
+                       TextColor="Gray"
+                       Margin="0,20,0,0"/>
+
+                <CollectionView ItemsSource="{Binding OrdenesActivas}"
+                                IsVisible="{Binding HayOrdenes}">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:OrdenMesa">
+
+                            <Border StrokeShape="RoundRectangle 14"
+                                    Padding="16"
+                                    Margin="0,0,0,14"
+                                    BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+
+                                <VerticalStackLayout Spacing="12">
+
+                                    <Grid ColumnDefinitions="*,Auto">
+                                        <VerticalStackLayout Grid.Column="0" Spacing="2">
+                                            <Label Text="{Binding MesaAsignada.NumeroMesa, StringFormat='Mesa {0}'}"
+                                                   FontSize="20"
+                                                   FontAttributes="Bold"/>
+
+                                            <Label Text="{Binding NombreCliente, StringFormat='Cliente: {0}'}"
+                                                   FontSize="13"
+                                                   TextColor="Gray"/>
+                                        </VerticalStackLayout>
+
+                                        <Label Grid.Column="1"
+                                               Text="{Binding TotalCuenta, StringFormat='${0:F2}'}"
+                                               FontSize="20"
+                                               FontAttributes="Bold"
+                                               TextColor="#1F4E8E"
+                                               VerticalOptions="Center"/>
+                                    </Grid>
+
+                                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Platillos}"
+                                                         Spacing="6">
+
+                                        <BindableLayout.ItemTemplate>
+                                            <DataTemplate x:DataType="models:DetallePedido">
+                                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                                      ColumnSpacing="8"
+                                                      Padding="0,4">
+
+                                                    <Label Grid.Column="0"
+                                                           Text="{Binding Cantidad, StringFormat='{0}x'}"
+                                                           FontAttributes="Bold"/>
+
+                                                    <VerticalStackLayout Grid.Column="1" Spacing="1">
+                                                        <Label Text="{Binding NombrePlatillo}"
+                                                               FontAttributes="Bold"/>
+
+                                                        <Label Text="{Binding Estado, StringFormat='Estado: {0}'}"
+                                                               FontSize="12"
+                                                               TextColor="Gray"/>
+                                                    </VerticalStackLayout>
+
+                                                    <Label Grid.Column="2"
+                                                           Text="{Binding Subtotal, StringFormat='${0:F2}'}"
+                                                           FontAttributes="Bold"
+                                                           VerticalOptions="Center"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </BindableLayout.ItemTemplate>
+                                    </VerticalStackLayout>
+
+                                    <Button Text="Confirmar pago"
+                                            Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.ConfirmarPagoCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#28A745"
+                                            TextColor="White"
+                                            CornerRadius="10"
+                                            HeightRequest="48"/>
+
+                                </VerticalStackLayout>
+                            </Border>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

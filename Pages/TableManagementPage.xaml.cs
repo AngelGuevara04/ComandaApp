@@ -4,9 +4,18 @@ namespace ComandaApp.Pages;
 
 public partial class TableManagementPage : ContentPage
 {
-    public TableManagementPage(TableManagementPageModel viewModel)
+    private readonly TableManagementPageModel _pageModel;
+
+    public TableManagementPage(TableManagementPageModel pageModel)
     {
         InitializeComponent();
-        BindingContext = viewModel;
+        _pageModel = pageModel;
+        BindingContext = pageModel;
+    }
+
+    protected override async void OnAppearing()
+    {
+        base.OnAppearing();
+        await _pageModel.CargarAsync();
     }
 }
