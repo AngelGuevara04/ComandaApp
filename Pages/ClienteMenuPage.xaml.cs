@@ -10,7 +10,7 @@ public partial class ClienteMenuPage : ContentPage
 
     private string _subscriptionKey = string.Empty;
 
-    public ClienteMenuPage(
+    public ClienteMenuPage( 
         ClienteMenuPageModel pageModel,
         RealtimeService realtimeService)
     {
