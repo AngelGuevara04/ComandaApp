@@ -139,7 +139,11 @@ public partial class ClienteMenuPageModel : ObservableObject
                     return item;
                 }));
 
-            var ordenActiva = await _ordenService.GetOrdenActivaAsync(NumeroMesa);
+            var nombreAUsar = _authService.CurrentUser?.IsPermanentDevice == true && !string.IsNullOrWhiteSpace(NombreClienteInput)
+                ? NombreClienteInput
+                : (_authService.CurrentUser?.DisplayName ?? "Cliente");
+
+            var ordenActiva = await _ordenService.GetOrdenActivaAsync(NumeroMesa, nombreAUsar);
 
             if (ordenActiva != null)
             {
@@ -159,10 +163,6 @@ public partial class ClienteMenuPageModel : ObservableObject
                     await ExpulsarClienteAsync();
                     return;
                 }
-
-                var nombreAUsar = _authService.CurrentUser?.IsPermanentDevice == true && !string.IsNullOrWhiteSpace(NombreClienteInput)
-                    ? NombreClienteInput
-                    : (_authService.CurrentUser?.DisplayName ?? "Cliente");
 
                 var nuevaOrden = await _ordenService.CrearOrdenAsync(NumeroMesa, nombreAUsar);
 
@@ -364,8 +364,20 @@ public partial class ClienteMenuPageModel : ObservableObject
     {
         await Shell.Current.DisplayAlertAsync(
             "Solicitud de pago",
-            $"Total a pagar: ${TotalConfirmado:F2}\n\nPor favor pasa a caja para realizar tu pago.",
+            $"Total a pagar: ${TotalConfirmado:F2}\n\nPor favor pasa a caja para realizar tu pago o un mesero te atenderá en breve.",
             "OK");
+            
+        var nombreAUsar = _authService.CurrentUser?.IsPermanentDevice == true && !string.IsNullOrWhiteSpace(NombreClienteInput)
+            ? NombreClienteInput
+            : (_authService.CurrentUser?.DisplayName ?? "Cliente");
+
+        try
+        {
+            await _ordenService.ActualizarNombreClienteAsync(IdOrden, $"[POR PAGAR] {nombreAUsar}");
+        }
+        catch { } // Si falla no pasa nada grave, igual lo expulsamos
+
+        await ExpulsarClienteAsync();
     }
 
     private void RefrescarTotales()

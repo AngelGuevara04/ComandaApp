@@ -1,4 +1,4 @@
-﻿using ComandaApp.Models;
+using ComandaApp.Models;
 using ComandaApp.Pages;
 using ComandaApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -146,7 +146,7 @@ public partial class DeviceManagementPageModel : ObservableObject
     [RelayCommand]
     private async Task EliminarPorRol()
     {
-        var rolStr = await Shell.Current.DisplayActionSheet(
+        var rolStr = await Shell.Current.DisplayActionSheetAsync(
             "Eliminar rol completo",
             "Cancelar",
             null,

@@ -183,7 +183,8 @@ public partial class MenuManagementPageModel : ObservableObject
     {
         try
         {
-            var photo = await MediaPicker.Default.PickPhotoAsync(new MediaPickerOptions { Title = "Selecciona una imagen" });
+            var photos = await MediaPicker.Default.PickPhotosAsync(new MediaPickerOptions { Title = "Selecciona una imagen" });
+            var photo = photos?.FirstOrDefault();
             if (photo != null)
             {
                 fotoSeleccionada = photo;

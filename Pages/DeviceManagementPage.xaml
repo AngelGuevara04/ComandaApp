@@ -159,7 +159,7 @@
                             <SwipeItems>
                                 <SwipeItem Text="Eliminar"
                                            BackgroundColor="Red"
-                                           Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.EliminarDispositivoCommand}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceManagementPageModel}}, Path=EliminarDispositivoCommand}"
                                            CommandParameter="{Binding .}"/>
                             </SwipeItems>
                         </SwipeView.RightItems>
@@ -188,7 +188,7 @@
 
                                 <Button Grid.Column="1"
                                         Text="Ver QR"
-                                        Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.MostrarQrCommand}"
+                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceManagementPageModel}}, Path=MostrarQrCommand}"
                                         CommandParameter="{Binding .}"
                                         BackgroundColor="#1F4E8E"
                                         TextColor="White"

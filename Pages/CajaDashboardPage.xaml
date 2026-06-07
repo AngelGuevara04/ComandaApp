@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:ComandaApp.PageModels"
              xmlns:models="clr-namespace:ComandaApp.Models"
              x:Class="ComandaApp.Pages.CajaDashboardPage"
              x:Name="PageRoot"
              Title="Caja">
 
-    <RefreshView IsRefreshing="{Binding IsBusy}"
-                 Command="{Binding CargarOrdenesCommand}">
+    <Grid>
+        <RefreshView IsRefreshing="{Binding IsBusy}"
+                     Command="{Binding CargarOrdenesCommand}">
 
         <ScrollView>
             <VerticalStackLayout Padding="20" Spacing="18">
@@ -123,11 +125,11 @@
                        TextColor="Gray"
                        Margin="0,20,0,0"/>
 
-                <CollectionView ItemsSource="{Binding OrdenesActivas}"
+                <CollectionView ItemsSource="{Binding MesasActivas}"
                                 IsVisible="{Binding HayOrdenes}">
 
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:OrdenMesa">
+                        <DataTemplate x:DataType="vm:MesaCajaGroup">
 
                             <Border StrokeShape="RoundRectangle 14"
                                     Padding="16"
@@ -138,11 +140,11 @@
 
                                     <Grid ColumnDefinitions="*,Auto">
                                         <VerticalStackLayout Grid.Column="0" Spacing="2">
-                                            <Label Text="{Binding MesaAsignada.NumeroMesa, StringFormat='Mesa {0}'}"
+                                            <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}"
                                                    FontSize="20"
                                                    FontAttributes="Bold"/>
 
-                                            <Label Text="{Binding NombreCliente, StringFormat='Cliente: {0}'}"
+                                            <Label Text="{Binding NombresClientes, StringFormat='Clientes: {0}'}"
                                                    FontSize="13"
                                                    TextColor="Gray"/>
                                         </VerticalStackLayout>
@@ -186,8 +188,8 @@
                                         </BindableLayout.ItemTemplate>
                                     </VerticalStackLayout>
 
-                                    <Button Text="Confirmar pago"
-                                            Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.ConfirmarPagoCommand}"
+                                    <Button Text="Cobrar cuenta"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CajaDashboardPageModel}}, Path=PrepararCobroCommand}"
                                             CommandParameter="{Binding .}"
                                             BackgroundColor="#28A745"
                                             TextColor="White"
@@ -202,5 +204,52 @@
 
             </VerticalStackLayout>
         </ScrollView>
-    </RefreshView>
+        </RefreshView>
+
+        <!-- VISTA: COBRO (Overlay) -->
+        <Grid BackgroundColor="{AppThemeBinding Light=#EEFFFFFF, Dark=#EE000000}"
+              IsVisible="{Binding MostrandoCobro}">
+            <Border StrokeShape="RoundRectangle 20"
+                    BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                    Padding="24"
+                    WidthRequest="350">
+                <VerticalStackLayout Spacing="16">
+                    <Label Text="Cobro de Cuenta" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#1F4E8E"/>
+                    
+                    <Label Text="{Binding MesaACobrar.NumeroMesa, StringFormat='Mesa {0}'}" FontSize="18" HorizontalOptions="Center"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,10">
+                        <Label Text="Total a cobrar:" FontSize="18" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding MesaACobrar.TotalCuenta, StringFormat='${0:F2}'}" FontSize="24" FontAttributes="Bold" TextColor="#C0392B"/>
+                    </Grid>
+
+                    <Label Text="Monto recibido:" FontSize="14" TextColor="Gray" Margin="0,0,0,-10"/>
+                    <Entry Placeholder="0.00" Keyboard="Numeric" Text="{Binding MontoRecibidoText}" FontSize="18" HorizontalTextAlignment="End"/>
+
+                    <Grid ColumnDefinitions="*,Auto" Margin="0,10,0,20">
+                        <Label Text="Cambio:" FontSize="18" VerticalOptions="Center"/>
+                        <Label Grid.Column="1" Text="{Binding Cambio, StringFormat='${0:F2}'}" FontSize="24" FontAttributes="Bold" TextColor="#28A745"/>
+                    </Grid>
+
+                    <Button Text="Finalizar pago"
+                            Command="{Binding FinalizarPagoCommand}"
+                            IsEnabled="{Binding PuedeFinalizarPago}"
+                            BackgroundColor="#28A745"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="48"
+                            Margin="0,0,0,10"/>
+
+                    <Button Text="Cancelar"
+                            Command="{Binding CancelarCobroCommand}"
+                            BackgroundColor="#6C757D"
+                            TextColor="White"
+                            CornerRadius="10"
+                            HeightRequest="48"/>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </Grid>
 </ContentPage>

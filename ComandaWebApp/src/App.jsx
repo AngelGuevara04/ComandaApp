@@ -46,17 +46,18 @@ function App() {
         .select('*')
         .eq('numero_mesa', numeroMesa)
         .eq('negocio_id', negocioId)
-        .eq('esta_pagada', false)
-        .maybeSingle();
+        .eq('esta_pagada', false);
 
       if (fetchError) throw fetchError;
 
-      if (existingOrders) {
-        setActiveOrderId(existingOrders.id);
-        if (existingOrders.nombre_cliente && existingOrders.nombre_cliente !== 'Cliente Web') {
-          setCustomerName(existingOrders.nombre_cliente);
+      const validOrder = existingOrders?.find(o => !o.nombre_cliente.startsWith('[POR PAGAR]'));
+
+      if (validOrder) {
+        setActiveOrderId(validOrder.id);
+        if (validOrder.nombre_cliente && validOrder.nombre_cliente !== 'Cliente Web') {
+          setCustomerName(validOrder.nombre_cliente);
         }
-        await fetchConfirmedItems(existingOrders.id);
+        await fetchConfirmedItems(validOrder.id);
       }
     } catch (err) {
       console.error('Error fetching active order:', err);
@@ -181,33 +182,37 @@ function App() {
 
     try {
       // 1. Get or create active order for this table
-      let ordenId = null;
+      let ordenId = activeOrderId;
       
-      const { data: existingOrders, error: fetchError } = await supabase
-        .from('ordenes')
-        .select('id')
-        .eq('numero_mesa', numeroMesa)
-        .eq('negocio_id', negocioId)
-        .eq('esta_pagada', false);
-
-      if (fetchError) throw fetchError;
-
-      if (existingOrders && existingOrders.length > 0) {
-        ordenId = existingOrders[0].id;
-      } else {
-        ordenId = crypto.randomUUID();
-        const { error: insertOrdenError } = await supabase
+      if (!ordenId) {
+        const { data: existingOrders, error: fetchError } = await supabase
           .from('ordenes')
-          .insert({
-            id: ordenId,
-            numero_mesa: numeroMesa,
-            nombre_cliente: customerName || 'Cliente Web',
-            fecha_creacion: new Date().toISOString(),
-            esta_pagada: false,
-            negocio_id: negocioId
-          });
-          
-        if (insertOrdenError) throw insertOrdenError;
+          .select('id, nombre_cliente')
+          .eq('numero_mesa', numeroMesa)
+          .eq('negocio_id', negocioId)
+          .eq('esta_pagada', false);
+
+        if (fetchError) throw fetchError;
+
+        const validOrder = existingOrders?.find(o => o.nombre_cliente === customerName);
+
+        if (validOrder) {
+          ordenId = validOrder.id;
+        } else {
+          ordenId = crypto.randomUUID();
+          const { error: insertOrdenError } = await supabase
+            .from('ordenes')
+            .insert({
+              id: ordenId,
+              numero_mesa: numeroMesa,
+              nombre_cliente: customerName || 'Cliente Web',
+              fecha_creacion: new Date().toISOString(),
+              esta_pagada: false,
+              negocio_id: negocioId
+            });
+            
+          if (insertOrdenError) throw insertOrdenError;
+        }
       }
 
       // 2. Insert details
@@ -243,6 +248,24 @@ function App() {
     } finally {
       setIsSubmitting(false);
     }
+  };
+
+  const solicitarPago = async () => {
+    if (!activeOrderId) return;
+    
+    const total = confirmedItems.reduce((acc, curr) => acc + (curr.precio_unitario * curr.cantidad), 0);
+    alert(`Solicitud de pago enviada.\nTotal a pagar: $${total.toFixed(2)}\n\nPor favor pasa a caja para realizar tu pago o un mesero te atenderá en breve.`);
+    
+    try {
+      await supabase
+        .from('ordenes')
+        .update({ nombre_cliente: `[POR PAGAR] ${customerName}` })
+        .eq('id', activeOrderId);
+    } catch (err) {
+      console.error(err);
+    }
+
+    setShowGoodbye(true);
   };
 
   if (!negocioId || !numeroMesa) {
@@ -416,6 +439,14 @@ function App() {
                      ${confirmedItems.reduce((acc, curr) => acc + (curr.precio_unitario * curr.cantidad), 0).toFixed(2)}
                    </strong>
                  </div>
+
+                 <button 
+                   className="btn btn-primary" 
+                   style={{ width: '100%', marginTop: '1rem', padding: '1rem', backgroundColor: 'var(--primary-color)' }}
+                   onClick={solicitarPago}
+                 >
+                   Solicitar Pago
+                 </button>
                </div>
             )}
           </div>

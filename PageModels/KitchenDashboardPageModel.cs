@@ -301,13 +301,16 @@ public partial class KitchenDashboardPageModel : ObservableObject
     private async Task AbrirOrden(OrdenCocinaGroup orden)
     {
         if (orden == null) return;
-        OrdenSeleccionada = orden;
         
-        await Task.Delay(50); // Prevent MAUI CollectionView crash when hiding parent
-
-        MostrandoOrdenes = false;
-        MostrandoDetalle = true;
-        MostrandoDisponibilidad = false;
+        await Task.Delay(100); // Prevent MAUI CollectionView crash when hiding parent
+        
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            OrdenSeleccionada = orden;
+            MostrandoOrdenes = false;
+            MostrandoDetalle = true;
+            MostrandoDisponibilidad = false;
+        });
     }
 
     [RelayCommand]

@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using ComandaApp.Pages;
 using ComandaApp.Services;
@@ -83,7 +83,7 @@ public partial class AdminDashboardPageModel : ObservableObject
     private async Task SalirSesion()
     {
         bool confirmar = await Shell.Current.DisplayAlertAsync(
-            "Salir de sesión",
+            "Cerrar sesión",
             "¿Deseas cerrar la sesión actual?",
             "Sí",
             "No");

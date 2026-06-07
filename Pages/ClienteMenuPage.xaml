@@ -90,9 +90,9 @@
                                         </Grid>
                                         <Label Text="{Binding Platillo.Descripcion}" FontSize="12" TextColor="Gray" MaxLines="2" LineBreakMode="TailTruncation"/>
                                         <Grid ColumnDefinitions="Auto,*,Auto" Margin="0,5,0,0">
-                                            <Button Grid.Column="0" Text="-" Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.QuitarCommand}" CommandParameter="{Binding .}" BackgroundColor="#C0392B" TextColor="White" CornerRadius="10" WidthRequest="40" HeightRequest="35" Padding="0"/>
+                                            <Button Grid.Column="0" Text="-" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ClienteMenuPageModel}}, Path=QuitarCommand}" CommandParameter="{Binding .}" BackgroundColor="#C0392B" TextColor="White" CornerRadius="10" WidthRequest="40" HeightRequest="35" Padding="0"/>
                                             <Label Grid.Column="1" Text="{Binding Cantidad}" FontSize="18" FontAttributes="Bold" HorizontalTextAlignment="Center" VerticalOptions="Center"/>
-                                            <Button Grid.Column="2" Text="+" Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.AgregarCommand}" CommandParameter="{Binding .}" BackgroundColor="#28A745" TextColor="White" CornerRadius="10" WidthRequest="40" HeightRequest="35" Padding="0"/>
+                                            <Button Grid.Column="2" Text="+" Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ClienteMenuPageModel}}, Path=AgregarCommand}" CommandParameter="{Binding .}" BackgroundColor="#28A745" TextColor="White" CornerRadius="10" WidthRequest="40" HeightRequest="35" Padding="0"/>
                                         </Grid>
                                     </VerticalStackLayout>
                                 </Grid>

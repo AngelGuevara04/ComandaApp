@@ -30,7 +30,7 @@ public partial class QrScannerPage : ContentPage
 
         if (!permitido)
         {
-            await DisplayAlert("Permiso requerido", "Se necesita acceso a la cámara para escanear códigos QR.", "OK");
+            await DisplayAlertAsync("Permiso requerido", "Se necesita acceso a la cámara para escanear códigos QR.", "OK");
             await Shell.Current.GoToAsync("..");
             return;
         }
@@ -89,7 +89,7 @@ public partial class QrScannerPage : ContentPage
 
         if (!result.Success)
         {
-            await DisplayAlert("Código inválido", result.Error, "OK");
+            await DisplayAlertAsync("Código inválido", result.Error, "OK");
             _procesando = false;
             QrReader.IsDetecting = true;
             return;

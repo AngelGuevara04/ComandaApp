@@ -175,7 +175,7 @@
                                     <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
 
                                         <Button Text="Editar"
-                                                Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.EditarPlatilloCommand}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MenuManagementPageModel}}, Path=EditarPlatilloCommand}"
                                                 CommandParameter="{Binding .}"
                                                 BackgroundColor="#1F4E8E"
                                                 TextColor="White"
@@ -184,7 +184,7 @@
                                                 Margin="2"/>
 
                                         <Button Text="Disp."
-                                                Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.CambiarDisponibilidadCommand}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MenuManagementPageModel}}, Path=CambiarDisponibilidadCommand}"
                                                 CommandParameter="{Binding .}"
                                                 BackgroundColor="#FFC107"
                                                 TextColor="Black"
@@ -193,7 +193,7 @@
                                                 Margin="2"/>
 
                                         <Button Text="Eliminar"
-                                                Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.EliminarPlatilloCommand}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MenuManagementPageModel}}, Path=EliminarPlatilloCommand}"
                                                 CommandParameter="{Binding .}"
                                                 BackgroundColor="#C0392B"
                                                 TextColor="White"

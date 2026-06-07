@@ -1,4 +1,4 @@
-﻿using ComandaApp.Models;
+using ComandaApp.Models;
 using ComandaApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -30,7 +30,7 @@ public partial class BusinessConfigPageModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"No se pudo cargar la configuracion: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlertAsync("Error", $"No se pudo cargar la configuracion: {ex.Message}", "OK");
         }
         finally
         {
@@ -44,7 +44,7 @@ public partial class BusinessConfigPageModel : ObservableObject
     {
         if (string.IsNullOrWhiteSpace(Config.NombreRestaurante))
         {
-            await Shell.Current.DisplayAlert("Aviso", "El nombre del restaurante es obligatorio.", "OK");
+            await Shell.Current.DisplayAlertAsync("Aviso", "El nombre del restaurante es obligatorio.", "OK");
             return;
         }
 
@@ -52,12 +52,12 @@ public partial class BusinessConfigPageModel : ObservableObject
         try
         {
             await _configService.SaveAsync(Config);
-            await Shell.Current.DisplayAlert("Exito", "Configuracion guardada correctamente.", "OK");
+            await Shell.Current.DisplayAlertAsync("Exito", "Configuracion guardada correctamente.", "OK");
             await Shell.Current.GoToAsync("..");
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"No se pudo guardar: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlertAsync("Error", $"No se pudo guardar: {ex.Message}", "OK");
         }
         finally
         {

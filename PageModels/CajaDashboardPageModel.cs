@@ -17,7 +17,7 @@ public partial class CajaDashboardPageModel : ObservableObject
     private bool isBusy;
 
     [ObservableProperty]
-    private ObservableCollection<OrdenMesa> ordenesActivas = new();
+    private ObservableCollection<MesaCajaGroup> mesasActivas = new();
 
     [ObservableProperty]
     private string nombreClienteTemporal = string.Empty;
@@ -31,9 +31,25 @@ public partial class CajaDashboardPageModel : ObservableObject
     [ObservableProperty]
     private ImageSource? qrTemporalImageSource;
 
-    public bool HayOrdenes => OrdenesActivas.Count > 0;
+    [ObservableProperty]
+    private bool mostrandoCobro;
+
+    [ObservableProperty]
+    private MesaCajaGroup? mesaACobrar;
+
+    [ObservableProperty]
+    private string montoRecibidoText = string.Empty;
+
+    [ObservableProperty]
+    private double cambio;
+
+    public bool HayOrdenes => MesasActivas.Count > 0;
     public bool NoHayOrdenes => !HayOrdenes;
     public bool TieneQrTemporal => !string.IsNullOrWhiteSpace(QrTemporal);
+    public bool PuedeFinalizarPago => !string.IsNullOrWhiteSpace(MontoRecibidoText) && 
+                                      double.TryParse(MontoRecibidoText, out var m) && 
+                                      MesaACobrar != null && 
+                                      m >= MesaACobrar.TotalCuenta;
 
     public CajaDashboardPageModel(
         OrdenService ordenService,
@@ -50,6 +66,20 @@ public partial class CajaDashboardPageModel : ObservableObject
         OnPropertyChanged(nameof(TieneQrTemporal));
     }
 
+    partial void OnMontoRecibidoTextChanged(string value)
+    {
+        if (double.TryParse(value, out var monto) && MesaACobrar != null)
+        {
+            Cambio = monto - MesaACobrar.TotalCuenta;
+            if (Cambio < 0) Cambio = 0;
+        }
+        else
+        {
+            Cambio = 0;
+        }
+        OnPropertyChanged(nameof(PuedeFinalizarPago));
+    }
+
     [RelayCommand]
     public async Task CargarOrdenesAsync()
     {
@@ -64,7 +94,17 @@ public partial class CajaDashboardPageModel : ObservableObject
         {
             var ordenes = await _ordenService.GetOrdenesActivasAsync();
 
-            OrdenesActivas = new ObservableCollection<OrdenMesa>(ordenes);
+            var grupos = ordenes.GroupBy(o => o.MesaAsignada.NumeroMesa)
+                .Select(g => new MesaCajaGroup
+                {
+                    NumeroMesa = g.Key,
+                    NombresClientes = string.Join(", ", g.Select(o => o.NombreCliente).Distinct()),
+                    TotalCuenta = g.Sum(o => o.TotalCuenta),
+                    Platillos = new ObservableCollection<DetallePedido>(g.SelectMany(o => o.Platillos)),
+                    IdsOrdenes = g.Select(o => o.IdOrden).ToList()
+                }).ToList();
+
+            MesasActivas = new ObservableCollection<MesaCajaGroup>(grupos);
 
             RefrescarEstadoLista();
         }
@@ -125,35 +165,45 @@ public partial class CajaDashboardPageModel : ObservableObject
     }
 
     [RelayCommand]
-    private async Task ConfirmarPago(OrdenMesa orden)
+    private void PrepararCobro(MesaCajaGroup mesa)
     {
-        if (orden == null)
-        {
-            return;
-        }
+        if (mesa == null) return;
+        MesaACobrar = mesa;
+        MontoRecibidoText = string.Empty;
+        Cambio = 0;
+        MostrandoCobro = true;
+    }
 
-        var confirmar = await Shell.Current.DisplayAlertAsync(
-            "Confirmar pago",
-            $"¿Confirmas el pago de la mesa {orden.MesaAsignada.NumeroMesa} por ${orden.TotalCuenta:F2}?",
-            "Sí",
-            "No");
+    [RelayCommand]
+    private void CancelarCobro()
+    {
+        MostrandoCobro = false;
+        MesaACobrar = null;
+    }
 
-        if (!confirmar)
-        {
-            return;
-        }
+    [RelayCommand]
+    private async Task FinalizarPago()
+    {
+        if (MesaACobrar == null) return;
 
         IsBusy = true;
 
         try
         {
-            await _ordenService.CerrarOrdenAsync(orden.IdOrden);
-            await _mesaService.ActualizarEstadoAsync(orden.MesaAsignada.NumeroMesa, false);
+            foreach (var idOrden in MesaACobrar.IdsOrdenes)
+            {
+                await _ordenService.CerrarOrdenAsync(idOrden);
+            }
+            await _mesaService.ActualizarEstadoAsync(MesaACobrar.NumeroMesa, false);
 
-            OrdenesActivas.Remove(orden);
+            MesasActivas.Remove(MesaACobrar);
             RefrescarEstadoLista();
 
-            await Shell.Current.DisplayAlertAsync("Pago confirmado", "La orden fue pagada y la mesa quedó libre.", "OK");
+            MostrandoCobro = false;
+            var numMesa = MesaACobrar.NumeroMesa;
+            MesaACobrar = null;
+
+            await Shell.Current.DisplayAlertAsync("Pago confirmado", $"La orden de la mesa {numMesa} fue pagada y quedó libre.", "OK");
         }
         catch (Exception ex)
         {
@@ -199,4 +249,21 @@ public partial class CajaDashboardPageModel : ObservableObject
 
         return ImageSource.FromStream(() => new MemoryStream(qrBytes));
     }
+}
+
+public partial class MesaCajaGroup : ObservableObject
+{
+    [ObservableProperty]
+    private string numeroMesa = string.Empty;
+
+    [ObservableProperty]
+    private string nombresClientes = string.Empty;
+
+    [ObservableProperty]
+    private double totalCuenta;
+
+    [ObservableProperty]
+    private ObservableCollection<DetallePedido> platillos = new();
+
+    public List<string> IdsOrdenes { get; set; } = new();
 }

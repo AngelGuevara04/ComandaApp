@@ -58,7 +58,7 @@ public class OrdenService
         return ordenes;
     }
 
-    public async Task<OrdenMesa?> GetOrdenActivaAsync(string numeroMesa)
+    public async Task<OrdenMesa?> GetOrdenActivaAsync(string numeroMesa, string? nombreCliente = null)
     {
         var client = await _supabaseService.GetClientAsync();
         var negocioId = _authService.NegocioIdActual;
@@ -68,7 +68,8 @@ public class OrdenService
         var ordenRecord = ordenesResult.Models.FirstOrDefault(o =>
             o.NegocioId == negocioId &&
             o.EstaPagada == false &&
-            NormalizarMesa(o.NumeroMesa) == NormalizarMesa(numeroMesa));
+            NormalizarMesa(o.NumeroMesa) == NormalizarMesa(numeroMesa) &&
+            (string.IsNullOrWhiteSpace(nombreCliente) || o.NombreCliente.Trim().Equals(nombreCliente.Trim(), StringComparison.OrdinalIgnoreCase)));
 
         if (ordenRecord == null)
         {

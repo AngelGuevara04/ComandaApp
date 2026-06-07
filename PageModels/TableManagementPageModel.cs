@@ -1,4 +1,4 @@
-﻿using ComandaApp.Models;
+using ComandaApp.Models;
 using ComandaApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -33,7 +33,7 @@ public partial class TableManagementPageModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"No se pudo cargar las mesas: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlertAsync("Error", $"No se pudo cargar las mesas: {ex.Message}", "OK");
         }
         finally
         {
@@ -53,7 +53,7 @@ public partial class TableManagementPageModel : ObservableObject
         // Verificar que no exista ya una mesa con ese numero.
         if (Mesas.Any(m => m.NumeroMesa == numeroIngresado.Trim()))
         {
-            await Shell.Current.DisplayAlert("Aviso", "Ya existe una mesa con ese numero.", "OK");
+            await Shell.Current.DisplayAlertAsync("Aviso", "Ya existe una mesa con ese numero.", "OK");
             return;
         }
 
@@ -62,7 +62,7 @@ public partial class TableManagementPageModel : ObservableObject
         int.TryParse(capacidadStr, out int capacidad);
         if (capacidad <= 0) capacidad = 4;
 
-        string area = await Shell.Current.DisplayActionSheet(
+        string area = await Shell.Current.DisplayActionSheetAsync(
             "Area", "Cancelar", null, "General", "Terraza", "VIP", "Bar");
         if (area == "Cancelar" || string.IsNullOrEmpty(area)) area = "General";
 
@@ -83,14 +83,14 @@ public partial class TableManagementPageModel : ObservableObject
         {
             await _mesaService.AddAsync(nuevaMesa);
             Mesas.Add(nuevaMesa);
-            await Shell.Current.DisplayAlert(
+            await Shell.Current.DisplayAlertAsync(
                 "Mesa agregada",
                 $"Mesa {numeroIngresado} creada.\nCodigo QR: {qrData}",
                 "OK");
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"No se pudo guardar la mesa: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlertAsync("Error", $"No se pudo guardar la mesa: {ex.Message}", "OK");
         }
         finally
         {
@@ -110,7 +110,7 @@ public partial class TableManagementPageModel : ObservableObject
 
         // Por ahora mostramos el codigo como texto.
         // La imagen se puede mostrar en una pagina de detalle mas adelante.
-        await Shell.Current.DisplayAlert(
+        await Shell.Current.DisplayAlertAsync(
             $"QR Mesa {mesa.NumeroMesa}",
             $"Codigo: {mesa.QrCodeData}\n\nArea: {mesa.Area} | Capacidad: {mesa.Capacidad}",
             "Cerrar");
@@ -120,7 +120,7 @@ public partial class TableManagementPageModel : ObservableObject
     [RelayCommand]
     private async Task EliminarMesa(Mesa mesa)
     {
-        bool confirmar = await Shell.Current.DisplayAlert(
+        bool confirmar = await Shell.Current.DisplayAlertAsync(
             "Eliminar Mesa",
             $"Eliminar la mesa {mesa.NumeroMesa}?",
             "Si, Eliminar", "Cancelar");
@@ -135,7 +135,7 @@ public partial class TableManagementPageModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"No se pudo eliminar: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlertAsync("Error", $"No se pudo eliminar: {ex.Message}", "OK");
         }
         finally
         {
@@ -155,7 +155,7 @@ public partial class TableManagementPageModel : ObservableObject
         }
         catch (Exception ex)
         {
-            await Shell.Current.DisplayAlert("Error", $"No se pudo actualizar el estado: {ex.Message}", "OK");
+            await Shell.Current.DisplayAlertAsync("Error", $"No se pudo actualizar el estado: {ex.Message}", "OK");
         }
     }
 }
