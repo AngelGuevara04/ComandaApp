@@ -69,8 +69,7 @@ function App() {
       const { data, error } = await supabase
         .from('detalles_pedido')
         .select('*')
-        .eq('orden_id', ordenId)
-        .order('fecha_creacion', { ascending: true });
+        .eq('orden_id', ordenId);
       
       if (error) throw error;
       setConfirmedItems(data || []);
