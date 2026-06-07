@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace ComandaApp.Models;
@@ -26,6 +26,6 @@ public partial class OrdenMesa : ObservableObject
 
     // Calcula el total de la cuenta.
     public double TotalCuenta => Platillos
-        .Where(p => p.Estado != EstadoPedido.Rechazado)
+        .Where(p => p.Estado == EstadoPedido.Listo)
         .Sum(p => p.Subtotal);
 }

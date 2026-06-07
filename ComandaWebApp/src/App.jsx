@@ -252,7 +252,7 @@ function App() {
   const solicitarPago = async () => {
     if (!activeOrderId) return;
     
-    const total = confirmedItems.reduce((acc, curr) => acc + (curr.precio_unitario * curr.cantidad), 0);
+    const total = confirmedItems.filter(i => i.estado === 'Listo').reduce((acc, curr) => acc + (curr.precio_unitario * curr.cantidad), 0);
     alert(`Solicitud de pago enviada.\nTotal a pagar: $${total.toFixed(2)}\n\nPor favor pasa a caja para realizar tu pago o un mesero te atenderá en breve.`);
     
     try {
@@ -433,9 +433,9 @@ function App() {
                  ))}
                  
                  <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                   <span style={{ fontSize: '1.25rem', color: 'var(--text-secondary)' }}>Total Confirmado</span>
+                   <span style={{ fontSize: '1.25rem', color: 'var(--text-secondary)' }}>Total a Pagar (Listos)</span>
                    <strong style={{ fontSize: '1.5rem', color: 'var(--success-color)' }}>
-                     ${confirmedItems.reduce((acc, curr) => acc + (curr.precio_unitario * curr.cantidad), 0).toFixed(2)}
+                     ${confirmedItems.filter(i => i.estado === 'Listo').reduce((acc, curr) => acc + (curr.precio_unitario * curr.cantidad), 0).toFixed(2)}
                    </strong>
                  </div>
 
