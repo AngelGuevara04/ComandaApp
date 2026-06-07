@@ -30,12 +30,14 @@
                                FontSize="18"
                                FontAttributes="Bold"/>
 
-                        <Entry Placeholder="Nombre del platillo"
+                        <Entry Placeholder="Nombre del platillo (Max 50 carácteres)"
                                Text="{Binding NombreInput}"
+                               MaxLength="50"
                                ClearButtonVisibility="WhileEditing"/>
 
-                        <Entry Placeholder="Descripción"
+                        <Entry Placeholder="Descripción (Max 150 carácteres)"
                                Text="{Binding DescripcionInput}"
+                               MaxLength="150"
                                ClearButtonVisibility="WhileEditing"/>
 
                         <Entry Placeholder="Precio"
@@ -43,9 +45,40 @@
                                Keyboard="Numeric"
                                ClearButtonVisibility="WhileEditing"/>
 
-                        <Entry Placeholder="Categoría"
-                               Text="{Binding CategoriaInput}"
-                               ClearButtonVisibility="WhileEditing"/>
+                        <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                            <Picker Grid.Column="0"
+                                    Title="Selecciona una categoría"
+                                    ItemsSource="{Binding CategoriasDisponibles}"
+                                    SelectedItem="{Binding CategoriaInput}" />
+                            <Button Grid.Column="1"
+                                    Text="+ Nueva"
+                                    Command="{Binding AgregarCategoriaCommand}"
+                                    BackgroundColor="#28A745"
+                                    TextColor="White"
+                                    CornerRadius="10" />
+                        </Grid>
+
+                        <Border StrokeShape="RoundRectangle 10" 
+                                Stroke="#1F4E8E" 
+                                StrokeThickness="2" 
+                                Padding="10" 
+                                BackgroundColor="#F0F8FF">
+                            <HorizontalStackLayout Spacing="15" VerticalOptions="Center" HorizontalOptions="Center">
+                                <Border StrokeShape="RoundRectangle 40" HeightRequest="80" WidthRequest="80" StrokeThickness="0">
+                                    <Image Source="{Binding ImagenMuestra}"
+                                           HeightRequest="80"
+                                           WidthRequest="80"
+                                           Aspect="AspectFill" />
+                                </Border>
+                                <Button Text="📷 Seleccionar Imagen"
+                                        Command="{Binding SeleccionarImagenCommand}"
+                                        BackgroundColor="#1F4E8E"
+                                        TextColor="White"
+                                        CornerRadius="10"
+                                        FontAttributes="Bold"
+                                        VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
 
                         <Button Text="{Binding TextoBotonGuardar}"
                                 Command="{Binding GuardarPlatilloCommand}"

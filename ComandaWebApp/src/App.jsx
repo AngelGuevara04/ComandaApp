@@ -12,6 +12,7 @@ function App() {
   const [notas, setNotas] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
+  const [businessName, setBusinessName] = useState('Menú Digital');
 
   // Parse URL params
   const searchParams = new URLSearchParams(window.location.search);
@@ -20,14 +21,26 @@ function App() {
 
   useEffect(() => {
     if (negocioId) {
-      fetchPlatillos();
+      fetchConfigAndPlatillos();
     } else {
       setLoading(false);
     }
   }, [negocioId]);
 
-  const fetchPlatillos = async () => {
+  const fetchConfigAndPlatillos = async () => {
     try {
+      // Fetch config
+      const { data: configData } = await supabase
+        .from('configuracion_negocio')
+        .select('nombre_restaurante')
+        .eq('negocio_id', negocioId)
+        .maybeSingle();
+        
+      if (configData && configData.nombre_restaurante) {
+        setBusinessName(configData.nombre_restaurante);
+      }
+
+      // Fetch platillos
       const { data, error } = await supabase
         .from('platillos')
         .select('*')
@@ -39,7 +52,7 @@ function App() {
       if (error) throw error;
       setPlatillos(data || []);
     } catch (err) {
-      console.error('Error fetching platillos:', err);
+      console.error('Error fetching data:', err);
       alert('Error al cargar el menú.');
     } finally {
       setLoading(false);
@@ -174,7 +187,7 @@ function App() {
       <header className="header flex justify-between items-center">
         <div className="flex items-center gap-2">
           <ChefHat size={28} style={{ color: 'var(--primary-color)' }} />
-          <h1>Menú Digital</h1>
+          <h1>{businessName}</h1>
         </div>
         <div style={{ fontSize: '0.875rem', color: 'var(--text-secondary)' }}>
           Mesa <strong style={{ color: 'var(--text-primary)' }}>{numeroMesa}</strong>
