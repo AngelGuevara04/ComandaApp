@@ -18,13 +18,13 @@
                    FontSize="18"
                    HorizontalOptions="Center"/>
 
-            <Grid ColumnDefinitions="*,*,*"
-                  ColumnSpacing="10">
+            <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
 
-                <Border Grid.Column="0"
-                        StrokeShape="RoundRectangle 10"
+                <Border StrokeShape="RoundRectangle 10"
                         BackgroundColor="#28A745"
-                        Padding="12">
+                        Padding="12"
+                        Margin="4"
+                        FlexLayout.Grow="1">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}"
                                               CommandParameter="Mesa"/>
@@ -42,10 +42,11 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Column="1"
-                        StrokeShape="RoundRectangle 10"
+                <Border StrokeShape="RoundRectangle 10"
                         BackgroundColor="#FFC107"
-                        Padding="12">
+                        Padding="12"
+                        Margin="4"
+                        FlexLayout.Grow="1">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}"
                                               CommandParameter="Cocina"/>
@@ -63,10 +64,11 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Column="2"
-                        StrokeShape="RoundRectangle 10"
+                <Border StrokeShape="RoundRectangle 10"
                         BackgroundColor="#512BD4"
-                        Padding="12">
+                        Padding="12"
+                        Margin="4"
+                        FlexLayout.Grow="1">
                     <Border.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding AbrirCuestionarioCommand}"
                                               CommandParameter="Caja"/>
@@ -83,7 +85,7 @@
                                HorizontalOptions="Center"/>
                     </VerticalStackLayout>
                 </Border>
-            </Grid>
+            </FlexLayout>
         </VerticalStackLayout>
 
         <Border Grid.Row="1"

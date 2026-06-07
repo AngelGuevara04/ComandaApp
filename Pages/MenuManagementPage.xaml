@@ -172,34 +172,36 @@
                                                VerticalOptions="Center"/>
                                     </Grid>
 
-                                    <Grid ColumnDefinitions="*,*,*"
-                                          ColumnSpacing="8">
+                                    <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
 
-                                        <Button Grid.Column="0"
-                                                Text="Editar"
+                                        <Button Text="Editar"
                                                 Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.EditarPlatilloCommand}"
                                                 CommandParameter="{Binding .}"
                                                 BackgroundColor="#1F4E8E"
                                                 TextColor="White"
-                                                CornerRadius="10"/>
+                                                CornerRadius="10"
+                                                FlexLayout.Grow="1"
+                                                Margin="2"/>
 
-                                        <Button Grid.Column="1"
-                                                Text="Disponible"
+                                        <Button Text="Disp."
                                                 Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.CambiarDisponibilidadCommand}"
                                                 CommandParameter="{Binding .}"
                                                 BackgroundColor="#FFC107"
                                                 TextColor="Black"
-                                                CornerRadius="10"/>
+                                                CornerRadius="10"
+                                                FlexLayout.Grow="1"
+                                                Margin="2"/>
 
-                                        <Button Grid.Column="2"
-                                                Text="Eliminar"
+                                        <Button Text="Eliminar"
                                                 Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.EliminarPlatilloCommand}"
                                                 CommandParameter="{Binding .}"
                                                 BackgroundColor="#C0392B"
                                                 TextColor="White"
-                                                CornerRadius="10"/>
+                                                CornerRadius="10"
+                                                FlexLayout.Grow="1"
+                                                Margin="2"/>
 
-                                    </Grid>
+                                    </FlexLayout>
 
                                 </VerticalStackLayout>
                             </Border>

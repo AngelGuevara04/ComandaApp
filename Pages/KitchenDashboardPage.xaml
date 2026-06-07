@@ -3,10 +3,17 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
              xmlns:models="clr-namespace:ComandaApp.Models"
+             xmlns:converters="clr-namespace:ComandaApp.Converters"
              x:Class="ComandaApp.Pages.KitchenDashboardPage"
              x:DataType="vm:KitchenDashboardPageModel"
              x:Name="PageRoot"
              Title="Panel de Cocina">
+
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <converters:StringNotNullConverter x:Key="StringNotNullConverter" />
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
     <RefreshView IsRefreshing="{Binding IsBusy}"
                  Command="{Binding CargarDatosCommand}">
@@ -15,212 +22,188 @@
               Padding="12"
               RowSpacing="12">
 
-            <Grid Grid.Row="0"
-                  ColumnDefinitions="*,Auto">
+            <!-- HEADER AND TABS -->
+            <FlexLayout Grid.Row="0" Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
+                <HorizontalStackLayout Spacing="10" VerticalOptions="Center" Margin="0,0,0,10">
+                    <Label Text="Cocina"
+                           FontSize="24"
+                           FontAttributes="Bold"
+                           TextColor="#1F4E8E"
+                           VerticalOptions="Center"
+                           Margin="0,0,10,0"/>
 
-                <Label Grid.Column="0"
-                       Text="Panel de Cocina"
-                       FontSize="26"
-                       FontAttributes="Bold"
-                       TextColor="#1F4E8E"
-                       VerticalOptions="Center"/>
+                    <Button Text="Órdenes" Command="{Binding VerOrdenesCommand}" CornerRadius="8" Padding="10,5">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding MostrandoOrdenes}" Value="True">
+                                <Setter Property="BackgroundColor" Value="#1F4E8E"/>
+                                <Setter Property="TextColor" Value="White"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Button" Binding="{Binding MostrandoOrdenes}" Value="False">
+                                <Setter Property="BackgroundColor" Value="#E0E0E0"/>
+                                <Setter Property="TextColor" Value="Black"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
 
-                <Button Grid.Column="1"
-                        Text="Salir"
+                    <Button Text="Menú" Command="{Binding VerDisponibilidadCommand}" CornerRadius="8" Padding="10,5">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" Binding="{Binding MostrandoDisponibilidad}" Value="True">
+                                <Setter Property="BackgroundColor" Value="#1F4E8E"/>
+                                <Setter Property="TextColor" Value="White"/>
+                            </DataTrigger>
+                            <DataTrigger TargetType="Button" Binding="{Binding MostrandoDisponibilidad}" Value="False">
+                                <Setter Property="BackgroundColor" Value="#E0E0E0"/>
+                                <Setter Property="TextColor" Value="Black"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                </HorizontalStackLayout>
+
+                <Button Text="Salir"
                         Command="{Binding SalirRolCommand}"
                         BackgroundColor="#C0392B"
                         TextColor="White"
-                        CornerRadius="10"/>
-            </Grid>
+                        CornerRadius="8"
+                        Padding="15,5"
+                        Margin="0,0,0,10"/>
+            </FlexLayout>
 
-            <Grid Grid.Row="1"
-                  ColumnDefinitions="6*,4*"
-                  ColumnSpacing="14">
+            <!-- MAIN CONTENT AREA -->
+            <Grid Grid.Row="1">
 
-                <Border Grid.Column="0"
-                        StrokeShape="RoundRectangle 12"
-                        Padding="14"
-                        BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#121212}">
+                <!-- VISTA: ORDENES ACTIVAS (Grouped Cards) -->
+                <Grid IsVisible="{Binding MostrandoOrdenes}">
+                    <Label Text="No hay órdenes pendientes en este momento."
+                           IsVisible="{Binding NoHayOrdenes}"
+                           HorizontalOptions="Center"
+                           VerticalOptions="Center"
+                           TextColor="Gray"
+                           FontSize="18"/>
 
-                    <Grid RowDefinitions="Auto,Auto,*"
-                          RowSpacing="12">
+                    <CollectionView ItemsSource="{Binding OrdenesActivas}"
+                                    IsVisible="{Binding HayOrdenes}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:OrdenCocinaGroup">
+                                <Border StrokeShape="RoundRectangle 12"
+                                        Padding="16"
+                                        Margin="0,0,0,15"
+                                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                                    <Border.GestureRecognizers>
+                                        <TapGestureRecognizer Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.AbrirOrdenCommand}"
+                                                              CommandParameter="{Binding .}"/>
+                                    </Border.GestureRecognizers>
+                                    <VerticalStackLayout Spacing="6">
+                                        <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
+                                            <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}" FontSize="24" FontAttributes="Bold" TextColor="#1F4E8E"/>
+                                            <Label Text="{Binding TiempoTranscurrido}" FontSize="14" TextColor="Gray"/>
+                                        </FlexLayout>
+                                        
+                                        <Label Text="{Binding NombreCliente, StringFormat='Cliente: {0}'}"
+                                               FontSize="14" TextColor="Gray"
+                                               IsVisible="{Binding NombreCliente, Converter={StaticResource StringNotNullConverter}}"/>
+                                        
+                                        <BoxView HeightRequest="1" Color="LightGray" Margin="0,5"/>
+                                        
+                                        <Label Text="{Binding TotalPlatillos, StringFormat='{0} platillos pendientes'}" FontSize="16" FontAttributes="Bold"/>
+                                        
+                                        <Button Text="Abrir Orden" 
+                                                Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.AbrirOrdenCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#1F4E8E"
+                                                TextColor="White"
+                                                CornerRadius="8"
+                                                Margin="0,10,0,0"/>
+                                    </VerticalStackLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
 
-                        <Grid Grid.Row="0"
-                              ColumnDefinitions="*,Auto"
-                              ColumnSpacing="10">
+                <!-- VISTA: DETALLE DE ORDEN (Platillos específicos) -->
+                <Grid IsVisible="{Binding MostrandoDetalle}">
+                    <Grid RowDefinitions="Auto,*">
+                        
+                        <FlexLayout Grid.Row="0" Wrap="Wrap" AlignItems="Center" Margin="0,0,0,15">
+                            <Button Text="← Volver" Command="{Binding VolverAOrdenesCommand}" BackgroundColor="#6C757D" TextColor="White" CornerRadius="8" Margin="0,0,10,0" Padding="10,5"/>
+                            <Label Text="{Binding OrdenSeleccionada.NumeroMesa, StringFormat='Mesa {0}'}" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
+                        </FlexLayout>
 
-                            <Label Grid.Column="0"
-                                   Text="Órdenes activas"
-                                   FontSize="24"
-                                   FontAttributes="Bold"
-                                   VerticalOptions="Center"/>
-
-                            <Button Grid.Column="1"
-                                    Text="Actualizar"
-                                    Command="{Binding CargarDatosCommand}"
-                                    BackgroundColor="#6C757D"
-                                    TextColor="White"
-                                    CornerRadius="10"/>
-                        </Grid>
-
-                        <Label Grid.Row="1"
-                               Text="No hay pedidos pendientes."
-                               IsVisible="{Binding NoHayPedidos}"
-                               HorizontalOptions="Center"
-                               TextColor="Gray"
-                               Margin="0,10,0,0"/>
-
-                        <CollectionView Grid.Row="2"
-                                        ItemsSource="{Binding PedidosActivos}"
-                                        IsVisible="{Binding HayPedidos}">
-
+                        <CollectionView Grid.Row="1" ItemsSource="{Binding OrdenSeleccionada.Platillos}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="vm:PedidoCocinaItem">
-
-                                    <Border StrokeShape="RoundRectangle 10"
-                                            Padding="14"
-                                            Margin="0,0,0,12"
-                                            BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
-
-                                        <Grid ColumnDefinitions="*,Auto"
-                                              ColumnSpacing="12">
-
-                                            <VerticalStackLayout Grid.Column="0"
-                                                                 Spacing="4">
-
-                                                <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}"
-                                                       FontSize="18"
-                                                       FontAttributes="Bold"
-                                                       TextColor="#1F4E8E"/>
-
-                                                <Label Text="{Binding NombreCliente, StringFormat='Cliente: {0}'}"
-                                                       FontSize="12"
-                                                       TextColor="Gray"
-                                                       IsVisible="{Binding TieneCliente}"/>
-
-                                                <Label Text="{Binding NombrePlatillo}"
-                                                       FontSize="18"
-                                                       FontAttributes="Bold"/>
-
-                                                <Label Text="{Binding Cantidad, StringFormat='Cantidad: {0}'}"
-                                                       FontSize="14"/>
-
-                                                <Label Text="{Binding Notas, StringFormat='Notas: {0}'}"
-                                                       TextColor="#C0392B"
-                                                       FontAttributes="Italic"
-                                                       IsVisible="{Binding TieneNotas}"/>
-
-                                                <Label Text="{Binding Estado, StringFormat='Estado: {0}'}"
-                                                       TextColor="Gray"
-                                                       FontSize="12"/>
-
+                                    <Border StrokeShape="RoundRectangle 10" Padding="14" Margin="0,0,0,12" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                                        <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
+                                            <VerticalStackLayout Spacing="4" FlexLayout.Grow="1" FlexLayout.Basis="200" Margin="0,0,10,10">
+                                                <Label Text="{Binding NombrePlatillo}" FontSize="20" FontAttributes="Bold" LineBreakMode="WordWrap"/>
+                                                <Label Text="{Binding Cantidad, StringFormat='Cantidad: {0}'}" FontSize="16" TextColor="#1F4E8E" FontAttributes="Bold"/>
+                                                <Label Text="{Binding Notas, StringFormat='Notas: {0}'}" TextColor="#C0392B" FontAttributes="Italic" IsVisible="{Binding TieneNotas}" LineBreakMode="WordWrap"/>
+                                                <Label Text="{Binding Estado, StringFormat='Estado: {0}'}" TextColor="Gray" FontSize="14"/>
                                             </VerticalStackLayout>
 
-                                            <VerticalStackLayout Grid.Column="1"
-                                                                 Spacing="8"
-                                                                 VerticalOptions="Center">
-
+                                            <FlexLayout Wrap="Wrap" JustifyContent="Start" AlignItems="Center">
                                                 <Button Text="Preparar"
                                                         Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.MarcarEnPreparacionCommand}"
                                                         CommandParameter="{Binding .}"
                                                         IsEnabled="{Binding PuedePreparar}"
-                                                        BackgroundColor="#FFC107"
-                                                        TextColor="Black"
-                                                        CornerRadius="10"
-                                                        WidthRequest="130"/>
-
+                                                        BackgroundColor="#FFC107" TextColor="Black" CornerRadius="10" Margin="0,0,8,8" Padding="15,5"/>
                                                 <Button Text="Listo"
                                                         Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.MarcarListoCommand}"
                                                         CommandParameter="{Binding .}"
                                                         IsEnabled="{Binding PuedeMarcarListo}"
-                                                        BackgroundColor="#28A745"
-                                                        TextColor="White"
-                                                        CornerRadius="10"
-                                                        WidthRequest="130"/>
-
+                                                        BackgroundColor="#28A745" TextColor="White" CornerRadius="10" Margin="0,0,8,8" Padding="15,5"/>
                                                 <Button Text="Rechazar"
                                                         Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.RechazarPedidoCommand}"
                                                         CommandParameter="{Binding .}"
-                                                        BackgroundColor="#C0392B"
-                                                        TextColor="White"
-                                                        CornerRadius="10"
-                                                        WidthRequest="130"/>
-
-                                            </VerticalStackLayout>
-
-                                        </Grid>
+                                                        BackgroundColor="#C0392B" TextColor="White" CornerRadius="10" Margin="0,0,0,8" Padding="15,5"/>
+                                            </FlexLayout>
+                                        </FlexLayout>
                                     </Border>
                                 </DataTemplate>
                             </CollectionView.ItemTemplate>
                         </CollectionView>
-
                     </Grid>
-                </Border>
+                </Grid>
 
-                <Border Grid.Column="1"
-                        StrokeShape="RoundRectangle 12"
-                        Padding="14"
-                        BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#121212}">
+                <!-- VISTA: DISPONIBILIDAD -->
+                <Grid IsVisible="{Binding MostrandoDisponibilidad}">
+                    <CollectionView ItemsSource="{Binding MenuRestaurante}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Platillo">
+                                <Border StrokeShape="RoundRectangle 10" Padding="12" Margin="0,0,0,10" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                                    <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
+                                        <VerticalStackLayout Spacing="3" FlexLayout.Grow="1" FlexLayout.Basis="150" Margin="0,0,10,0">
+                                            <Label Text="{Binding Nombre}" FontSize="18" FontAttributes="Bold" LineBreakMode="WordWrap"/>
+                                            <Label Text="{Binding Precio, StringFormat='Precio: ${0:F2}'}" FontSize="14" TextColor="Gray"/>
+                                            <Label FontSize="14" FontAttributes="Bold">
+                                                <Label.Triggers>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding EstaDisponible}" Value="True">
+                                                        <Setter Property="Text" Value="Disponible" />
+                                                        <Setter Property="TextColor" Value="#28A745" />
+                                                    </DataTrigger>
+                                                    <DataTrigger TargetType="Label" Binding="{Binding EstaDisponible}" Value="False">
+                                                        <Setter Property="Text" Value="No disponible" />
+                                                        <Setter Property="TextColor" Value="#C0392B" />
+                                                    </DataTrigger>
+                                                </Label.Triggers>
+                                            </Label>
+                                        </VerticalStackLayout>
 
-                    <Grid RowDefinitions="Auto,*"
-                          RowSpacing="12">
-
-                        <Label Grid.Row="0"
-                               Text="Disponibilidad del menú"
-                               FontSize="20"
-                               FontAttributes="Bold"/>
-
-                        <CollectionView Grid.Row="1"
-                                        ItemsSource="{Binding MenuRestaurante}">
-
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="models:Platillo">
-
-                                    <Border StrokeShape="RoundRectangle 10"
-                                            Padding="12"
-                                            Margin="0,0,0,10"
-                                            BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
-
-                                        <Grid ColumnDefinitions="*,Auto"
-                                              ColumnSpacing="10">
-
-                                            <VerticalStackLayout Grid.Column="0"
-                                                                 Spacing="3">
-
-                                                <Label Text="{Binding Nombre}"
-                                                       FontSize="16"
-                                                       FontAttributes="Bold"/>
-
-                                                <Label Text="{Binding Precio, StringFormat='Precio: ${0:F2}'}"
-                                                       FontSize="12"
-                                                       TextColor="Gray"/>
-
-                                                <Label Text="{Binding EstaDisponible, StringFormat='Disponible: {0}'}"
-                                                       FontSize="12"
-                                                       TextColor="Gray"/>
-
-                                            </VerticalStackLayout>
-
-                                            <Button Grid.Column="1"
-                                                    Text="Cambiar"
-                                                    Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.AlternarDisponibilidadCommand}"
-                                                    CommandParameter="{Binding .}"
-                                                    BackgroundColor="#1F4E8E"
-                                                    TextColor="White"
-                                                    CornerRadius="10"
-                                                    WidthRequest="100"
-                                                    VerticalOptions="Center"/>
-
-                                        </Grid>
-                                    </Border>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-
-                    </Grid>
-                </Border>
+                                        <Button Text="Cambiar"
+                                                Command="{Binding Source={x:Reference PageRoot}, Path=BindingContext.AlternarDisponibilidadCommand}"
+                                                CommandParameter="{Binding .}"
+                                                BackgroundColor="#1F4E8E"
+                                                TextColor="White"
+                                                CornerRadius="10" Padding="15,5"/>
+                                    </FlexLayout>
+                                </Border>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Grid>
 
             </Grid>
+
         </Grid>
     </RefreshView>
 </ContentPage>

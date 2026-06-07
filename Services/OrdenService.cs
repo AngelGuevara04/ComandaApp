@@ -153,6 +153,28 @@ public class OrdenService
             .Update();
     }
 
+    public async Task RechazarDetallesPorPlatilloAsync(string nombrePlatillo)
+    {
+        var client = await _supabaseService.GetClientAsync();
+        var negocioId = _authService.NegocioIdActual;
+
+        var detallesResult = await client.From<DetallePedidoRecord>()
+            .Where(d => d.NegocioId == negocioId && d.NombrePlatillo == nombrePlatillo)
+            .Get();
+
+        foreach (var detalle in detallesResult.Models)
+        {
+            if (detalle.Estado == EstadoPedido.Pendiente.ToString() || 
+                detalle.Estado == EstadoPedido.EnPreparacion.ToString())
+            {
+                await client.From<DetallePedidoRecord>()
+                    .Where(d => d.Id == detalle.Id)
+                    .Set(d => d.Estado, EstadoPedido.Rechazado.ToString())
+                    .Update();
+            }
+        }
+    }
+
     private async Task CargarDetallesAsync(OrdenMesa orden)
     {
         var client = await _supabaseService.GetClientAsync();

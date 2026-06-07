@@ -15,20 +15,19 @@
                    HorizontalOptions="Center" 
                    TextColor="#512BD4"/>
 
-            <Grid ColumnDefinitions="*,*" 
-                  RowDefinitions="Auto,Auto,Auto" 
-                  ColumnSpacing="15" 
-                  RowSpacing="15">
+            <FlexLayout Wrap="Wrap" 
+                        JustifyContent="SpaceBetween" 
+                        AlignItems="Stretch">
 
-                <Border Grid.Row="0" 
-                        Grid.Column="0" 
-                        Grid.ColumnSpan="2" 
-                        StrokeShape="RoundRectangle 12" 
+                <Border StrokeShape="RoundRectangle 12" 
                         Padding="15" 
+                        Margin="5"
+                        FlexLayout.Grow="1"
+                        FlexLayout.Basis="250"
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Gestión de Dispositivos QR" 
+                        <Label Text="Gestión de Dispositivos" 
                                FontAttributes="Bold" 
                                HorizontalOptions="Center" 
                                FontSize="16"/>
@@ -40,15 +39,15 @@
 
                         <Button Text="Administrar Accesos" 
                                 Command="{Binding AbrirDispositivosCommand}" 
-                                WidthRequest="250" 
                                 BackgroundColor="#512BD4"/>
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Row="1" 
-                        Grid.Column="0" 
-                        StrokeShape="RoundRectangle 12" 
+                <Border StrokeShape="RoundRectangle 12" 
                         Padding="15" 
+                        Margin="5"
+                        FlexLayout.Grow="1"
+                        FlexLayout.Basis="150"
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
@@ -68,10 +67,11 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Row="1" 
-                        Grid.Column="1" 
-                        StrokeShape="RoundRectangle 12" 
+                <Border StrokeShape="RoundRectangle 12" 
                         Padding="15" 
+                        Margin="5"
+                        FlexLayout.Grow="1"
+                        FlexLayout.Basis="150"
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
@@ -91,11 +91,11 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border Grid.Row="2" 
-                        Grid.Column="0" 
-                        Grid.ColumnSpan="2" 
-                        StrokeShape="RoundRectangle 12" 
+                <Border StrokeShape="RoundRectangle 12" 
                         Padding="15" 
+                        Margin="5"
+                        FlexLayout.Grow="1"
+                        FlexLayout.Basis="250"
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
@@ -104,19 +104,18 @@
                                HorizontalOptions="Center" 
                                FontSize="16"/>
 
-                        <Label Text="Consulta de pedidos por día" 
+                        <Label Text="Consulta de pedidos" 
                                FontSize="12" 
                                TextColor="Gray" 
                                HorizontalOptions="Center"/>
 
-                        <Button Text="Consultar Pedidos" 
+                        <Button Text="Consultar" 
                                 Command="{Binding AbrirHistorialCommand}" 
-                                WidthRequest="220" 
                                 BackgroundColor="#512BD4"/>
                     </VerticalStackLayout>
                 </Border>
 
-            </Grid>
+            </FlexLayout>
 
             <Button Text="Configuración del Restaurante" 
                     Command="{Binding AbrirConfigCommand}"

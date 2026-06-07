@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using ComandaApp.Models;
 using ComandaApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -16,13 +16,25 @@ public partial class KitchenDashboardPageModel : ObservableObject
     private bool isBusy;
 
     [ObservableProperty]
-    private ObservableCollection<PedidoCocinaItem> pedidosActivos = new();
+    private ObservableCollection<OrdenCocinaGroup> ordenesActivas = new();
+
+    [ObservableProperty]
+    private OrdenCocinaGroup? ordenSeleccionada;
 
     [ObservableProperty]
     private ObservableCollection<Platillo> menuRestaurante = new();
 
-    public bool HayPedidos => PedidosActivos.Count > 0;
-    public bool NoHayPedidos => !HayPedidos;
+    [ObservableProperty]
+    private bool mostrandoOrdenes = true;
+
+    [ObservableProperty]
+    private bool mostrandoDetalle = false;
+
+    [ObservableProperty]
+    private bool mostrandoDisponibilidad = false;
+
+    public bool HayOrdenes => OrdenesActivas.Count > 0;
+    public bool NoHayOrdenes => !HayOrdenes;
 
     public KitchenDashboardPageModel(
         OrdenService ordenService,
@@ -49,16 +61,18 @@ public partial class KitchenDashboardPageModel : ObservableObject
             var ordenes = await _ordenService.GetOrdenesActivasAsync();
             var platillos = await _menuService.GetAllAsync();
 
-            var pedidos = new List<PedidoCocinaItem>();
+            var grupos = new List<OrdenCocinaGroup>();
 
             foreach (var orden in ordenes)
             {
+                var pedidosGrupo = new List<PedidoCocinaItem>();
+
                 foreach (var detalle in orden.Platillos)
                 {
                     if (detalle.Estado == EstadoPedido.Pendiente ||
                         detalle.Estado == EstadoPedido.EnPreparacion)
                     {
-                        pedidos.Add(new PedidoCocinaItem
+                        pedidosGrupo.Add(new PedidoCocinaItem
                         {
                             IdDetalle = detalle.Id,
                             IdOrden = orden.IdOrden,
@@ -72,13 +86,38 @@ public partial class KitchenDashboardPageModel : ObservableObject
                         });
                     }
                 }
+
+                if (pedidosGrupo.Count > 0)
+                {
+                    grupos.Add(new OrdenCocinaGroup
+                    {
+                        IdOrden = orden.IdOrden,
+                        NumeroMesa = orden.MesaAsignada.NumeroMesa,
+                        NombreCliente = orden.NombreCliente,
+                        FechaCreacion = orden.FechaCreacion,
+                        Platillos = new ObservableCollection<PedidoCocinaItem>(
+                            pedidosGrupo.OrderBy(p => p.NombrePlatillo))
+                    });
+                }
             }
 
-            PedidosActivos = new ObservableCollection<PedidoCocinaItem>(
-                pedidos.OrderBy(p => p.NumeroMesa)
-                       .ThenBy(p => p.NombrePlatillo));
+            OrdenesActivas = new ObservableCollection<OrdenCocinaGroup>(
+                grupos.OrderBy(g => g.FechaCreacion));
 
             MenuRestaurante = new ObservableCollection<Platillo>(platillos);
+
+            if (OrdenSeleccionada != null)
+            {
+                var ordenActualizada = grupos.FirstOrDefault(g => g.IdOrden == OrdenSeleccionada.IdOrden);
+                if (ordenActualizada != null)
+                {
+                    OrdenSeleccionada = ordenActualizada;
+                }
+                else
+                {
+                    VolverAOrdenes();
+                }
+            }
 
             RefrescarEstadoLista();
         }
@@ -135,7 +174,15 @@ public partial class KitchenDashboardPageModel : ObservableObject
             await _ordenService.ActualizarEstadoDetalleAsync(pedido.IdDetalle, EstadoPedido.Listo);
             pedido.Estado = EstadoPedido.Listo;
 
-            PedidosActivos.Remove(pedido);
+            if (OrdenSeleccionada != null)
+            {
+                OrdenSeleccionada.Platillos.Remove(pedido);
+                if (OrdenSeleccionada.Platillos.Count == 0)
+                {
+                    VolverAOrdenes();
+                    await CargarDatosAsync();
+                }
+            }
             RefrescarEstadoLista();
         }
         catch (Exception ex)
@@ -168,7 +215,15 @@ public partial class KitchenDashboardPageModel : ObservableObject
             await _ordenService.ActualizarEstadoDetalleAsync(pedido.IdDetalle, EstadoPedido.Rechazado);
             pedido.Estado = EstadoPedido.Rechazado;
 
-            PedidosActivos.Remove(pedido);
+            if (OrdenSeleccionada != null)
+            {
+                OrdenSeleccionada.Platillos.Remove(pedido);
+                if (OrdenSeleccionada.Platillos.Count == 0)
+                {
+                    VolverAOrdenes();
+                    await CargarDatosAsync();
+                }
+            }
             RefrescarEstadoLista();
         }
         catch (Exception ex)
@@ -192,6 +247,12 @@ public partial class KitchenDashboardPageModel : ObservableObject
             await _menuService.ActualizarDisponibilidadAsync(platillo.Id, nuevoEstado);
 
             platillo.EstaDisponible = nuevoEstado;
+
+            if (!nuevoEstado)
+            {
+                await _ordenService.RechazarDetallesPorPlatilloAsync(platillo.Nombre);
+                await CargarDatosAsync();
+            }
         }
         catch (Exception ex)
         {
@@ -218,11 +279,72 @@ public partial class KitchenDashboardPageModel : ObservableObject
         await Shell.Current.GoToAsync("//login");
     }
 
+    [RelayCommand]
+    private async Task VerOrdenes()
+    {
+        MostrandoOrdenes = true;
+        MostrandoDetalle = false;
+        MostrandoDisponibilidad = false;
+        await CargarDatosAsync();
+    }
+
+    [RelayCommand]
+    private async Task VerDisponibilidad()
+    {
+        MostrandoOrdenes = false;
+        MostrandoDetalle = false;
+        MostrandoDisponibilidad = true;
+        await CargarDatosAsync();
+    }
+
+    [RelayCommand]
+    private async Task AbrirOrden(OrdenCocinaGroup orden)
+    {
+        if (orden == null) return;
+        OrdenSeleccionada = orden;
+        
+        await Task.Delay(50); // Prevent MAUI CollectionView crash when hiding parent
+
+        MostrandoOrdenes = false;
+        MostrandoDetalle = true;
+        MostrandoDisponibilidad = false;
+    }
+
+    [RelayCommand]
+    private void VolverAOrdenes()
+    {
+        OrdenSeleccionada = null;
+        MostrandoOrdenes = true;
+        MostrandoDetalle = false;
+        MostrandoDisponibilidad = false;
+    }
+
     private void RefrescarEstadoLista()
     {
-        OnPropertyChanged(nameof(HayPedidos));
-        OnPropertyChanged(nameof(NoHayPedidos));
+        OnPropertyChanged(nameof(HayOrdenes));
+        OnPropertyChanged(nameof(NoHayOrdenes));
     }
+}
+
+public partial class OrdenCocinaGroup : ObservableObject
+{
+    [ObservableProperty]
+    private string idOrden = string.Empty;
+
+    [ObservableProperty]
+    private string numeroMesa = string.Empty;
+
+    [ObservableProperty]
+    private string nombreCliente = string.Empty;
+
+    [ObservableProperty]
+    private DateTime fechaCreacion;
+
+    [ObservableProperty]
+    private ObservableCollection<PedidoCocinaItem> platillos = new();
+
+    public int TotalPlatillos => Platillos.Count;
+    public string TiempoTranscurrido => $"{(int)(DateTime.Now - FechaCreacion).TotalMinutes} min";
 }
 
 public partial class PedidoCocinaItem : ObservableObject

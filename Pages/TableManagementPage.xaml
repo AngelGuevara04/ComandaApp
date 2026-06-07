@@ -42,9 +42,9 @@
                         </SwipeView.RightItems>
 
                         <Border StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
-                            <Grid ColumnDefinitions="*, Auto, Auto">
+                            <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
 
-                                <VerticalStackLayout Grid.Column="0" VerticalOptions="Center">
+                                <VerticalStackLayout FlexLayout.Grow="1" FlexLayout.Basis="150" VerticalOptions="Center" Margin="0,0,10,10">
                                     <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}" FontAttributes="Bold" FontSize="18"/>
                                     <Label Text="{Binding Area}" TextColor="Gray"/>
                                     <Label Text="{Binding EstaOcupada, StringFormat='Ocupada: {0}'}" 
@@ -53,19 +53,22 @@
                                            FontAttributes="Bold"/>
                                 </VerticalStackLayout>
 
-                                <Button Grid.Column="1" 
-                                        Text="Estado" 
-                                        Margin="0,0,10,0"
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TableManagementPageModel}}, Path=CambiarEstadoMesaCommand}"
-                                        CommandParameter="{Binding .}"
-                                        BackgroundColor="#28A745"/>
+                                <FlexLayout Wrap="Wrap" AlignItems="Center">
+                                    <Button Text="Estado" 
+                                            Margin="0,0,10,5"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TableManagementPageModel}}, Path=CambiarEstadoMesaCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#28A745"
+                                            FlexLayout.Grow="1"/>
 
-                                <Button Grid.Column="2" 
-                                        Text="Ver QR" 
-                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TableManagementPageModel}}, Path=VerQrMesaCommand}"
-                                        CommandParameter="{Binding .}"
-                                        BackgroundColor="#512BD4"/>
-                            </Grid>
+                                    <Button Text="Ver QR" 
+                                            Margin="0,0,0,5"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type vm:TableManagementPageModel}}, Path=VerQrMesaCommand}"
+                                            CommandParameter="{Binding .}"
+                                            BackgroundColor="#512BD4"
+                                            FlexLayout.Grow="1"/>
+                                </FlexLayout>
+                            </FlexLayout>
                         </Border>
                     </SwipeView>
                 </DataTemplate>
