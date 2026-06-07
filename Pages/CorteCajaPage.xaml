@@ -71,7 +71,7 @@
                             BackgroundColor="{AppThemeBinding Light=#EEF4FF, Dark=#172336}">
 
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="Ã“rdenes pagadas"
+                            <Label Text="Órdenes pagadas"
                                    FontSize="13"
                                    TextColor="Gray"/>
 

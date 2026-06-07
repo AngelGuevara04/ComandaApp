@@ -50,7 +50,7 @@
                             BackgroundColor="{AppThemeBinding Light=#EEF4FF, Dark=#172336}">
 
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="Ã“rdenes"
+                            <Label Text="Órdenes"
                                    FontSize="13"
                                    TextColor="Gray"/>
 

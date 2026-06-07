@@ -50,10 +50,10 @@
                                ClearButtonVisibility="WhileEditing"/>
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="NÃºmero de mesa" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
+                            <Label Text="Número de mesa" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
                             <Label Grid.Column="1" Text="{Binding Source={x:Reference NumMesaEntry}, Path=Text.Length, StringFormat='{0}/20'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
                         </Grid>
-                        <Entry x:Name="NumMesaEntry" Placeholder="NÃºmero de mesa"
+                        <Entry x:Name="NumMesaEntry" Placeholder="Número de mesa"
                                Text="{Binding NumeroMesaTemporal}"
                                Keyboard="Text"
                                MaxLength="20"
@@ -106,7 +106,7 @@
 
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <Label Grid.Column="0"
-                           Text="Ã“rdenes activas"
+                           Text="Órdenes activas"
                            FontSize="20"
                            FontAttributes="Bold"
                            VerticalOptions="Center"/>
@@ -119,7 +119,7 @@
                             CornerRadius="16"/>
                 </Grid>
 
-                <Label Text="No hay Ã³rdenes activas."
+                <Label Text="No hay órdenes activas."
                        IsVisible="{Binding NoHayOrdenes}"
                        HorizontalOptions="Center"
                        TextColor="Gray"

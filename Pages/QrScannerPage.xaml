@@ -28,13 +28,13 @@
                              Spacing="12"
                              BackgroundColor="#CC000000">
 
-            <Label Text="Escanea el cÃ³digo QR"
+            <Label Text="Escanea el código QR"
                    TextColor="White"
                    FontSize="20"
                    FontAttributes="Bold"
                    HorizontalTextAlignment="Center"/>
 
-            <Label Text="Apunta la cÃ¡mara al cÃ³digo de mesa, cocina o caja."
+            <Label Text="Apunta la cámara al código de mesa, cocina o caja."
                    TextColor="#DDDDDD"
                    FontSize="13"
                    HorizontalTextAlignment="Center"/>

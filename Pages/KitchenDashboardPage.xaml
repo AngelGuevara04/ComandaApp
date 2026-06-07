@@ -32,7 +32,7 @@
                            VerticalOptions="Center"
                            Margin="0,0,10,0"/>
 
-                    <Button Text="Ã“rdenes" Command="{Binding VerOrdenesCommand}" CornerRadius="16" Padding="10,5">
+                    <Button Text="Órdenes" Command="{Binding VerOrdenesCommand}" CornerRadius="16" Padding="10,5">
                         <Button.Triggers>
                             <DataTrigger TargetType="Button" Binding="{Binding MostrandoOrdenes}" Value="True">
                                 <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
@@ -45,7 +45,7 @@
                         </Button.Triggers>
                     </Button>
 
-                    <Button Text="MenÃº" Command="{Binding VerDisponibilidadCommand}" CornerRadius="16" Padding="10,5">
+                    <Button Text="Menú" Command="{Binding VerDisponibilidadCommand}" CornerRadius="16" Padding="10,5">
                         <Button.Triggers>
                             <DataTrigger TargetType="Button" Binding="{Binding MostrandoDisponibilidad}" Value="True">
                                 <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
@@ -73,7 +73,7 @@
 
                 <!-- VISTA: ORDENES ACTIVAS (Grouped Cards) -->
                 <Grid IsVisible="{Binding MostrandoOrdenes}">
-                    <Label Text="No hay Ã³rdenes pendientes en este momento."
+                    <Label Text="No hay órdenes pendientes en este momento."
                            IsVisible="{Binding NoHayOrdenes}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
@@ -120,12 +120,12 @@
                     </CollectionView>
                 </Grid>
 
-                <!-- VISTA: DETALLE DE ORDEN (Platillos especÃ­ficos) -->
+                <!-- VISTA: DETALLE DE ORDEN (Platillos específicos) -->
                 <Grid IsVisible="{Binding MostrandoDetalle}">
                     <Grid RowDefinitions="Auto,*">
                         
                         <FlexLayout Grid.Row="0" Wrap="Wrap" AlignItems="Center" Margin="0,0,0,15">
-                            <Button Text="â† Volver" Command="{Binding VolverAOrdenesCommand}" BackgroundColor="#6C757D" TextColor="White" CornerRadius="16" Margin="0,0,10,0" Padding="10,5"/>
+                            <Button Text="← Volver" Command="{Binding VolverAOrdenesCommand}" BackgroundColor="#6C757D" TextColor="White" CornerRadius="16" Margin="0,0,10,0" Padding="10,5"/>
                             <Label Text="{Binding OrdenSeleccionada.NumeroMesa, StringFormat='Mesa {0}'}" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
                         </FlexLayout>
 

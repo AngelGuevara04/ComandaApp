@@ -9,7 +9,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="25" Spacing="25">
 
-            <Label Text="Panel de AdministraciÃ³n" 
+            <Label Text="Panel de Administración" 
                    FontSize="28" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center" 
@@ -27,7 +27,7 @@
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="GestiÃ³n de Dispositivos" 
+                        <Label Text="Gestión de Dispositivos" 
                                FontAttributes="Bold" 
                                HorizontalOptions="Center" 
                                FontSize="16"/>
@@ -51,7 +51,7 @@
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="MenÃº" 
+                        <Label Text="Menú" 
                                FontAttributes="Bold" 
                                HorizontalOptions="Center" 
                                FontSize="16"/>
@@ -80,7 +80,7 @@
                                HorizontalOptions="Center" 
                                FontSize="16"/>
 
-                        <Label Text="Finanzas del dÃ­a" 
+                        <Label Text="Finanzas del día" 
                                FontSize="12" 
                                TextColor="Gray" 
                                HorizontalOptions="Center"/>
@@ -117,14 +117,14 @@
 
             </FlexLayout>
 
-            <Button Text="ConfiguraciÃ³n del Restaurante" 
+            <Button Text="Configuración del Restaurante" 
                     Command="{Binding AbrirConfigCommand}"
                     BackgroundColor="#6C757D"
                     FontAttributes="Bold"
                     HeightRequest="55"
                     Margin="0,10,0,0" />
 
-            <Button Text="Cerrar sesiÃ³n" 
+            <Button Text="Cerrar sesión" 
                     Command="{Binding SalirSesionCommand}"
                     BackgroundColor="#C0392B"
                     TextColor="White"

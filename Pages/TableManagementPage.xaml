@@ -5,7 +5,7 @@
              xmlns:converters="clr-namespace:ComandaApp.Converters"
              x:Class="ComandaApp.Pages.TableManagementPage"
              x:DataType="vm:TableManagementPageModel"
-             Title="GestiÃ³n de Mesas">
+             Title="Gestión de Mesas">
 
     <ContentPage.Resources>
         <converters:BoolToColorConverter x:Key="BoolToColorConverter" />

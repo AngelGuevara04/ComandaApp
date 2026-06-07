@@ -6,7 +6,7 @@
              x:Class="ComandaApp.Pages.DeviceManagementPage"
              x:DataType="vm:DeviceManagementPageModel"
              x:Name="PageRoot"
-             Title="GestiÃ³n de Dispositivos">
+             Title="Gestión de Dispositivos">
 
     <Grid RowDefinitions="Auto,Auto,*,Auto"
           Padding="15"
@@ -97,7 +97,7 @@
             <VerticalStackLayout Spacing="12"
                                  HorizontalOptions="Center">
 
-                <Label Text="CÃ³digo QR del dispositivo"
+                <Label Text="Código QR del dispositivo"
                        FontSize="18"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"/>

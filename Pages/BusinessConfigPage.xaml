@@ -8,7 +8,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <Label Text="InformaciÃ³n del Negocio" 
+            <Label Text="Información del Negocio" 
                    FontSize="24" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center" 
@@ -22,7 +22,7 @@
                             <Label Text="Nombre del Restaurante" FontAttributes="Bold" TextColor="Gray"/>
                             <Label Grid.Column="1" Text="{Binding Source={x:Reference NomResEntry}, Path=Text.Length, StringFormat='{0}/50'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
                         </Grid>
-                        <Entry x:Name="NomResEntry" Placeholder="Ej. TaquerÃ­a El FogÃ³n" Text="{Binding Config.NombreRestaurante}" MaxLength="50"/>
+                        <Entry x:Name="NomResEntry" Placeholder="Ej. Taquería El Fogón" Text="{Binding Config.NombreRestaurante}" MaxLength="50"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
@@ -35,7 +35,7 @@
 
                     <VerticalStackLayout Spacing="5">
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="DirecciÃ³n" FontAttributes="Bold" TextColor="Gray"/>
+                            <Label Text="Dirección" FontAttributes="Bold" TextColor="Gray"/>
                             <Label Grid.Column="1" Text="{Binding Source={x:Reference DirEntry}, Path=Text.Length, StringFormat='{0}/100'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
                         </Grid>
                         <Entry x:Name="DirEntry" Placeholder="Calle, Colonia, Ciudad" Text="{Binding Config.Direccion}" MaxLength="100"/>

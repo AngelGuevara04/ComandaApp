@@ -45,7 +45,7 @@
               BackgroundColor="{AppThemeBinding Light=#EAEAEA, Dark={StaticResource Gray900}}">
 
             <Button Grid.Column="0"
-                    Text="MenÃº"
+                    Text="Menú"
                     Command="{Binding VerMenuCommand}"
                     BackgroundColor="{StaticResource Primary}"
                     TextColor="White"
@@ -162,7 +162,7 @@
               Padding="24">
             
             <VerticalStackLayout VerticalOptions="Center" Spacing="20">
-                <Label Text="Â¡Bienvenido!"
+                <Label Text="¡Bienvenido!"
                        FontSize="32"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"/>
