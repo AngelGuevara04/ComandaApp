@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
@@ -6,7 +6,7 @@
              x:Class="ComandaApp.Pages.MenuManagementPage"
              x:DataType="vm:MenuManagementPageModel"
              x:Name="PageRoot"
-             Title="Gestión de Menú">
+             Title="GestiÃ³n de MenÃº">
 
     <RefreshView IsRefreshing="{Binding IsBusy}"
                  Command="{Binding CargarMenuCommand}">
@@ -14,13 +14,13 @@
         <ScrollView>
             <VerticalStackLayout Padding="18" Spacing="16">
 
-                <Label Text="Gestión de menú"
+                <Label Text="GestiÃ³n de menÃº"
                        FontSize="28"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
-                       TextColor="#1F4E8E"/>
+                       TextColor="{StaticResource Primary}"/>
 
-                <Border StrokeShape="RoundRectangle 14"
+                <Border StrokeShape="RoundRectangle 24"
                         Padding="16"
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
@@ -40,10 +40,10 @@
                                ClearButtonVisibility="WhileEditing"/>
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Descripción" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
+                            <Label Text="DescripciÃ³n" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
                             <Label Grid.Column="1" Text="{Binding Source={x:Reference DescEntry}, Path=Text.Length, StringFormat='{0}/150'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
                         </Grid>
-                        <Entry x:Name="DescEntry" Placeholder="Descripción breve"
+                        <Entry x:Name="DescEntry" Placeholder="DescripciÃ³n breve"
                                Text="{Binding DescripcionInput}"
                                MaxLength="150"
                                ClearButtonVisibility="WhileEditing"/>
@@ -60,7 +60,7 @@
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
                             <Picker Grid.Column="0"
-                                    Title="Selecciona una categoría"
+                                    Title="Selecciona una categorÃ­a"
                                     ItemsSource="{Binding CategoriasDisponibles}"
                                     SelectedItem="{Binding CategoriaInput}" />
                             <Button Grid.Column="1"
@@ -68,7 +68,7 @@
                                     Command="{Binding AgregarCategoriaCommand}"
                                     BackgroundColor="#28A745"
                                     TextColor="White"
-                                    CornerRadius="10" />
+                                    CornerRadius="16" />
                         </Grid>
 
                         <Border StrokeShape="RoundRectangle 16"
@@ -81,7 +81,7 @@
                                 HeightRequest="180">
                             <Grid>
                                 <VerticalStackLayout Spacing="8" VerticalOptions="Center" HorizontalOptions="Center">
-                                    <Label Text="📷" FontSize="40" HorizontalOptions="Center"/>
+                                    <Label Text="ðŸ“·" FontSize="40" HorizontalOptions="Center"/>
                                     <Label Text="Tocar para subir" TextColor="#6B7280" FontSize="14" HorizontalOptions="Center"/>
                                 </VerticalStackLayout>
                                 <Image Source="{Binding ImagenMuestra}" Aspect="AspectFill" />
@@ -93,17 +93,17 @@
 
                         <Button Text="{Binding TextoBotonGuardar}"
                                 Command="{Binding GuardarPlatilloCommand}"
-                                BackgroundColor="#1F4E8E"
+                                BackgroundColor="{StaticResource Primary}"
                                 TextColor="White"
-                                CornerRadius="10"
+                                CornerRadius="16"
                                 HeightRequest="48"/>
 
-                        <Button Text="Cancelar edición"
+                        <Button Text="Cancelar ediciÃ³n"
                                 Command="{Binding CancelarEdicionCommand}"
                                 IsVisible="{Binding IsEditing}"
                                 BackgroundColor="#6C757D"
                                 TextColor="White"
-                                CornerRadius="10"
+                                CornerRadius="16"
                                 HeightRequest="44"/>
 
                     </VerticalStackLayout>
@@ -123,7 +123,7 @@
                             Command="{Binding CargarMenuCommand}"
                             BackgroundColor="#6C757D"
                             TextColor="White"
-                            CornerRadius="10"/>
+                            CornerRadius="16"/>
                 </Grid>
 
                 <Label Text="No hay platillos registrados."
@@ -138,7 +138,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:Platillo">
 
-                            <Border StrokeShape="RoundRectangle 14"
+                            <Border StrokeShape="RoundRectangle 24"
                                     Padding="14"
                                     Margin="0,0,0,12"
                                     BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
@@ -155,7 +155,7 @@
                                                    FontSize="13"
                                                    TextColor="Gray"/>
 
-                                            <Label Text="{Binding Categoria, StringFormat='Categoría: {0}'}"
+                                            <Label Text="{Binding Categoria, StringFormat='CategorÃ­a: {0}'}"
                                                    FontSize="12"
                                                    TextColor="Gray"/>
 
@@ -168,7 +168,7 @@
                                                Text="{Binding Precio, StringFormat='${0:F2}'}"
                                                FontSize="20"
                                                FontAttributes="Bold"
-                                               TextColor="#1F4E8E"
+                                               TextColor="{StaticResource Primary}"
                                                VerticalOptions="Center"/>
                                     </Grid>
 
@@ -177,9 +177,9 @@
                                         <Button Text="Editar"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MenuManagementPageModel}}, Path=EditarPlatilloCommand}"
                                                 CommandParameter="{Binding .}"
-                                                BackgroundColor="#1F4E8E"
+                                                BackgroundColor="{StaticResource Primary}"
                                                 TextColor="White"
-                                                CornerRadius="10"
+                                                CornerRadius="16"
                                                 FlexLayout.Grow="1"
                                                 Margin="2"/>
 
@@ -188,7 +188,7 @@
                                                 CommandParameter="{Binding .}"
                                                 BackgroundColor="#FFC107"
                                                 TextColor="Black"
-                                                CornerRadius="10"
+                                                CornerRadius="16"
                                                 FlexLayout.Grow="1"
                                                 Margin="2"/>
 
@@ -197,7 +197,7 @@
                                                 CommandParameter="{Binding .}"
                                                 BackgroundColor="#C0392B"
                                                 TextColor="White"
-                                                CornerRadius="10"
+                                                CornerRadius="16"
                                                 FlexLayout.Grow="1"
                                                 Margin="2"/>
 

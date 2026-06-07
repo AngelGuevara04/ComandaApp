@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
@@ -6,7 +6,7 @@
              x:Class="ComandaApp.Pages.DeviceManagementPage"
              x:DataType="vm:DeviceManagementPageModel"
              x:Name="PageRoot"
-             Title="Gestión de Dispositivos">
+             Title="GestiÃ³n de Dispositivos">
 
     <Grid RowDefinitions="Auto,Auto,*,Auto"
           Padding="15"
@@ -20,7 +20,7 @@
 
             <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
 
-                <Border StrokeShape="RoundRectangle 10"
+                <Border StrokeShape="RoundRectangle 16"
                         BackgroundColor="#28A745"
                         Padding="12"
                         Margin="4"
@@ -42,7 +42,7 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border StrokeShape="RoundRectangle 10"
+                <Border StrokeShape="RoundRectangle 16"
                         BackgroundColor="#FFC107"
                         Padding="12"
                         Margin="4"
@@ -64,7 +64,7 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border StrokeShape="RoundRectangle 10"
+                <Border StrokeShape="RoundRectangle 16"
                         BackgroundColor="#512BD4"
                         Padding="12"
                         Margin="4"
@@ -90,14 +90,14 @@
 
         <Border Grid.Row="1"
                 IsVisible="{Binding QrVisible}"
-                StrokeShape="RoundRectangle 14"
+                StrokeShape="RoundRectangle 24"
                 Padding="16"
                 BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
             <VerticalStackLayout Spacing="12"
                                  HorizontalOptions="Center">
 
-                <Label Text="Código QR del dispositivo"
+                <Label Text="CÃ³digo QR del dispositivo"
                        FontSize="18"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"/>
@@ -105,10 +105,10 @@
                 <Label Text="{Binding DispositivoSeleccionado.Nombre}"
                        FontSize="16"
                        FontAttributes="Bold"
-                       TextColor="#1F4E8E"
+                       TextColor="{StaticResource Primary}"
                        HorizontalOptions="Center"/>
 
-                <Border StrokeShape="RoundRectangle 12"
+                <Border StrokeShape="RoundRectangle 16"
                         Padding="18"
                         BackgroundColor="White"
                         HorizontalOptions="Center">
@@ -130,7 +130,7 @@
                         Command="{Binding CerrarQrCommand}"
                         BackgroundColor="#6C757D"
                         TextColor="White"
-                        CornerRadius="10"
+                        CornerRadius="16"
                         HeightRequest="44"
                         WidthRequest="180"/>
             </VerticalStackLayout>
@@ -146,7 +146,7 @@
                            FontAttributes="Bold"
                            FontSize="20"
                            Padding="10"
-                           BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark=#2A2A2A}"
+                           BackgroundColor="{AppThemeBinding Light=#F0F0F0, Dark={StaticResource Gray900}}"
                            TextColor="{AppThemeBinding Light=Black, Dark=White}"/>
                 </DataTemplate>
             </CollectionView.GroupHeaderTemplate>
@@ -190,9 +190,9 @@
                                         Text="Ver QR"
                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:DeviceManagementPageModel}}, Path=MostrarQrCommand}"
                                         CommandParameter="{Binding .}"
-                                        BackgroundColor="#1F4E8E"
+                                        BackgroundColor="{StaticResource Primary}"
                                         TextColor="White"
-                                        CornerRadius="10"
+                                        CornerRadius="16"
                                         WidthRequest="90"
                                         VerticalOptions="Center"/>
                             </Grid>

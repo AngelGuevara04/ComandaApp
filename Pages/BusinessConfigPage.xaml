@@ -1,4 +1,4 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
              x:Class="ComandaApp.Pages.BusinessConfigPage"
@@ -8,13 +8,13 @@
     <ScrollView>
         <VerticalStackLayout Padding="20" Spacing="20">
 
-            <Label Text="Información del Negocio" 
+            <Label Text="InformaciÃ³n del Negocio" 
                    FontSize="24" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center" 
                    TextColor="#512BD4"/>
 
-            <Border StrokeShape="RoundRectangle 12" Padding="20" BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#1E1E1E}">
+            <Border StrokeShape="RoundRectangle 16" Padding="20" BackgroundColor="{AppThemeBinding Light=#F8F9FA, Dark=#1E1E1E}">
                 <VerticalStackLayout Spacing="15">
 
                     <VerticalStackLayout Spacing="5">
@@ -22,7 +22,7 @@
                             <Label Text="Nombre del Restaurante" FontAttributes="Bold" TextColor="Gray"/>
                             <Label Grid.Column="1" Text="{Binding Source={x:Reference NomResEntry}, Path=Text.Length, StringFormat='{0}/50'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
                         </Grid>
-                        <Entry x:Name="NomResEntry" Placeholder="Ej. Taquería El Fogón" Text="{Binding Config.NombreRestaurante}" MaxLength="50"/>
+                        <Entry x:Name="NomResEntry" Placeholder="Ej. TaquerÃ­a El FogÃ³n" Text="{Binding Config.NombreRestaurante}" MaxLength="50"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
@@ -35,7 +35,7 @@
 
                     <VerticalStackLayout Spacing="5">
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Dirección" FontAttributes="Bold" TextColor="Gray"/>
+                            <Label Text="DirecciÃ³n" FontAttributes="Bold" TextColor="Gray"/>
                             <Label Grid.Column="1" Text="{Binding Source={x:Reference DirEntry}, Path=Text.Length, StringFormat='{0}/100'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
                         </Grid>
                         <Entry x:Name="DirEntry" Placeholder="Calle, Colonia, Ciudad" Text="{Binding Config.Direccion}" MaxLength="100"/>

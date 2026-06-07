@@ -1,11 +1,11 @@
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+﻿<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
              xmlns:models="clr-namespace:ComandaApp.Models"
              xmlns:converters="clr-namespace:ComandaApp.Converters"
              x:Class="ComandaApp.Pages.TableManagementPage"
              x:DataType="vm:TableManagementPageModel"
-             Title="Gestión de Mesas">
+             Title="GestiÃ³n de Mesas">
 
     <ContentPage.Resources>
         <converters:BoolToColorConverter x:Key="BoolToColorConverter" />
@@ -41,7 +41,7 @@
                             </SwipeItems>
                         </SwipeView.RightItems>
 
-                        <Border StrokeShape="RoundRectangle 12" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                        <Border StrokeShape="RoundRectangle 16" Padding="15" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                             <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
 
                                 <VerticalStackLayout FlexLayout.Grow="1" FlexLayout.Basis="150" VerticalOptions="Center" Margin="0,0,10,10">

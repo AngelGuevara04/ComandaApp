@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
@@ -28,14 +28,14 @@
                     <Label Text="Cocina"
                            FontSize="24"
                            FontAttributes="Bold"
-                           TextColor="#1F4E8E"
+                           TextColor="{StaticResource Primary}"
                            VerticalOptions="Center"
                            Margin="0,0,10,0"/>
 
-                    <Button Text="Órdenes" Command="{Binding VerOrdenesCommand}" CornerRadius="8" Padding="10,5">
+                    <Button Text="Ã“rdenes" Command="{Binding VerOrdenesCommand}" CornerRadius="16" Padding="10,5">
                         <Button.Triggers>
                             <DataTrigger TargetType="Button" Binding="{Binding MostrandoOrdenes}" Value="True">
-                                <Setter Property="BackgroundColor" Value="#1F4E8E"/>
+                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
                                 <Setter Property="TextColor" Value="White"/>
                             </DataTrigger>
                             <DataTrigger TargetType="Button" Binding="{Binding MostrandoOrdenes}" Value="False">
@@ -45,10 +45,10 @@
                         </Button.Triggers>
                     </Button>
 
-                    <Button Text="Menú" Command="{Binding VerDisponibilidadCommand}" CornerRadius="8" Padding="10,5">
+                    <Button Text="MenÃº" Command="{Binding VerDisponibilidadCommand}" CornerRadius="16" Padding="10,5">
                         <Button.Triggers>
                             <DataTrigger TargetType="Button" Binding="{Binding MostrandoDisponibilidad}" Value="True">
-                                <Setter Property="BackgroundColor" Value="#1F4E8E"/>
+                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}"/>
                                 <Setter Property="TextColor" Value="White"/>
                             </DataTrigger>
                             <DataTrigger TargetType="Button" Binding="{Binding MostrandoDisponibilidad}" Value="False">
@@ -63,7 +63,7 @@
                         Command="{Binding SalirRolCommand}"
                         BackgroundColor="#C0392B"
                         TextColor="White"
-                        CornerRadius="8"
+                        CornerRadius="16"
                         Padding="15,5"
                         Margin="0,0,0,10"/>
             </FlexLayout>
@@ -73,7 +73,7 @@
 
                 <!-- VISTA: ORDENES ACTIVAS (Grouped Cards) -->
                 <Grid IsVisible="{Binding MostrandoOrdenes}">
-                    <Label Text="No hay órdenes pendientes en este momento."
+                    <Label Text="No hay Ã³rdenes pendientes en este momento."
                            IsVisible="{Binding NoHayOrdenes}"
                            HorizontalOptions="Center"
                            VerticalOptions="Center"
@@ -84,7 +84,7 @@
                                     IsVisible="{Binding HayOrdenes}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="vm:OrdenCocinaGroup">
-                                <Border StrokeShape="RoundRectangle 12"
+                                <Border StrokeShape="RoundRectangle 16"
                                         Padding="16"
                                         Margin="0,0,0,15"
                                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
@@ -94,7 +94,7 @@
                                     </Border.GestureRecognizers>
                                     <VerticalStackLayout Spacing="6">
                                         <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
-                                            <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}" FontSize="24" FontAttributes="Bold" TextColor="#1F4E8E"/>
+                                            <Label Text="{Binding NumeroMesa, StringFormat='Mesa {0}'}" FontSize="24" FontAttributes="Bold" TextColor="{StaticResource Primary}"/>
                                             <Label Text="{Binding TiempoTranscurrido}" FontSize="14" TextColor="Gray"/>
                                         </FlexLayout>
                                         
@@ -109,9 +109,9 @@
                                         <Button Text="Abrir Orden" 
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:KitchenDashboardPageModel}}, Path=AbrirOrdenCommand}"
                                                 CommandParameter="{Binding .}"
-                                                BackgroundColor="#1F4E8E"
+                                                BackgroundColor="{StaticResource Primary}"
                                                 TextColor="White"
-                                                CornerRadius="8"
+                                                CornerRadius="16"
                                                 Margin="0,10,0,0"/>
                                     </VerticalStackLayout>
                                 </Border>
@@ -120,23 +120,23 @@
                     </CollectionView>
                 </Grid>
 
-                <!-- VISTA: DETALLE DE ORDEN (Platillos específicos) -->
+                <!-- VISTA: DETALLE DE ORDEN (Platillos especÃ­ficos) -->
                 <Grid IsVisible="{Binding MostrandoDetalle}">
                     <Grid RowDefinitions="Auto,*">
                         
                         <FlexLayout Grid.Row="0" Wrap="Wrap" AlignItems="Center" Margin="0,0,0,15">
-                            <Button Text="← Volver" Command="{Binding VolverAOrdenesCommand}" BackgroundColor="#6C757D" TextColor="White" CornerRadius="8" Margin="0,0,10,0" Padding="10,5"/>
+                            <Button Text="â† Volver" Command="{Binding VolverAOrdenesCommand}" BackgroundColor="#6C757D" TextColor="White" CornerRadius="16" Margin="0,0,10,0" Padding="10,5"/>
                             <Label Text="{Binding OrdenSeleccionada.NumeroMesa, StringFormat='Mesa {0}'}" FontSize="22" FontAttributes="Bold" VerticalOptions="Center"/>
                         </FlexLayout>
 
                         <CollectionView Grid.Row="1" ItemsSource="{Binding OrdenSeleccionada.Platillos}">
                             <CollectionView.ItemTemplate>
                                 <DataTemplate x:DataType="vm:PedidoCocinaItem">
-                                    <Border StrokeShape="RoundRectangle 10" Padding="14" Margin="0,0,0,12" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                                    <Border StrokeShape="RoundRectangle 16" Padding="14" Margin="0,0,0,12" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                                         <VerticalStackLayout Spacing="10">
                                             <VerticalStackLayout Spacing="4">
                                                 <Label Text="{Binding NombrePlatillo}" FontSize="20" FontAttributes="Bold" LineBreakMode="WordWrap"/>
-                                                <Label Text="{Binding Cantidad, StringFormat='Cantidad: {0}'}" FontSize="16" TextColor="#1F4E8E" FontAttributes="Bold"/>
+                                                <Label Text="{Binding Cantidad, StringFormat='Cantidad: {0}'}" FontSize="16" TextColor="{StaticResource Primary}" FontAttributes="Bold"/>
                                                 <Label Text="{Binding Notas, StringFormat='Notas: {0}'}" TextColor="#C0392B" FontAttributes="Italic" IsVisible="{Binding TieneNotas}" LineBreakMode="WordWrap"/>
                                                 <Label Text="{Binding Estado, StringFormat='Estado: {0}'}" TextColor="Gray" FontSize="14"/>
                                             </VerticalStackLayout>
@@ -146,16 +146,16 @@
                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:KitchenDashboardPageModel}}, Path=MarcarEnPreparacionCommand}"
                                                         CommandParameter="{Binding .}"
                                                         IsEnabled="{Binding PuedePreparar}"
-                                                        BackgroundColor="#FFC107" TextColor="Black" CornerRadius="10" Margin="0,0,8,8" Padding="15,5"/>
+                                                        BackgroundColor="#FFC107" TextColor="Black" CornerRadius="16" Margin="0,0,8,8" Padding="15,5"/>
                                                 <Button Text="Listo"
                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:KitchenDashboardPageModel}}, Path=MarcarListoCommand}"
                                                         CommandParameter="{Binding .}"
                                                         IsEnabled="{Binding PuedeMarcarListo}"
-                                                        BackgroundColor="#28A745" TextColor="White" CornerRadius="10" Margin="0,0,8,8" Padding="15,5"/>
+                                                        BackgroundColor="#28A745" TextColor="White" CornerRadius="16" Margin="0,0,8,8" Padding="15,5"/>
                                                 <Button Text="Rechazar"
                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:KitchenDashboardPageModel}}, Path=RechazarPedidoCommand}"
                                                         CommandParameter="{Binding .}"
-                                                        BackgroundColor="#C0392B" TextColor="White" CornerRadius="10" Margin="0,0,0,8" Padding="15,5"/>
+                                                        BackgroundColor="#C0392B" TextColor="White" CornerRadius="16" Margin="0,0,0,8" Padding="15,5"/>
                                             </FlexLayout>
                                         </VerticalStackLayout>
                                     </Border>
@@ -170,7 +170,7 @@
                     <CollectionView ItemsSource="{Binding MenuRestaurante}">
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Platillo">
-                                <Border StrokeShape="RoundRectangle 10" Padding="12" Margin="0,0,0,10" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
+                                <Border StrokeShape="RoundRectangle 16" Padding="12" Margin="0,0,0,10" BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
                                     <FlexLayout Wrap="Wrap" JustifyContent="SpaceBetween" AlignItems="Center">
                                         <VerticalStackLayout Spacing="3" FlexLayout.Grow="1" FlexLayout.Basis="150" Margin="0,0,10,0">
                                             <Label Text="{Binding Nombre}" FontSize="18" FontAttributes="Bold" LineBreakMode="WordWrap"/>
@@ -192,9 +192,9 @@
                                         <Button Text="Cambiar"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:KitchenDashboardPageModel}}, Path=AlternarDisponibilidadCommand}"
                                                 CommandParameter="{Binding .}"
-                                                BackgroundColor="#1F4E8E"
+                                                BackgroundColor="{StaticResource Primary}"
                                                 TextColor="White"
-                                                CornerRadius="10" Padding="15,5"/>
+                                                CornerRadius="16" Padding="15,5"/>
                                     </FlexLayout>
                                 </Border>
                             </DataTemplate>

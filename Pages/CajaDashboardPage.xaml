@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
@@ -20,17 +20,17 @@
                            FontSize="28"
                            FontAttributes="Bold"
                            HorizontalOptions="Center"
-                           TextColor="#1F4E8E"/>
+                           TextColor="{StaticResource Primary}"/>
 
                     <Button Grid.Column="1"
                             Text="Salir"
                             Command="{Binding SalirRolCommand}"
                             BackgroundColor="#C0392B"
                             TextColor="White"
-                            CornerRadius="10"/>
+                            CornerRadius="16"/>
                 </Grid>
 
-                <Border StrokeShape="RoundRectangle 14"
+                <Border StrokeShape="RoundRectangle 24"
                         Padding="16"
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
@@ -50,10 +50,10 @@
                                ClearButtonVisibility="WhileEditing"/>
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Número de mesa" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
+                            <Label Text="NÃºmero de mesa" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
                             <Label Grid.Column="1" Text="{Binding Source={x:Reference NumMesaEntry}, Path=Text.Length, StringFormat='{0}/20'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
                         </Grid>
-                        <Entry x:Name="NumMesaEntry" Placeholder="Número de mesa"
+                        <Entry x:Name="NumMesaEntry" Placeholder="NÃºmero de mesa"
                                Text="{Binding NumeroMesaTemporal}"
                                Keyboard="Text"
                                MaxLength="20"
@@ -61,13 +61,13 @@
 
                         <Button Text="Generar QR temporal"
                                 Command="{Binding GenerarQrTemporalCommand}"
-                                BackgroundColor="#1F4E8E"
+                                BackgroundColor="{StaticResource Primary}"
                                 TextColor="White"
-                                CornerRadius="10"
+                                CornerRadius="16"
                                 HeightRequest="48"/>
 
                         <Border IsVisible="{Binding TieneQrTemporal}"
-                                StrokeShape="RoundRectangle 10"
+                                StrokeShape="RoundRectangle 16"
                                 Padding="12"
                                 BackgroundColor="{AppThemeBinding Light=#EEF4FF, Dark=#172336}">
 
@@ -77,10 +77,10 @@
                                 <Label Text="QR temporal del cliente"
                                        FontAttributes="Bold"
                                        FontSize="16"
-                                       TextColor="#1F4E8E"
+                                       TextColor="{StaticResource Primary}"
                                        HorizontalOptions="Center"/>
 
-                                <Border StrokeShape="RoundRectangle 12"
+                                <Border StrokeShape="RoundRectangle 16"
                                         Padding="18"
                                         BackgroundColor="White"
                                         HorizontalOptions="Center">
@@ -106,7 +106,7 @@
 
                 <Grid ColumnDefinitions="*,Auto" ColumnSpacing="12">
                     <Label Grid.Column="0"
-                           Text="Órdenes activas"
+                           Text="Ã“rdenes activas"
                            FontSize="20"
                            FontAttributes="Bold"
                            VerticalOptions="Center"/>
@@ -116,10 +116,10 @@
                             Command="{Binding CargarOrdenesCommand}"
                             BackgroundColor="#6C757D"
                             TextColor="White"
-                            CornerRadius="10"/>
+                            CornerRadius="16"/>
                 </Grid>
 
-                <Label Text="No hay órdenes activas."
+                <Label Text="No hay Ã³rdenes activas."
                        IsVisible="{Binding NoHayOrdenes}"
                        HorizontalOptions="Center"
                        TextColor="Gray"
@@ -131,7 +131,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="vm:MesaCajaGroup">
 
-                            <Border StrokeShape="RoundRectangle 14"
+                            <Border StrokeShape="RoundRectangle 24"
                                     Padding="16"
                                     Margin="0,0,0,14"
                                     BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
@@ -153,7 +153,7 @@
                                                Text="{Binding TotalCuenta, StringFormat='${0:F2}'}"
                                                FontSize="20"
                                                FontAttributes="Bold"
-                                               TextColor="#1F4E8E"
+                                               TextColor="{StaticResource Primary}"
                                                VerticalOptions="Center"/>
                                     </Grid>
 
@@ -193,7 +193,7 @@
                                             CommandParameter="{Binding .}"
                                             BackgroundColor="#28A745"
                                             TextColor="White"
-                                            CornerRadius="10"
+                                            CornerRadius="16"
                                             HeightRequest="48"/>
 
                                 </VerticalStackLayout>
@@ -216,7 +216,7 @@
                     Padding="24"
                     WidthRequest="350">
                 <VerticalStackLayout Spacing="16">
-                    <Label Text="Cobro de Cuenta" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" TextColor="#1F4E8E"/>
+                    <Label Text="Cobro de Cuenta" FontSize="22" FontAttributes="Bold" HorizontalOptions="Center" TextColor="{StaticResource Primary}"/>
                     
                     <Label Text="{Binding MesaACobrar.NumeroMesa, StringFormat='Mesa {0}'}" FontSize="18" HorizontalOptions="Center"/>
                     
@@ -238,7 +238,7 @@
                             IsEnabled="{Binding PuedeFinalizarPago}"
                             BackgroundColor="#28A745"
                             TextColor="White"
-                            CornerRadius="10"
+                            CornerRadius="16"
                             HeightRequest="48"
                             Margin="0,0,0,10"/>
 
@@ -246,7 +246,7 @@
                             Command="{Binding CancelarCobroCommand}"
                             BackgroundColor="#6C757D"
                             TextColor="White"
-                            CornerRadius="10"
+                            CornerRadius="16"
                             HeightRequest="48"/>
                 </VerticalStackLayout>
             </Border>

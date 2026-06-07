@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
@@ -17,9 +17,9 @@
                        FontSize="28"
                        FontAttributes="Bold"
                        HorizontalOptions="Center"
-                       TextColor="#1F4E8E"/>
+                       TextColor="{StaticResource Primary}"/>
 
-                <Border StrokeShape="RoundRectangle 14"
+                <Border StrokeShape="RoundRectangle 24"
                         Padding="16"
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
@@ -33,9 +33,9 @@
 
                         <Button Text="Consultar"
                                 Command="{Binding CargarHistorialCommand}"
-                                BackgroundColor="#1F4E8E"
+                                BackgroundColor="{StaticResource Primary}"
                                 TextColor="White"
-                                CornerRadius="10"
+                                CornerRadius="16"
                                 HeightRequest="48"/>
 
                     </VerticalStackLayout>
@@ -45,24 +45,24 @@
                       ColumnSpacing="12">
 
                     <Border Grid.Column="0"
-                            StrokeShape="RoundRectangle 14"
+                            StrokeShape="RoundRectangle 24"
                             Padding="14"
                             BackgroundColor="{AppThemeBinding Light=#EEF4FF, Dark=#172336}">
 
                         <VerticalStackLayout Spacing="4">
-                            <Label Text="Órdenes"
+                            <Label Text="Ã“rdenes"
                                    FontSize="13"
                                    TextColor="Gray"/>
 
                             <Label Text="{Binding TotalOrdenes}"
                                    FontSize="24"
                                    FontAttributes="Bold"
-                                   TextColor="#1F4E8E"/>
+                                   TextColor="{StaticResource Primary}"/>
                         </VerticalStackLayout>
                     </Border>
 
                     <Border Grid.Column="1"
-                            StrokeShape="RoundRectangle 14"
+                            StrokeShape="RoundRectangle 24"
                             Padding="14"
                             BackgroundColor="{AppThemeBinding Light=#EEF4FF, Dark=#172336}">
 
@@ -74,7 +74,7 @@
                             <Label Text="{Binding TotalDia, StringFormat='${0:F2}'}"
                                    FontSize="24"
                                    FontAttributes="Bold"
-                                   TextColor="#1F4E8E"/>
+                                   TextColor="{StaticResource Primary}"/>
                         </VerticalStackLayout>
                     </Border>
 
@@ -92,7 +92,7 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:OrdenMesa">
 
-                            <Border StrokeShape="RoundRectangle 14"
+                            <Border StrokeShape="RoundRectangle 24"
                                     Padding="16"
                                     Margin="0,0,0,14"
                                     BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
@@ -118,7 +118,7 @@
                                                Text="{Binding TotalCuenta, StringFormat='${0:F2}'}"
                                                FontSize="20"
                                                FontAttributes="Bold"
-                                               TextColor="#1F4E8E"
+                                               TextColor="{StaticResource Primary}"
                                                VerticalOptions="Center"/>
                                     </Grid>
 

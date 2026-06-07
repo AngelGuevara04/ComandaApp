@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:pm="clr-namespace:ComandaApp.PageModels"
              x:Class="ComandaApp.Pages.LoginPage"
              x:DataType="pm:LoginPageModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="{AppThemeBinding Light=#F0F4F8, Dark=#17171a}">
+             BackgroundColor="{AppThemeBinding Light={StaticResource LightSecondaryBackground}, Dark={StaticResource DarkBackground}}">
 
     <ScrollView>
         <VerticalStackLayout Padding="28,56,28,32" Spacing="0">
@@ -14,12 +14,12 @@
                    FontSize="34"
                    FontAttributes="Bold"
                    HorizontalTextAlignment="Center"
-                   TextColor="{AppThemeBinding Light=#1F4E8E, Dark=#4A90D9}"/>
+                   TextColor="{AppThemeBinding Light={StaticResource Primary}, Dark={StaticResource PrimaryDark}}"/>
 
-            <Label Text="Sistema de gestión de pedidos"
+            <Label Text="Sistema de gestiÃ³n de pedidos"
                    FontSize="14"
                    HorizontalTextAlignment="Center"
-                   TextColor="{AppThemeBinding Light=#666, Dark=#888}"
+                   TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark=#888}"
                    Margin="0,4,0,36"/>
 
             <VerticalStackLayout IsVisible="{Binding ShowRegisterForm}" Spacing="14">
@@ -28,18 +28,18 @@
                        FontSize="18"
                        FontAttributes="Bold"
                        HorizontalTextAlignment="Center"
-                       TextColor="{AppThemeBinding Light=#222, Dark=#EEE}"
+                       TextColor="{AppThemeBinding Light={StaticResource Gray950}, Dark={StaticResource Gray200}}"
                        Margin="0,0,0,4"/>
 
                 <Label Text="Registra las credenciales del administrador."
                        FontSize="13"
                        HorizontalTextAlignment="Center"
-                       TextColor="{AppThemeBinding Light=#777, Dark=#999}"
+                       TextColor="{AppThemeBinding Light={StaticResource Gray400}, Dark={StaticResource Gray400}}"
                        Margin="0,0,0,8"/>
 
-                <Border StrokeShape="RoundRectangle 14"
-                        Stroke="{AppThemeBinding Light=#DDE3EA, Dark=#2A2A2A}"
-                        BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1C}"
+                <Border StrokeShape="RoundRectangle 24"
+                        Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray900}}"
+                        BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource DarkSecondaryBackground}}"
                         Padding="20,16">
 
                     <VerticalStackLayout Spacing="12">
@@ -56,10 +56,10 @@
                                ClearButtonVisibility="WhileEditing"/>
 
                         <Grid ColumnDefinitions="*,Auto">
-                            <Label Text="Correo electrónico" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
+                            <Label Text="Correo electrÃ³nico" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
                             <Label Grid.Column="1" Text="{Binding Source={x:Reference RegEmailEntry}, Path=Text.Length, StringFormat='{0}/100'}" TextColor="Gray" FontSize="11" VerticalOptions="End"/>
                         </Grid>
-                        <Entry x:Name="RegEmailEntry" Placeholder="Correo electrónico"
+                        <Entry x:Name="RegEmailEntry" Placeholder="Correo electrÃ³nico"
                                Text="{Binding Email}"
                                Keyboard="Email"
                                MaxLength="100"
@@ -68,7 +68,7 @@
 
                         <Grid ColumnDefinitions="*,48" ColumnSpacing="4">
                             <Entry Grid.Column="0"
-                                   Placeholder="Contraseña"
+                                   Placeholder="ContraseÃ±a"
                                    Text="{Binding Password}"
                                    IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InvertedBoolConverter}}"
                                    ReturnType="Next"/>
@@ -81,7 +81,7 @@
                                     Padding="0"/>
                         </Grid>
 
-                        <Entry Placeholder="Confirmar contraseña"
+                        <Entry Placeholder="Confirmar contraseÃ±a"
                                Text="{Binding ConfirmPassword}"
                                IsPassword="True"
                                ReturnType="Done"
@@ -91,7 +91,7 @@
                 </Border>
 
                 <Label Text="{Binding ErrorMessage}"
-                       TextColor="#E74C3C"
+                       TextColor="{StaticResource Danger}"
                        FontSize="13"
                        HorizontalTextAlignment="Center"
                        IsVisible="{Binding HasError}"/>
@@ -99,30 +99,30 @@
                 <Button Text="Crear cuenta"
                         Command="{Binding RegisterCommand}"
                         IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
-                        BackgroundColor="#1F4E8E"
+                        BackgroundColor="{StaticResource Primary}"
                         TextColor="White"
-                        CornerRadius="12"
+                        CornerRadius="16"
                         HeightRequest="52"
                         FontSize="16"
                         FontAttributes="Bold"/>
 
                 <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
-                    <Label Text="¿Ya tienes cuenta?"
+                    <Label Text="Â¿Ya tienes cuenta?"
                            VerticalOptions="Center"
                            FontSize="13"
-                           TextColor="{AppThemeBinding Light=#666, Dark=#AAA}"/>
+                           TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}"/>
 
-                    <Button Text="Iniciar sesión"
+                    <Button Text="Iniciar sesiÃ³n"
                             Command="{Binding ShowLoginCommand}"
                             BackgroundColor="Transparent"
-                            TextColor="#1F4E8E"
+                            TextColor="{StaticResource Primary}"
                             FontAttributes="Bold"
                             Padding="0"/>
                 </HorizontalStackLayout>
 
                 <ActivityIndicator IsRunning="{Binding IsLoading}"
                                    IsVisible="{Binding IsLoading}"
-                                   Color="#1F4E8E"
+                                   Color="{StaticResource Primary}"
                                    HorizontalOptions="Center"/>
 
             </VerticalStackLayout>
@@ -141,17 +141,17 @@
                             Command="{Binding SelectCredentialsCommand}"
                             BackgroundColor="{Binding IsCredentialsMode, Converter={StaticResource BoolToSelectedColorConverter}}"
                             TextColor="White"
-                            CornerRadius="10"
+                            CornerRadius="16"
                             HeightRequest="42"
                             FontSize="13"
                             FontAttributes="{Binding IsCredentialsMode, Converter={StaticResource BoolToFontAttributesConverter}}"/>
 
                     <Button Grid.Column="1"
-                            Text="Código QR"
+                            Text="CÃ³digo QR"
                             Command="{Binding SelectQrCommand}"
                             BackgroundColor="{Binding IsQrMode, Converter={StaticResource BoolToSelectedColorConverter}}"
                             TextColor="White"
-                            CornerRadius="10"
+                            CornerRadius="16"
                             HeightRequest="42"
                             FontSize="13"
                             FontAttributes="{Binding IsQrMode, Converter={StaticResource BoolToFontAttributesConverter}}"/>
@@ -159,18 +159,18 @@
 
                 <VerticalStackLayout IsVisible="{Binding IsCredentialsMode}" Spacing="12">
 
-                    <Border StrokeShape="RoundRectangle 14"
-                            Stroke="{AppThemeBinding Light=#DDE3EA, Dark=#2A2A2A}"
-                            BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1C}"
+                    <Border StrokeShape="RoundRectangle 24"
+                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray900}}"
+                            BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource DarkSecondaryBackground}}"
                             Padding="20,16">
 
                         <VerticalStackLayout Spacing="12">
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Correo electrónico" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
+                                <Label Text="Correo electrÃ³nico" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
                                 <Label Grid.Column="1" Text="{Binding Source={x:Reference LogEmailEntry}, Path=Text.Length, StringFormat='{0}/100'}" TextColor="Gray" FontSize="11" VerticalOptions="End"/>
                             </Grid>
-                            <Entry x:Name="LogEmailEntry" Placeholder="Correo electrónico"
+                            <Entry x:Name="LogEmailEntry" Placeholder="Correo electrÃ³nico"
                                    Text="{Binding Email}"
                                    Keyboard="Email"
                                    MaxLength="100"
@@ -179,7 +179,7 @@
 
                             <Grid ColumnDefinitions="*,48" ColumnSpacing="4">
                                 <Entry Grid.Column="0"
-                                       Placeholder="Contraseña"
+                                       Placeholder="ContraseÃ±a"
                                        Text="{Binding Password}"
                                        IsPassword="{Binding IsPasswordVisible, Converter={StaticResource InvertedBoolConverter}}"
                                        ReturnType="Done"
@@ -197,96 +197,96 @@
                     </Border>
 
                     <Label Text="{Binding ErrorMessage}"
-                           TextColor="#E74C3C"
+                           TextColor="{StaticResource Danger}"
                            FontSize="13"
                            HorizontalTextAlignment="Center"
                            IsVisible="{Binding HasError}"/>
 
-                    <Button Text="Iniciar sesión"
+                    <Button Text="Iniciar sesiÃ³n"
                             Command="{Binding LoginCommand}"
                             IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
-                            BackgroundColor="#1F4E8E"
+                            BackgroundColor="{StaticResource Primary}"
                             TextColor="White"
-                            CornerRadius="12"
+                            CornerRadius="16"
                             HeightRequest="52"
                             FontSize="16"
                             FontAttributes="Bold"/>
 
                     <HorizontalStackLayout HorizontalOptions="Center" Spacing="4">
-                        <Label Text="¿Aún no tienes cuenta?"
+                        <Label Text="Â¿AÃºn no tienes cuenta?"
                                VerticalOptions="Center"
                                FontSize="13"
-                               TextColor="{AppThemeBinding Light=#666, Dark=#AAA}"/>
+                               TextColor="{AppThemeBinding Light={StaticResource Gray500}, Dark={StaticResource Gray300}}"/>
 
                         <Button Text="Registrarte"
                                 Command="{Binding ShowRegisterCommand}"
                                 BackgroundColor="Transparent"
-                                TextColor="#1F4E8E"
+                                TextColor="{StaticResource Primary}"
                                 FontAttributes="Bold"
                                 Padding="0"/>
                     </HorizontalStackLayout>
 
                     <ActivityIndicator IsRunning="{Binding IsLoading}"
                                        IsVisible="{Binding IsLoading}"
-                                       Color="#1F4E8E"
+                                       Color="{StaticResource Primary}"
                                        HorizontalOptions="Center"/>
 
                 </VerticalStackLayout>
 
                 <VerticalStackLayout IsVisible="{Binding IsQrMode}" Spacing="12">
 
-                    <Border StrokeShape="RoundRectangle 14"
-                            Stroke="{AppThemeBinding Light=#DDE3EA, Dark=#2A2A2A}"
-                            BackgroundColor="{AppThemeBinding Light=White, Dark=#1C1C1C}"
+                    <Border StrokeShape="RoundRectangle 24"
+                            Stroke="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray900}}"
+                            BackgroundColor="{AppThemeBinding Light=White, Dark={StaticResource DarkSecondaryBackground}}"
                             Padding="20,16">
 
                         <VerticalStackLayout Spacing="12">
 
-                            <Label Text="Ingresa el código generado desde el panel de admin"
+                            <Label Text="Ingresa el cÃ³digo generado desde el panel de admin"
                                    FontSize="13"
                                    HorizontalTextAlignment="Center"
-                                   TextColor="{AppThemeBinding Light=#555, Dark=#AAA}"/>
+                                   TextColor="{AppThemeBinding Light={StaticResource Gray600}, Dark={StaticResource Gray300}}"/>
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Text="Código de acceso" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
+                                <Label Text="CÃ³digo de acceso" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
                                 <Label Grid.Column="1" Text="{Binding Source={x:Reference QrEntry}, Path=Text.Length, StringFormat='{0}/200'}" TextColor="Gray" FontSize="11" VerticalOptions="End"/>
                             </Grid>
-                            <Entry x:Name="QrEntry" Placeholder="Código QR del dispositivo"
+                            <Entry x:Name="QrEntry" Placeholder="CÃ³digo QR del dispositivo"
                                    Text="{Binding QrToken}"
                                    MaxLength="200"
                                    ClearButtonVisibility="WhileEditing"
                                    ReturnType="Done"
                                    ReturnCommand="{Binding LoginWithQrCommand}"/>
 
-                            <Button Text="Escanear con cámara"
+                            <Button Text="Escanear con cÃ¡mara"
                                     Command="{Binding AbrirScannerCommand}"
-                                    BackgroundColor="{AppThemeBinding Light=#E8F0FB, Dark=#1A2A40}"
-                                    TextColor="#1F4E8E"
-                                    CornerRadius="10"
+                                    BackgroundColor="{AppThemeBinding Light={StaticResource LightSecondaryBackground}, Dark={StaticResource DarkSecondaryBackground}}"
+                                    TextColor="{StaticResource Primary}"
+                                    CornerRadius="16"
                                     HeightRequest="44"/>
 
                         </VerticalStackLayout>
                     </Border>
 
                     <Label Text="{Binding ErrorMessage}"
-                           TextColor="#E74C3C"
+                           TextColor="{StaticResource Danger}"
                            FontSize="13"
                            HorizontalTextAlignment="Center"
                            IsVisible="{Binding HasError}"/>
 
-                    <Button Text="Acceder con código"
+                    <Button Text="Acceder con cÃ³digo"
                             Command="{Binding LoginWithQrCommand}"
                             IsEnabled="{Binding IsLoading, Converter={StaticResource InvertedBoolConverter}}"
-                            BackgroundColor="#1F4E8E"
+                            BackgroundColor="{StaticResource Primary}"
                             TextColor="White"
-                            CornerRadius="12"
+                            CornerRadius="16"
                             HeightRequest="52"
                             FontSize="16"
                             FontAttributes="Bold"/>
 
                     <ActivityIndicator IsRunning="{Binding IsLoading}"
                                        IsVisible="{Binding IsLoading}"
-                                       Color="#1F4E8E"
+                                       Color="{StaticResource Primary}"
                                        HorizontalOptions="Center"/>
 
                 </VerticalStackLayout>

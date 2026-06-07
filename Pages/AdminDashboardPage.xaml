@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:ComandaApp.PageModels"
@@ -9,7 +9,7 @@
     <ScrollView>
         <VerticalStackLayout Padding="25" Spacing="25">
 
-            <Label Text="Panel de Administración" 
+            <Label Text="Panel de AdministraciÃ³n" 
                    FontSize="28" 
                    FontAttributes="Bold" 
                    HorizontalOptions="Center" 
@@ -19,7 +19,7 @@
                         JustifyContent="SpaceBetween" 
                         AlignItems="Stretch">
 
-                <Border StrokeShape="RoundRectangle 12" 
+                <Border StrokeShape="RoundRectangle 16" 
                         Padding="15" 
                         Margin="5"
                         FlexLayout.Grow="1"
@@ -27,7 +27,7 @@
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Gestión de Dispositivos" 
+                        <Label Text="GestiÃ³n de Dispositivos" 
                                FontAttributes="Bold" 
                                HorizontalOptions="Center" 
                                FontSize="16"/>
@@ -43,7 +43,7 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border StrokeShape="RoundRectangle 12" 
+                <Border StrokeShape="RoundRectangle 16" 
                         Padding="15" 
                         Margin="5"
                         FlexLayout.Grow="1"
@@ -51,7 +51,7 @@
                         BackgroundColor="{AppThemeBinding Light=White, Dark=#1E1E1E}">
 
                     <VerticalStackLayout Spacing="10" HorizontalOptions="Center">
-                        <Label Text="Menú" 
+                        <Label Text="MenÃº" 
                                FontAttributes="Bold" 
                                HorizontalOptions="Center" 
                                FontSize="16"/>
@@ -67,7 +67,7 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border StrokeShape="RoundRectangle 12" 
+                <Border StrokeShape="RoundRectangle 16" 
                         Padding="15" 
                         Margin="5"
                         FlexLayout.Grow="1"
@@ -80,7 +80,7 @@
                                HorizontalOptions="Center" 
                                FontSize="16"/>
 
-                        <Label Text="Finanzas del día" 
+                        <Label Text="Finanzas del dÃ­a" 
                                FontSize="12" 
                                TextColor="Gray" 
                                HorizontalOptions="Center"/>
@@ -91,7 +91,7 @@
                     </VerticalStackLayout>
                 </Border>
 
-                <Border StrokeShape="RoundRectangle 12" 
+                <Border StrokeShape="RoundRectangle 16" 
                         Padding="15" 
                         Margin="5"
                         FlexLayout.Grow="1"
@@ -117,20 +117,20 @@
 
             </FlexLayout>
 
-            <Button Text="Configuración del Restaurante" 
+            <Button Text="ConfiguraciÃ³n del Restaurante" 
                     Command="{Binding AbrirConfigCommand}"
                     BackgroundColor="#6C757D"
                     FontAttributes="Bold"
                     HeightRequest="55"
                     Margin="0,10,0,0" />
 
-            <Button Text="Cerrar sesión" 
+            <Button Text="Cerrar sesiÃ³n" 
                     Command="{Binding SalirSesionCommand}"
                     BackgroundColor="#C0392B"
                     TextColor="White"
                     FontAttributes="Bold"
                     HeightRequest="55"
-                    CornerRadius="12"
+                    CornerRadius="16"
                     Margin="0,5,0,0" />
 
         </VerticalStackLayout>

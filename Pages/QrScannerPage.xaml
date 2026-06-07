@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:zxing="clr-namespace:ZXing.Net.Maui.Controls;assembly=ZXing.Net.MAUI.Controls"
@@ -28,13 +28,13 @@
                              Spacing="12"
                              BackgroundColor="#CC000000">
 
-            <Label Text="Escanea el código QR"
+            <Label Text="Escanea el cÃ³digo QR"
                    TextColor="White"
                    FontSize="20"
                    FontAttributes="Bold"
                    HorizontalTextAlignment="Center"/>
 
-            <Label Text="Apunta la cámara al código de mesa, cocina o caja."
+            <Label Text="Apunta la cÃ¡mara al cÃ³digo de mesa, cocina o caja."
                    TextColor="#DDDDDD"
                    FontSize="13"
                    HorizontalTextAlignment="Center"/>
@@ -43,7 +43,7 @@
                     Clicked="Cancelar_Clicked"
                     BackgroundColor="#C0392B"
                     TextColor="White"
-                    CornerRadius="12"
+                    CornerRadius="16"
                     HeightRequest="48"/>
 
         </VerticalStackLayout>
