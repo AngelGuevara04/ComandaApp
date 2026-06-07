@@ -1,4 +1,4 @@
-﻿using System.Collections.ObjectModel;
+using System.Collections.ObjectModel;
 using ComandaApp.Models;
 using ComandaApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
@@ -109,7 +109,7 @@ public partial class CajaDashboardPageModel : ObservableObject
             await _ordenService.CrearOrdenParaCajaAsync(numeroMesa, nombreCliente);
             await _mesaService.ActualizarEstadoAsync(numeroMesa, true);
 
-            QrTemporal = $"CLIENTE_TEMP|{negocioId}|{numeroMesa}|{nombreCliente}|{DateTime.UtcNow:yyyyMMddHHmmss}";
+            QrTemporal = $"https://comanda-web-app.onrender.com/?mesa={numeroMesa}&negocio={negocioId}";
             QrTemporalImageSource = CrearImagenQr(QrTemporal);
         }
         catch (Exception ex)
