@@ -15,6 +15,10 @@ function App() {
   const [businessName, setBusinessName] = useState('Menú Digital');
   const [customerName, setCustomerName] = useState('');
   const [customerNameInput, setCustomerNameInput] = useState('');
+  const [showGoodbye, setShowGoodbye] = useState(false);
+  const [activeOrderId, setActiveOrderId] = useState(null);
+  const [confirmedItems, setConfirmedItems] = useState([]);
+  const [activeTab, setActiveTab] = useState('menu'); // 'menu' | 'cuenta'
 
   // Parse URL params
   const searchParams = new URLSearchParams(window.location.search);
@@ -31,15 +35,67 @@ function App() {
 
   useEffect(() => {
     if (negocioId && numeroMesa) {
-      const channel = supabase.channel(`mesa_web_${numeroMesa}`)
+      fetchActiveOrder();
+    }
+  }, [negocioId, numeroMesa]);
+
+  const fetchActiveOrder = async () => {
+    try {
+      const { data: existingOrders, error: fetchError } = await supabase
+        .from('ordenes')
+        .select('*')
+        .eq('numero_mesa', numeroMesa)
+        .eq('negocio_id', negocioId)
+        .eq('esta_pagada', false)
+        .maybeSingle();
+
+      if (fetchError) throw fetchError;
+
+      if (existingOrders) {
+        setActiveOrderId(existingOrders.id);
+        if (existingOrders.nombre_cliente && existingOrders.nombre_cliente !== 'Cliente Web') {
+          setCustomerName(existingOrders.nombre_cliente);
+        }
+        await fetchConfirmedItems(existingOrders.id);
+      }
+    } catch (err) {
+      console.error('Error fetching active order:', err);
+    }
+  };
+
+  const fetchConfirmedItems = async (ordenId) => {
+    try {
+      const { data, error } = await supabase
+        .from('detalles_pedido')
+        .select('*')
+        .eq('orden_id', ordenId)
+        .order('fecha_creacion', { ascending: true });
+      
+      if (error) throw error;
+      setConfirmedItems(data || []);
+    } catch (err) {
+      console.error('Error fetching details:', err);
+    }
+  };
+
+  useEffect(() => {
+    if (negocioId && numeroMesa) {
+      const channel = supabase.channel(`mesa_web_${numeroMesa}_full`)
         .on(
           'postgres_changes',
           { event: '*', schema: 'public', table: 'ordenes', filter: `numero_mesa=eq.${numeroMesa}` },
           (payload) => {
             if (payload.new && payload.new.esta_pagada === true) {
-              setCustomerName('');
-              setCustomerNameInput('');
-              setCart([]);
+              setShowGoodbye(true);
+            }
+          }
+        )
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'detalles_pedido' },
+          (payload) => {
+            if (activeOrderId && (payload.new?.orden_id === activeOrderId || payload.old?.orden_id === activeOrderId)) {
+              fetchConfirmedItems(activeOrderId);
             }
           }
         )
@@ -49,7 +105,7 @@ function App() {
         supabase.removeChannel(channel);
       }
     }
-  }, [negocioId, numeroMesa]);
+  }, [negocioId, numeroMesa, activeOrderId]);
 
   const fetchConfigAndPlatillos = async () => {
     try {
@@ -176,6 +232,9 @@ function App() {
       setCart([]);
       setIsCartOpen(false);
       setOrderSuccess(true);
+      setActiveOrderId(ordenId);
+      await fetchConfirmedItems(ordenId);
+      setActiveTab('cuenta');
       setTimeout(() => setOrderSuccess(false), 5000);
 
     } catch (err) {
@@ -202,6 +261,32 @@ function App() {
     return (
       <div className="flex items-center justify-center" style={{ minHeight: '100vh' }}>
         <Loader2 size={48} className="animate-spin" style={{ color: 'var(--primary-color)' }} />
+      </div>
+    );
+  }
+
+  if (showGoodbye) {
+    return (
+      <div className="flex flex-col items-center justify-center" style={{ minHeight: '100vh', padding: '2rem', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--success-color)' }}>¡Muchas gracias por su visita!</h2>
+        <p className="mt-4" style={{ color: 'var(--text-secondary)', marginBottom: '2rem', fontSize: '1.25rem' }}>
+          Esperamos que la comida haya sido de su agrado. ¡Vuelva pronto!
+        </p>
+        <button 
+          className="btn btn-primary" 
+          style={{ width: '100%', maxWidth: '300px' }}
+          onClick={() => {
+            setShowGoodbye(false);
+            setCustomerName('');
+            setCustomerNameInput('');
+            setActiveOrderId(null);
+            setConfirmedItems([]);
+            setActiveTab('menu');
+            setCart([]);
+          }}
+        >
+          Iniciar nueva orden
+        </button>
       </div>
     );
   }
@@ -250,6 +335,21 @@ function App() {
         </div>
       </header>
 
+      <div style={{ display: 'flex', gap: '1rem', padding: '1rem', backgroundColor: 'var(--bg-secondary)', borderBottom: '1px solid var(--border-color)' }}>
+        <button 
+          style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: 'none', backgroundColor: activeTab === 'menu' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'menu' ? 'white' : 'var(--text-primary)', fontWeight: 'bold', cursor: 'pointer', transition: 'background-color 0.2s' }}
+          onClick={() => setActiveTab('menu')}
+        >
+          Menú
+        </button>
+        <button 
+          style={{ flex: 1, padding: '0.75rem', borderRadius: '8px', border: 'none', backgroundColor: activeTab === 'cuenta' ? 'var(--primary-color)' : 'transparent', color: activeTab === 'cuenta' ? 'white' : 'var(--text-primary)', fontWeight: 'bold', cursor: 'pointer', transition: 'background-color 0.2s' }}
+          onClick={() => setActiveTab('cuenta')}
+        >
+          Mi Cuenta
+        </button>
+      </div>
+
       <main className="container flex-col gap-4">
         {orderSuccess && (
           <div className="card" style={{ backgroundColor: 'rgba(16, 185, 129, 0.1)', borderColor: 'var(--success-color)', marginBottom: '1rem' }}>
@@ -261,32 +361,65 @@ function App() {
           </div>
         )}
 
-        {categorias.map(categoria => (
-          <div key={categoria} className="mb-4">
-            <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>{categoria}</h2>
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
-              {platillos.filter(p => p.categoria === categoria).map(platillo => (
-                <div key={platillo.id} className="card" onClick={() => openPlatilloModal(platillo)}>
-                  {/* Assuming image loading if valid, else placeholder */}
-                  {platillo.imagen_url && platillo.imagen_url !== 'dotnet_bot.svg' ? (
-                    <img src={platillo.imagen_url} alt={platillo.nombre} className="dish-image" />
-                  ) : (
-                    <div className="dish-image flex items-center justify-center">
-                      <ChefHat size={48} style={{ color: 'var(--text-secondary)', opacity: 0.5 }} />
+        {activeTab === 'menu' ? (
+          <>
+            {categorias.map(categoria => (
+              <div key={categoria} className="mb-4">
+                <h2 style={{ fontSize: '1.25rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>{categoria}</h2>
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: '1rem' }}>
+                  {platillos.filter(p => p.categoria === categoria).map(platillo => (
+                    <div key={platillo.id} className="card" onClick={() => openPlatilloModal(platillo)}>
+                      {platillo.imagen_url && platillo.imagen_url !== 'dotnet_bot.svg' ? (
+                        <img src={platillo.imagen_url} alt={platillo.nombre} className="dish-image" />
+                      ) : (
+                        <div className="dish-image flex items-center justify-center">
+                          <ChefHat size={48} style={{ color: 'var(--text-secondary)', opacity: 0.5 }} />
+                        </div>
+                      )}
+                      <div className="flex justify-between items-center">
+                        <h3 style={{ fontSize: '1.1rem' }}>{platillo.nombre}</h3>
+                        <strong style={{ color: 'var(--success-color)' }}>${platillo.precio.toFixed(2)}</strong>
+                      </div>
+                      <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.5rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
+                        {platillo.descripcion || 'Sin descripción'}
+                      </p>
                     </div>
-                  )}
-                  <div className="flex justify-between items-center">
-                    <h3 style={{ fontSize: '1.1rem' }}>{platillo.nombre}</h3>
-                    <strong style={{ color: 'var(--success-color)' }}>${platillo.precio.toFixed(2)}</strong>
-                  </div>
-                  <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', marginTop: '0.5rem', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>
-                    {platillo.descripcion || 'Sin descripción'}
-                  </p>
+                  ))}
                 </div>
-              ))}
-            </div>
+              </div>
+            ))}
+          </>
+        ) : (
+          <div className="flex-col gap-4">
+            <h2 style={{ fontSize: '1.5rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>Mis Pedidos</h2>
+            
+            {confirmedItems.length === 0 ? (
+               <p style={{ color: 'var(--text-secondary)', textAlign: 'center', marginTop: '2rem' }}>No tienes pedidos confirmados aún.</p>
+            ) : (
+               <div className="flex-col gap-4">
+                 {confirmedItems.map(item => (
+                   <div key={item.id} className="card flex items-center justify-between" style={{ padding: '1rem', marginBottom: '0.5rem' }}>
+                      <div className="flex items-center gap-4">
+                        <div className="badge">{item.cantidad}</div>
+                        <div className="flex-col">
+                          <strong>{item.nombre_platillo}</strong>
+                          <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>Estado: {item.estado}</span>
+                        </div>
+                      </div>
+                      <strong style={{ color: 'var(--primary-color)' }}>${(item.precio_unitario * item.cantidad).toFixed(2)}</strong>
+                   </div>
+                 ))}
+                 
+                 <div style={{ marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                   <span style={{ fontSize: '1.25rem', color: 'var(--text-secondary)' }}>Total Confirmado</span>
+                   <strong style={{ fontSize: '1.5rem', color: 'var(--success-color)' }}>
+                     ${confirmedItems.reduce((acc, curr) => acc + (curr.precio_unitario * curr.cantidad), 0).toFixed(2)}
+                   </strong>
+                 </div>
+               </div>
+            )}
           </div>
-        ))}
+        )}
       </main>
 
       {/* Cart Bottom Bar */}

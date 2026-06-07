@@ -30,12 +30,7 @@ public partial class KitchenDashboardPage : ContentPage
             {
                 await _realtimeService.SuscribirseAsync(
                     "cocina",
-                    "ordenes",
-                    async () => await _viewModel.CargarDatosAsync());
-
-                await _realtimeService.SuscribirseAsync(
-                    "cocina",
-                    "detalles_pedido",
+                    new[] { "ordenes", "detalles_pedido" },
                     async () => await _viewModel.CargarDatosAsync());
 
                 _suscrito = true;

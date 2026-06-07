@@ -11,6 +11,7 @@ public partial class ClienteMenuPageModel : ObservableObject
 {
     private readonly MenuService _menuService;
     private readonly OrdenService _ordenService;
+    private readonly AuthService _authService;
     private readonly HashSet<string> _pedidosListosNotificados = new();
 
     private bool _ordenYaFueCargada;
