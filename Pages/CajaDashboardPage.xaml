@@ -38,13 +38,23 @@
                                FontSize="18"
                                FontAttributes="Bold"/>
 
-                        <Entry Placeholder="Nombre del cliente"
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Nombre del cliente" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference NombreCliEntry}, Path=Text.Length, StringFormat='{0}/30'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="NombreCliEntry" Placeholder="Nombre del cliente"
                                Text="{Binding NombreClienteTemporal}"
+                               MaxLength="30"
                                ClearButtonVisibility="WhileEditing"/>
 
-                        <Entry Placeholder="Número de mesa"
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Número de mesa" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference NumMesaEntry}, Path=Text.Length, StringFormat='{0}/20'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="NumMesaEntry" Placeholder="Número de mesa"
                                Text="{Binding NumeroMesaTemporal}"
                                Keyboard="Text"
+                               MaxLength="20"
                                ClearButtonVisibility="WhileEditing"/>
 
                         <Button Text="Generar QR temporal"

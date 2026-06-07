@@ -44,15 +44,25 @@
 
                     <VerticalStackLayout Spacing="12">
 
-                        <Entry Placeholder="Nombre completo"
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Nombre completo" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference RegNombreEntry}, Path=Text.Length, StringFormat='{0}/50'}" TextColor="Gray" FontSize="11" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="RegNombreEntry" Placeholder="Nombre completo"
                                Text="{Binding DisplayName}"
                                Keyboard="Text"
+                               MaxLength="50"
                                ReturnType="Next"
                                ClearButtonVisibility="WhileEditing"/>
 
-                        <Entry Placeholder="Correo electrónico"
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Correo electrónico" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference RegEmailEntry}, Path=Text.Length, StringFormat='{0}/100'}" TextColor="Gray" FontSize="11" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="RegEmailEntry" Placeholder="Correo electrónico"
                                Text="{Binding Email}"
                                Keyboard="Email"
+                               MaxLength="100"
                                ReturnType="Next"
                                ClearButtonVisibility="WhileEditing"/>
 
@@ -156,9 +166,14 @@
 
                         <VerticalStackLayout Spacing="12">
 
-                            <Entry Placeholder="Correo electrónico"
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Correo electrónico" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
+                                <Label Grid.Column="1" Text="{Binding Source={x:Reference LogEmailEntry}, Path=Text.Length, StringFormat='{0}/100'}" TextColor="Gray" FontSize="11" VerticalOptions="End"/>
+                            </Grid>
+                            <Entry x:Name="LogEmailEntry" Placeholder="Correo electrónico"
                                    Text="{Binding Email}"
                                    Keyboard="Email"
+                                   MaxLength="100"
                                    ReturnType="Next"
                                    ClearButtonVisibility="WhileEditing"/>
 
@@ -232,8 +247,13 @@
                                    HorizontalTextAlignment="Center"
                                    TextColor="{AppThemeBinding Light=#555, Dark=#AAA}"/>
 
-                            <Entry Placeholder="Código QR del dispositivo"
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Text="Código de acceso" FontSize="12" TextColor="Gray" Margin="0,0,0,2"/>
+                                <Label Grid.Column="1" Text="{Binding Source={x:Reference QrEntry}, Path=Text.Length, StringFormat='{0}/200'}" TextColor="Gray" FontSize="11" VerticalOptions="End"/>
+                            </Grid>
+                            <Entry x:Name="QrEntry" Placeholder="Código QR del dispositivo"
                                    Text="{Binding QrToken}"
+                                   MaxLength="200"
                                    ClearButtonVisibility="WhileEditing"
                                    ReturnType="Done"
                                    ReturnCommand="{Binding LoginWithQrCommand}"/>

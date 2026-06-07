@@ -18,23 +18,35 @@
                 <VerticalStackLayout Spacing="15">
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Nombre del Restaurante" FontAttributes="Bold" TextColor="Gray"/>
-                        <Entry Placeholder="Ej. Taquería El Fogón" Text="{Binding Config.NombreRestaurante}" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Nombre del Restaurante" FontAttributes="Bold" TextColor="Gray"/>
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference NomResEntry}, Path=Text.Length, StringFormat='{0}/50'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="NomResEntry" Placeholder="Ej. Taquería El Fogón" Text="{Binding Config.NombreRestaurante}" MaxLength="50"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="RFC" FontAttributes="Bold" TextColor="Gray"/>
-                        <Entry Placeholder="Ej. XAXX010101000" Text="{Binding Config.Rfc}" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="RFC" FontAttributes="Bold" TextColor="Gray"/>
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference RfcEntry}, Path=Text.Length, StringFormat='{0}/13'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="RfcEntry" Placeholder="Ej. XAXX010101000" Text="{Binding Config.Rfc}" MaxLength="13"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="Dirección" FontAttributes="Bold" TextColor="Gray"/>
-                        <Entry Placeholder="Calle, Colonia, Ciudad" Text="{Binding Config.Direccion}" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Dirección" FontAttributes="Bold" TextColor="Gray"/>
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference DirEntry}, Path=Text.Length, StringFormat='{0}/100'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="DirEntry" Placeholder="Calle, Colonia, Ciudad" Text="{Binding Config.Direccion}" MaxLength="100"/>
                     </VerticalStackLayout>
 
                     <VerticalStackLayout Spacing="5">
-                        <Label Text="URL del Logo (Opcional)" FontAttributes="Bold" TextColor="Gray"/>
-                        <Entry Placeholder="https://..." Text="{Binding Config.LogoUrl}" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="URL del Logo (Opcional)" FontAttributes="Bold" TextColor="Gray"/>
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference LogoEntry}, Path=Text.Length, StringFormat='{0}/200'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="LogoEntry" Placeholder="https://..." Text="{Binding Config.LogoUrl}" MaxLength="200"/>
                     </VerticalStackLayout>
 
                 </VerticalStackLayout>

@@ -1,4 +1,4 @@
-﻿using ComandaApp.Models;
+using ComandaApp.Models;
 using ComandaApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -133,14 +133,24 @@ public partial class AddDevicePageModel : ObservableObject
 
     private static string CrearTextoQr(RolDispositivo rol, string nombre)
     {
-        var nombreQr = nombre
-            .Trim()
-            .Replace(" ", "_")
-            .ToLowerInvariant();
+        var rolStr = rol.ToString().ToLowerInvariant();
+        var nombreQr = nombre.Trim().ToLowerInvariant();
+
+        if (nombreQr.StartsWith(rolStr))
+        {
+            nombreQr = nombreQr[rolStr.Length..].Trim();
+        }
+
+        if (string.IsNullOrWhiteSpace(nombreQr))
+        {
+            nombreQr = "general";
+        }
+
+        nombreQr = nombreQr.Replace(" ", "_");
 
         var codigo = Guid.NewGuid().ToString("N")[..5];
 
-        return $"comanda_{rol.ToString().ToLowerInvariant()}_{nombreQr}_{codigo}";
+        return $"comanda_{rolStr}_{nombreQr}_{codigo}";
     }
 
     private static ImageSource CrearImagenQr(string texto)

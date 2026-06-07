@@ -1,4 +1,4 @@
-﻿using ComandaApp.Models;
+using ComandaApp.Models;
 using ComandaApp.Services;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
@@ -300,15 +300,17 @@ public partial class ClienteMenuPageModel : ObservableObject
     }
 
     [RelayCommand]
-    private void VerMenu()
+    private async Task VerMenu()
     {
         MostrandoMenu = true;
+        await ActualizarDatosAsync();
     }
 
     [RelayCommand]
-    private void VerMisPedidos()
+    private async Task VerMisPedidos()
     {
         MostrandoMenu = false;
+        await ActualizarDatosAsync();
     }
 
     [RelayCommand]

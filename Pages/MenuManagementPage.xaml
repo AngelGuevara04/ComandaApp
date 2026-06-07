@@ -30,19 +30,32 @@
                                FontSize="18"
                                FontAttributes="Bold"/>
 
-                        <Entry Placeholder="Nombre del platillo (Max 50 carácteres)"
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Nombre del Platillo" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference NombreEntry}, Path=Text.Length, StringFormat='{0}/50'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="NombreEntry" Placeholder="Nombre del platillo"
                                Text="{Binding NombreInput}"
                                MaxLength="50"
                                ClearButtonVisibility="WhileEditing"/>
 
-                        <Entry Placeholder="Descripción (Max 150 carácteres)"
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Descripción" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference DescEntry}, Path=Text.Length, StringFormat='{0}/150'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="DescEntry" Placeholder="Descripción breve"
                                Text="{Binding DescripcionInput}"
                                MaxLength="150"
                                ClearButtonVisibility="WhileEditing"/>
 
-                        <Entry Placeholder="Precio"
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Text="Precio" FontSize="14" TextColor="Gray" Margin="0,0,0,2" />
+                            <Label Grid.Column="1" Text="{Binding Source={x:Reference PrecioEntry}, Path=Text.Length, StringFormat='{0}/10'}" TextColor="Gray" FontSize="12" VerticalOptions="End"/>
+                        </Grid>
+                        <Entry x:Name="PrecioEntry" Placeholder="Precio"
                                Text="{Binding PrecioInput}"
                                Keyboard="Numeric"
+                               MaxLength="10"
                                ClearButtonVisibility="WhileEditing"/>
 
                         <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
@@ -58,26 +71,24 @@
                                     CornerRadius="10" />
                         </Grid>
 
-                        <Border StrokeShape="RoundRectangle 10" 
-                                Stroke="#1F4E8E" 
-                                StrokeThickness="2" 
-                                Padding="10" 
-                                BackgroundColor="#F0F8FF">
-                            <HorizontalStackLayout Spacing="15" VerticalOptions="Center" HorizontalOptions="Center">
-                                <Border StrokeShape="RoundRectangle 40" HeightRequest="80" WidthRequest="80" StrokeThickness="0">
-                                    <Image Source="{Binding ImagenMuestra}"
-                                           HeightRequest="80"
-                                           WidthRequest="80"
-                                           Aspect="AspectFill" />
-                                </Border>
-                                <Button Text="📷 Seleccionar Imagen"
-                                        Command="{Binding SeleccionarImagenCommand}"
-                                        BackgroundColor="#1F4E8E"
-                                        TextColor="White"
-                                        CornerRadius="10"
-                                        FontAttributes="Bold"
-                                        VerticalOptions="Center" />
-                            </HorizontalStackLayout>
+                        <Border StrokeShape="RoundRectangle 16"
+                                Stroke="#D1D5DB"
+                                StrokeThickness="2"
+                                StrokeDashArray="6,6"
+                                BackgroundColor="#F3F4F6"
+                                HorizontalOptions="Center"
+                                WidthRequest="180"
+                                HeightRequest="180">
+                            <Grid>
+                                <VerticalStackLayout Spacing="8" VerticalOptions="Center" HorizontalOptions="Center">
+                                    <Label Text="📷" FontSize="40" HorizontalOptions="Center"/>
+                                    <Label Text="Tocar para subir" TextColor="#6B7280" FontSize="14" HorizontalOptions="Center"/>
+                                </VerticalStackLayout>
+                                <Image Source="{Binding ImagenMuestra}" Aspect="AspectFill" />
+                            </Grid>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding SeleccionarImagenCommand}"/>
+                            </Border.GestureRecognizers>
                         </Border>
 
                         <Button Text="{Binding TextoBotonGuardar}"

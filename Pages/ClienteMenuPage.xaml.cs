@@ -25,14 +25,21 @@ public partial class ClienteMenuPage : ContentPage
     {
         base.OnAppearing();
 
-        await _pageModel.InicializarAsync();
+        try
+        {
+            await _pageModel.InicializarAsync();
 
-        _subscriptionKey = ObtenerSubscriptionKey();
+            _subscriptionKey = ObtenerSubscriptionKey();
 
-        await _realtimeService.SuscribirseAsync(
-            _subscriptionKey,
-            new[] { "ordenes", "detalles_pedido", "platillos" },
-            async () => await _pageModel.ActualizarDatosAsync());
+            await _realtimeService.SuscribirseAsync(
+                _subscriptionKey,
+                new[] { "ordenes", "detalles_pedido", "platillos" },
+                async () => await _pageModel.ActualizarDatosAsync());
+        }
+        catch (Exception ex)
+        {
+            await Shell.Current.DisplayAlertAsync("Error de Conexión", $"No se pudo establecer conexión en tiempo real. {ex.Message}", "OK");
+        }
     }
 
     protected override void OnDisappearing()

@@ -1,4 +1,4 @@
-﻿using ComandaApp.Models;
+using ComandaApp.Models;
 using ComandaApp.Models.Records;
 
 namespace ComandaApp.Services;
@@ -60,33 +60,26 @@ public class OrdenService
 
     public async Task<OrdenMesa?> GetOrdenActivaAsync(string numeroMesa)
     {
-        try
-        {
-            var client = await _supabaseService.GetClientAsync();
-            var negocioId = _authService.NegocioIdActual;
+        var client = await _supabaseService.GetClientAsync();
+        var negocioId = _authService.NegocioIdActual;
 
-            var ordenesResult = await client.From<OrdenRecord>().Get();
+        var ordenesResult = await client.From<OrdenRecord>().Get();
 
-            var ordenRecord = ordenesResult.Models.FirstOrDefault(o =>
-                o.NegocioId == negocioId &&
-                o.EstaPagada == false &&
-                NormalizarMesa(o.NumeroMesa) == NormalizarMesa(numeroMesa));
+        var ordenRecord = ordenesResult.Models.FirstOrDefault(o =>
+            o.NegocioId == negocioId &&
+            o.EstaPagada == false &&
+            NormalizarMesa(o.NumeroMesa) == NormalizarMesa(numeroMesa));
 
-            if (ordenRecord == null)
-            {
-                return null;
-            }
-
-            var orden = ordenRecord.ToModel();
-
-            await CargarDetallesAsync(orden);
-
-            return orden;
-        }
-        catch
+        if (ordenRecord == null)
         {
             return null;
         }
+
+        var orden = ordenRecord.ToModel();
+
+        await CargarDetallesAsync(orden);
+
+        return orden;
     }
 
     public async Task<OrdenMesa> CrearOrdenAsync(string numeroMesa, string nombreCliente = "")
@@ -177,8 +170,10 @@ public class OrdenService
         }
     }
 
-    private static string NormalizarMesa(string value)
+    private static string NormalizarMesa(string? value)
     {
+        if (string.IsNullOrWhiteSpace(value)) return string.Empty;
+        
         return value
             .Trim()
             .Replace(" ", string.Empty)
