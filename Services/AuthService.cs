@@ -1,4 +1,4 @@
-﻿using ComandaApp.Models;
+using ComandaApp.Models;
 using ComandaApp.Models.Records;
 using Supabase.Gotrue;
 
@@ -12,6 +12,7 @@ public class AuthService
     private const string AdminSetupKey = "admin_setup_done";
     private const string SavedEmailKey = "saved_admin_email";
     private const string SavedPasswordKey = "saved_admin_password";
+    private const string SavedQrTokenKey = "saved_device_qr_token";
 
     public UserAccount? CurrentUser => _currentUser;
     public bool IsAuthenticated => _currentUser is not null;
@@ -31,6 +32,18 @@ public class AuthService
     {
         try
         {
+            var qrToken = await SecureStorage.Default.GetAsync(SavedQrTokenKey);
+            if (!string.IsNullOrWhiteSpace(qrToken))
+            {
+                var qrResult = await LoginWithQrAsync(qrToken);
+                if (qrResult.Success)
+                {
+                    return true;
+                }
+                ClearSavedLogin();
+                return false;
+            }
+
             var email = await SecureStorage.Default.GetAsync(SavedEmailKey);
             var password = await SecureStorage.Default.GetAsync(SavedPasswordKey);
 
@@ -216,8 +229,12 @@ public class AuthService
                     Role = rolNormalizado,
                     QrToken = cleanToken,
                     Extra = ObtenerExtraDispositivo(dispositivo, cleanToken, rolNormalizado),
-                    NegocioId = string.IsNullOrWhiteSpace(dispositivo.NegocioId) ? "default" : dispositivo.NegocioId
+                    NegocioId = string.IsNullOrWhiteSpace(dispositivo.NegocioId) ? "default" : dispositivo.NegocioId,
+                    IsPermanentDevice = true,
+                    DeviceId = dispositivo.Id
                 };
+
+                await SaveQrTokenAsync(cleanToken);
 
                 return (true, string.Empty);
             }
@@ -479,12 +496,24 @@ public class AuthService
         }
     }
 
+    private static async Task SaveQrTokenAsync(string token)
+    {
+        try
+        {
+            await SecureStorage.Default.SetAsync(SavedQrTokenKey, token);
+        }
+        catch
+        {
+        }
+    }
+
     private static void ClearSavedLogin()
     {
         try
         {
             SecureStorage.Default.Remove(SavedEmailKey);
             SecureStorage.Default.Remove(SavedPasswordKey);
+            SecureStorage.Default.Remove(SavedQrTokenKey);
         }
         catch
         {

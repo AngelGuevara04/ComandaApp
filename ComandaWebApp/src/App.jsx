@@ -13,6 +13,8 @@ function App() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [businessName, setBusinessName] = useState('Menú Digital');
+  const [customerName, setCustomerName] = useState('');
+  const [customerNameInput, setCustomerNameInput] = useState('');
 
   // Parse URL params
   const searchParams = new URLSearchParams(window.location.search);
@@ -26,6 +28,28 @@ function App() {
       setLoading(false);
     }
   }, [negocioId]);
+
+  useEffect(() => {
+    if (negocioId && numeroMesa) {
+      const channel = supabase.channel(`mesa_web_${numeroMesa}`)
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'ordenes', filter: `numero_mesa=eq.${numeroMesa}` },
+          (payload) => {
+            if (payload.new && payload.new.esta_pagada === true) {
+              setCustomerName('');
+              setCustomerNameInput('');
+              setCart([]);
+            }
+          }
+        )
+        .subscribe();
+        
+      return () => {
+        supabase.removeChannel(channel);
+      }
+    }
+  }, [negocioId, numeroMesa]);
 
   const fetchConfigAndPlatillos = async () => {
     try {
@@ -121,7 +145,7 @@ function App() {
           .insert({
             id: ordenId,
             numero_mesa: numeroMesa,
-            nombre_cliente: 'Cliente Web',
+            nombre_cliente: customerName || 'Cliente Web',
             fecha_creacion: new Date().toISOString(),
             esta_pagada: false,
             negocio_id: negocioId
@@ -178,6 +202,38 @@ function App() {
     return (
       <div className="flex items-center justify-center" style={{ minHeight: '100vh' }}>
         <Loader2 size={48} className="animate-spin" style={{ color: 'var(--primary-color)' }} />
+      </div>
+    );
+  }
+
+  if (!customerName) {
+    return (
+      <div className="flex flex-col items-center justify-center" style={{ minHeight: '100vh', padding: '2rem', textAlign: 'center' }}>
+        <h2 style={{ fontSize: '2rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>¡Bienvenido!</h2>
+        <p className="mt-4" style={{ color: 'var(--text-secondary)', marginBottom: '2rem' }}>
+          Por favor, ingresa tu nombre para comenzar tu pedido.
+        </p>
+        <input 
+          type="text" 
+          className="input" 
+          placeholder="Tu nombre" 
+          value={customerNameInput}
+          onChange={(e) => setCustomerNameInput(e.target.value)}
+          style={{ width: '100%', maxWidth: '300px', textAlign: 'center', marginBottom: '1rem' }}
+        />
+        <button 
+          className="btn btn-primary" 
+          style={{ width: '100%', maxWidth: '300px' }}
+          onClick={() => {
+            if (customerNameInput.trim()) {
+              setCustomerName(customerNameInput.trim());
+            } else {
+              setCustomerName('Cliente');
+            }
+          }}
+        >
+          Comenzar Pedido
+        </button>
       </div>
     );
   }

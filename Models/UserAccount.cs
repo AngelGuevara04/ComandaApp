@@ -1,4 +1,4 @@
-﻿namespace ComandaApp.Models;
+namespace ComandaApp.Models;
 
 public class UserAccount
 {
@@ -19,4 +19,8 @@ public class UserAccount
     public string Extra { get; set; } = string.Empty;
 
     public string NegocioId { get; set; } = string.Empty;
+
+    public bool IsPermanentDevice { get; set; }
+
+    public string DeviceId { get; set; } = string.Empty;
 }

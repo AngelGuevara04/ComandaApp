@@ -26,6 +26,12 @@ public partial class ClienteMenuPageModel : ObservableObject
     private bool mostrandoMenu = true;
 
     [ObservableProperty]
+    private bool mostrandoBienvenida;
+
+    [ObservableProperty]
+    private string nombreClienteInput = string.Empty;
+
+    [ObservableProperty]
     private bool isBusy;
 
     [ObservableProperty]
@@ -58,18 +64,28 @@ public partial class ClienteMenuPageModel : ObservableObject
         OnPropertyChanged(nameof(PuedeSolicitarPago));
     }
 
-    public ClienteMenuPageModel(MenuService menuService, OrdenService ordenService)
+    public ClienteMenuPageModel(MenuService menuService, OrdenService ordenService, AuthService authService)
     {
         _menuService = menuService;
         _ordenService = ordenService;
+        _authService = authService;
     }
 
     public async Task InicializarAsync()
     {
         _clienteExpulsado = false;
-        MostrandoMenu = true;
 
-        await CargarDatosClienteAsync(true, false);
+        if (_authService.CurrentUser?.IsPermanentDevice == true && string.IsNullOrWhiteSpace(NombreClienteInput))
+        {
+            MostrandoBienvenida = true;
+            MostrandoMenu = false;
+        }
+        else
+        {
+            MostrandoBienvenida = false;
+            MostrandoMenu = true;
+            await CargarDatosClienteAsync(true, false);
+        }
     }
 
     public async Task ActualizarDatosAsync()
@@ -143,7 +159,11 @@ public partial class ClienteMenuPageModel : ObservableObject
                     return;
                 }
 
-                var nuevaOrden = await _ordenService.CrearOrdenAsync(NumeroMesa);
+                var nombreAUsar = _authService.CurrentUser?.IsPermanentDevice == true && !string.IsNullOrWhiteSpace(NombreClienteInput)
+                    ? NombreClienteInput
+                    : (_authService.CurrentUser?.DisplayName ?? "Cliente");
+
+                var nuevaOrden = await _ordenService.CrearOrdenAsync(NumeroMesa, nombreAUsar);
 
                 IdOrden = nuevaOrden.IdOrden;
                 _ordenYaFueCargada = true;
@@ -176,15 +196,26 @@ public partial class ClienteMenuPageModel : ObservableObject
 
         IdOrden = string.Empty;
         _ordenYaFueCargada = false;
+        NombreClienteInput = string.Empty;
 
         RefrescarTotales();
 
-        await Shell.Current.DisplayAlertAsync(
-            "Cuenta cerrada",
-            "Caja cerró la cuenta de esta mesa. Serás enviado al inicio.",
-            "OK");
+        if (_authService.CurrentUser?.IsPermanentDevice == true)
+        {
+            _clienteExpulsado = false;
+            MostrandoBienvenida = true;
+            MostrandoMenu = false;
+            OnPropertyChanged(nameof(MostrandoMisPedidos));
+        }
+        else
+        {
+            await Shell.Current.DisplayAlertAsync(
+                "Cuenta cerrada",
+                "Caja cerró la cuenta de esta mesa. Serás enviado al inicio.",
+                "OK");
 
-        await Shell.Current.GoToAsync("//login");
+            await Shell.Current.GoToAsync("//login");
+        }
     }
 
     private async Task RevisarPedidosListosAsync(List<DetallePedido> pedidos, bool permitirNotificaciones)
@@ -297,6 +328,20 @@ public partial class ClienteMenuPageModel : ObservableObject
         {
             IsBusy = false;
         }
+    }
+
+    [RelayCommand]
+    private async Task ComenzarPedido()
+    {
+        if (string.IsNullOrWhiteSpace(NombreClienteInput))
+        {
+            NombreClienteInput = "Cliente";
+        }
+
+        MostrandoBienvenida = false;
+        MostrandoMenu = true;
+        OnPropertyChanged(nameof(MostrandoMisPedidos));
+        await CargarDatosClienteAsync(true, false);
     }
 
     [RelayCommand]
